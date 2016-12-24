@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+* {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+html,body {
+  background: #FFFFFF;
+}
+
+header {
+  background: #E83F6F;
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  h2, .material-icons {
+    color: #FFF;
+  }
+}
+
+.outer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column wrap;
+}
+
+.card {
+  padding: 1em;
+  width: 70vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  img {
+    width: 5em;
+    height: auto;
+    border-radius: 100%;
+  }
+  p {
+    color: #264653;
+  }
+  &:nth-of-type(even) {
+    background: darken(#FFF, 1%);
+  }
+  &:not(:last-of-type) {
+    border-bottom: 1px solid darken(#FFF, 2%);
+  }
+  .info {
+    display: flex;
+    flex-flow: column wrap;
+    p {
+      font-size: 1em;
+    }
+    p:first-of-type {
+      font-weight: 700;
+    }
+    p:last-of-type {
+      font-size: .85em;
+    }
+  }
+  .actions {
+    display: flex;
+    button {
+      border: none;
+      background: #E83F6F;
+      width: 7em;
+      text-transform: uppercase;
+      color: #FFF;
+      border-radius: 4px;
+      padding: 1em;
+      outline: none;
+      cursor: pointer;
+      transition: all ease-in-out .2s;
+      &:hover {
+        background: lighten(#E83F6F, 4%);
+      }
+    }
+  }
+}
+
+.notification {
+  background: rgba(0, 0, 0, 0.85);
+  width: 40em;
+  height: 3em;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  color: #FFF;
+  padding: 1em;
+  font-size: .8em;
+  transform: translateY(5em);
+  transition: all ease-in-out .5s;
+}

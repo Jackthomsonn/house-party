@@ -1,0 +1,45 @@
+{
+  "name": "house-party",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jackthomsonn/house-party.git"
+  },
+  "author": "Jack Thomson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jackthomsonn/house-party/issues"
+  },
+  "homepage": "https://github.com/Jackthomsonn/house-party#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.6.8",
+    "node-restful": "^0.2.5",
+    "socket.io": "^1.5.1",
+    "socket.io-client": "^1.5.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.18.2",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-2": "^6.18.0",
+    "babel-register": "^6.18.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.1",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-clean-css": "^2.0.13",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-sass": "^2.3.2",
+    "jQuery": "^1.7.4",
+    "jquery": "^3.1.1",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
