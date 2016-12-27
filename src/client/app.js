@@ -27,7 +27,10 @@ export default class App {
   }
 
   setupClient() {
-    Service.getSongs().then( (songs) => { View.makeList(songs) })
+    Service.getSongs()
+      .then( (songs) => {
+        View.makeList(songs)
+      })
   }
 }
 

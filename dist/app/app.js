@@ -17589,18 +17589,10 @@ var Notification = function () {
   _createClass(Notification, null, [{
     key: 'show',
     value: function show(data, isError) {
-      var _this = this;
-
       this.notification = document.querySelector('.notification');
       this.notification.style.transform = 'translateY(0)';
-      if (isError) {
-        this.notification.innerHTML = data;
-      } else {
-        this.notification.innerHTML = 'Someone just requested ' + data.artist + ' - ' + data.songName;
-      }
-      setTimeout(function () {
-        _this.hide();
-      }, 3000);
+      isError ? this.notification.innerHTML = data : this.notification.innerHTML = 'Someone just requested ' + data.artist + ' - ' + data.songName;
+      setTimeout(this.hide, 3000);
     }
   }, {
     key: 'hide',
