@@ -17,6 +17,10 @@ app.use(bodyParser.json())
 app.use('/api', require('./routes/music.js'))
 app.use('/api', require('./routes/requests.js'))
 
+app.get('/player', (req, res) => {
+  res.status(200).sendFile(__dirname + '/player.html')
+})
+
 io.sockets.on('connection', function (socket) {
   const _id = socket.id
   console.log('Socket Connected: ' + _id)
@@ -24,6 +28,7 @@ io.sockets.on('connection', function (socket) {
     console.log('Socket Disconnected: ' + _id)
   })
   socket.on('songRequested', (data) => {
+    console.log('Song Requested')
     io.emit('songRequested', data)
   })
 })

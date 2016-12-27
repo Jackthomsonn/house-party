@@ -2,19 +2,32 @@ import Service from './services'
 import View from './view'
 import Settings from './settings'
 import Notification from './notification'
-import $ from 'jquery';
+import Player from './player'
 
 export default class App {
   constructor() {
     Settings.init()
-
-    Service.getSongs('/api/music', 'GET').then( (songs) => {
-      View.makeList(songs)
-    })
-
+    Settings.isPlayer() ? this.setupPlayer() : this.setupClient()
     Settings.socket.on('songRequested', (data) => {
-      Notification.show(data)
+      if(!Settings.isPlayer()) {
+        Notification.show(data)
+      } else {
+        View.updateSongQueue(data)
+        if(!Player.isPlaying) {
+          Player.play()
+        }
+      }
     })
+  }
+
+  setupPlayer() {
+    Player.play(function(songs) {
+      View.songQueue(songs)
+    })
+  }
+
+  setupClient() {
+    Service.getSongs().then( (songs) => { View.makeList(songs) })
   }
 }
 

@@ -30,13 +30,13 @@ header {
 
 .card {
   padding: 1em;
-  width: 70vw;
+  width: 50vw;
   display: flex;
   justify-content: space-around;
   align-items: center;
   img {
     width: 5em;
-    height: auto;
+    height: 5em;
     border-radius: 100%;
   }
   p {
@@ -51,6 +51,8 @@ header {
   .info {
     display: flex;
     flex-flow: column wrap;
+    flex: 1;
+    padding: 0 2em;
     p {
       font-size: 1em;
     }
@@ -64,18 +66,24 @@ header {
   .actions {
     display: flex;
     button {
-      border: none;
-      background: #E83F6F;
+      background: #FFF;
+      color: #E83F6F;
+      border: 1px solid #DDD;
       width: 7em;
       text-transform: uppercase;
-      color: #FFF;
       border-radius: 4px;
       padding: 1em;
       outline: none;
       cursor: pointer;
       transition: all ease-in-out .2s;
+      &.player {
+        background: #FFF;
+        color: #E83F6F;
+        border: 1px solid #DDD;
+        cursor: default;
+      }
       &:hover {
-        background: lighten(#E83F6F, 4%);
+        background: darken(#FFF, 2%);
       }
     }
   }
@@ -85,7 +93,7 @@ header {
   background: rgba(0, 0, 0, 0.85);
   width: 40em;
   height: 3em;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;

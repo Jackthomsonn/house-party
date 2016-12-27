@@ -17502,6 +17502,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _services = require('./services');
 
 var _services2 = _interopRequireDefault(_services);
@@ -17518,34 +17520,57 @@ var _notification = require('./notification');
 
 var _notification2 = _interopRequireDefault(_notification);
 
-var _jquery = require('jquery');
+var _player = require('./player');
 
-var _jquery2 = _interopRequireDefault(_jquery);
+var _player2 = _interopRequireDefault(_player);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var App = function App() {
-  _classCallCheck(this, App);
+var App = function () {
+  function App() {
+    _classCallCheck(this, App);
 
-  _settings2.default.init();
+    _settings2.default.init();
+    _settings2.default.isPlayer() ? this.setupPlayer() : this.setupClient();
+    _settings2.default.socket.on('songRequested', function (data) {
+      if (!_settings2.default.isPlayer()) {
+        _notification2.default.show(data);
+      } else {
+        _view2.default.updateSongQueue(data);
+        if (!_player2.default.isPlaying) {
+          _player2.default.play();
+        }
+      }
+    });
+  }
 
-  _services2.default.getSongs('/api/music', 'GET').then(function (songs) {
-    _view2.default.makeList(songs);
-  });
+  _createClass(App, [{
+    key: 'setupPlayer',
+    value: function setupPlayer() {
+      _player2.default.play(function (songs) {
+        _view2.default.songQueue(songs);
+      });
+    }
+  }, {
+    key: 'setupClient',
+    value: function setupClient() {
+      _services2.default.getSongs().then(function (songs) {
+        _view2.default.makeList(songs);
+      });
+    }
+  }]);
 
-  _settings2.default.socket.on('songRequested', function (data) {
-    _notification2.default.show(data);
-  });
-};
+  return App;
+}();
 
 exports.default = App;
 
 
 new App();
 
-},{"./notification":51,"./services":52,"./settings":53,"./view":54,"jquery":2}],51:[function(require,module,exports){
+},{"./notification":51,"./player":52,"./services":53,"./settings":54,"./view":55}],51:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17563,12 +17588,16 @@ var Notification = function () {
 
   _createClass(Notification, null, [{
     key: 'show',
-    value: function show(data) {
+    value: function show(data, isError) {
       var _this = this;
 
       this.notification = document.querySelector('.notification');
       this.notification.style.transform = 'translateY(0)';
-      this.notification.innerHTML = 'Someone just requested ' + data.artist + ' - ' + data.songName;
+      if (isError) {
+        this.notification.innerHTML = data;
+      } else {
+        this.notification.innerHTML = 'Someone just requested ' + data.artist + ' - ' + data.songName;
+      }
       setTimeout(function () {
         _this.hide();
       }, 3000);
@@ -17577,7 +17606,7 @@ var Notification = function () {
     key: 'hide',
     value: function hide() {
       this.notification = document.querySelector('.notification');
-      this.notification.style.transform = 'translateY(5em)';
+      this.notification.style.transform = 'translateY(100vh)';
     }
   }]);
 
@@ -17595,9 +17624,91 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _services = require('./services');
+
+var _services2 = _interopRequireDefault(_services);
+
+var _view = require('./view');
+
+var _view2 = _interopRequireDefault(_view);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Player = function () {
+  function Player() {
+    _classCallCheck(this, Player);
+
+    this.isPlaying = false;
+  }
+
+  _createClass(Player, null, [{
+    key: 'play',
+    value: function play(callback) {
+      var _this = this;
+
+      var cache = null;
+      var audio = document.querySelector('audio');
+      audio.autoplay = true;
+      _services2.default.getSongs('/api/music/requests').then(function (songs) {
+        if (callback) {
+          callback(songs);
+        }
+        if (songs.length > 0) {
+          _this.isPlaying = true;
+          cache = songs[0];
+          audio.src = cache.link;
+          setInterval(function () {
+            _this.hasEnded(audio) ? _this.next(cache) && (cache = null) : undefined;
+          }, 1000);
+        } else {
+          _this.isPlaying = false;
+        }
+      });
+    }
+  }, {
+    key: 'hasEnded',
+    value: function hasEnded(audio) {
+      return audio.duration === audio.currentTime;
+    }
+  }, {
+    key: 'next',
+    value: function next(cache) {
+      var _this2 = this;
+
+      if (cache) {
+        _services2.default.removeSong(cache._id).then(function (response) {
+          _view2.default.removeSongFromQueue();
+          _this2.play();
+        }).catch(function (error) {
+          return error;
+        });
+      }
+    }
+  }]);
+
+  return Player;
+}();
+
+exports.default = Player;
+
+},{"./services":53,"./view":55}],53:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _jquery = require('jquery');
 
 var _jquery2 = _interopRequireDefault(_jquery);
+
+var _settings = require('./settings');
+
+var _settings2 = _interopRequireDefault(_settings);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -17610,10 +17721,10 @@ var Services = function () {
 
   _createClass(Services, null, [{
     key: 'getSongs',
-    value: function getSongs() {
+    value: function getSongs(alternativeUrl) {
       return new Promise(function (resolve, reject) {
         _jquery2.default.ajax({
-          url: '/api/music',
+          url: alternativeUrl ? alternativeUrl : '/api/music',
           method: 'GET'
         }).done(function (results) {
           resolve(results);
@@ -17632,7 +17743,7 @@ var Services = function () {
         async: false
       }).done(function (responses) {
         responses.map(function (response) {
-          if (requestedSong._id === response._id) {
+          if (requestedSong.link === response.link) {
             exists = true;
           }
         });
@@ -17647,12 +17758,21 @@ var Services = function () {
         method: 'POST',
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
+        async: false,
         data: JSON.stringify({
-          _id: requestedSong._id,
+          image: requestedSong.image,
           songName: requestedSong.songName,
           artist: requestedSong.artist,
           link: requestedSong.link
         })
+      }).done(function (response) {
+        _settings2.default.socket.emit('songRequested', {
+          image: requestedSong.image,
+          artist: requestedSong.artist,
+          songName: requestedSong.songName
+        });
+      }).fail(function (error) {
+        return error;
       });
     }
   }, {
@@ -17661,7 +17781,21 @@ var Services = function () {
       var _this = this;
 
       return new Promise(function (resolve, reject) {
-        _this.equalityCheck(requestedSong) ? reject('Already in queue') : _this.createRequest(requestedSong) && resolve();
+        _this.equalityCheck(requestedSong) ? reject('Song is already in queue') : resolve(_this.createRequest(requestedSong));
+      });
+    }
+  }, {
+    key: 'removeSong',
+    value: function removeSong(songToRemove) {
+      return new Promise(function (resolve, reject) {
+        _jquery2.default.ajax({
+          url: '/api/music/requests/' + songToRemove,
+          method: 'DELETE'
+        }).done(function (response) {
+          resolve();
+        }).fail(function (error) {
+          reject('There was an error when trying to delete this song');
+        });
       });
     }
   }]);
@@ -17671,7 +17805,7 @@ var Services = function () {
 
 exports.default = Services;
 
-},{"jquery":2}],53:[function(require,module,exports){
+},{"./settings":54,"jquery":2}],54:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17696,7 +17830,12 @@ var Settings = function () {
   _createClass(Settings, null, [{
     key: 'init',
     value: function init() {
-      this.socket = _socket2.default.connect('http://localhost:3000');
+      this.socket = _socket2.default.connect('http://192.168.0.11:3000');
+    }
+  }, {
+    key: 'isPlayer',
+    value: function isPlayer() {
+      return document.querySelector('audio');
     }
   }]);
 
@@ -17705,7 +17844,7 @@ var Settings = function () {
 
 exports.default = Settings;
 
-},{"socket.io-client":3}],54:[function(require,module,exports){
+},{"socket.io-client":3}],55:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17714,17 +17853,23 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _settings = require('./settings');
-
-var _settings2 = _interopRequireDefault(_settings);
-
 var _services = require('./services');
 
 var _services2 = _interopRequireDefault(_services);
 
+var _notification = require('./notification');
+
+var _notification2 = _interopRequireDefault(_notification);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var parent = (0, _jquery2.default)('.outer');
 
 var View = function () {
   function View() {
@@ -17734,31 +17879,36 @@ var View = function () {
   _createClass(View, null, [{
     key: 'makeList',
     value: function makeList(songs) {
-      var _this = this;
-
-      var parent = document.querySelector('.outer');
-      songs.map(function (song) {
-        parent.innerHTML += '<div class="card">\n        <img src="https://images-na.ssl-images-amazon.com/images/I/81iC%2BO0ec2L._SL1448_.jpg"></img>\n        <div class="info">\n          <p>' + song.artist + '</p>\n          <p>' + song.songName + '</p>\n        </div>\n        <div class="actions">\n          <button>Request</button>\n        </div>\n      </div>';
-        var buttons = document.querySelectorAll('button');
+      songs.map(function (song, index) {
+        parent.append('<div class="card">\n        <img src="' + song.image + '"></img>\n        <div class="info">\n          <p>' + song.artist + '</p>\n          <p>' + song.songName + '</p>\n        </div>\n        <div class="actions">\n          <button class="list">Request</button>\n        </div>\n      </div>');
+        var buttons = document.querySelectorAll('button.list');
         buttons.forEach(function (button, index, curr) {
           curr[index].addEventListener('click', function () {
-            _this.requestSong(songs[index]);
+            _services2.default.requestSong(songs[index]).then(function (response) {
+              return response;
+            }).catch(function (error) {
+              _notification2.default.show(error, true);
+            });
           });
         });
       });
     }
   }, {
-    key: 'requestSong',
-    value: function requestSong(songToRequest) {
-      _settings2.default.socket.emit('songRequested', {
-        artist: songToRequest.artist,
-        songName: songToRequest.songName
+    key: 'songQueue',
+    value: function songQueue(songs) {
+      songs.map(function (song, index) {
+        parent.append('<div class="card">\n        <img src="' + song.image + '"></img>\n        <div class="info">\n          <p>' + song.artist + '</p>\n          <p>' + song.songName + '</p>\n        </div>\n      </div>');
       });
-      _services2.default.requestSong(songToRequest).then(function (response) {
-        return response;
-      }).catch(function (error) {
-        return error;
-      });
+    }
+  }, {
+    key: 'updateSongQueue',
+    value: function updateSongQueue(song) {
+      parent.append('<div class="card">\n      <img src="' + song.image + '"></img>\n      <div class="info">\n        <p>' + song.artist + '</p>\n        <p>' + song.songName + '</p>\n      </div>\n    </div>');
+    }
+  }, {
+    key: 'removeSongFromQueue',
+    value: function removeSongFromQueue() {
+      parent.find('.card').first().remove();
     }
   }]);
 
@@ -17767,4 +17917,4 @@ var View = function () {
 
 exports.default = View;
 
-},{"./services":52,"./settings":53}]},{},[50]);
+},{"./notification":51,"./services":53,"jquery":2}]},{},[50]);

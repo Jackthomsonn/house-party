@@ -1,10 +1,11 @@
 import $ from 'jquery';
+import Settings from './settings'
 
 export default class Services {
-  static getSongs() {
+  static getSongs(alternativeUrl) {
     return new Promise( (resolve, reject) => {
       $.ajax({
-        url: '/api/music',
+        url: alternativeUrl ? alternativeUrl : '/api/music',
         method: 'GET'
       }).done( (results) => {
         resolve(results)
@@ -22,7 +23,7 @@ export default class Services {
       async: false,
     }).done( (responses) => {
       responses.map( (response) => {
-        if(requestedSong._id === response._id) {
+        if(requestedSong.link === response.link) {
           exists = true
         }
       })
@@ -36,18 +37,40 @@ export default class Services {
       method: 'POST',
       contentType: 'application/json; charset=utf-8',
       dataType: 'json',
+      async: false,
       data: JSON.stringify({
-        _id: requestedSong._id,
+        image: requestedSong.image,
         songName: requestedSong.songName,
         artist: requestedSong.artist,
         link: requestedSong.link
       })
+    }).done( (response) => {
+      Settings.socket.emit('songRequested', {
+        image: requestedSong.image,
+        artist: requestedSong.artist,
+        songName: requestedSong.songName
+      })
+    }).fail( (error) => {
+      return error
     })
   }
 
   static requestSong(requestedSong) {
     return new Promise( (resolve, reject) => {
-      this.equalityCheck(requestedSong) ? reject('Already in queue') : this.createRequest(requestedSong) && resolve()
+      this.equalityCheck(requestedSong) ? reject('Song is already in queue') : resolve(this.createRequest(requestedSong))
+    })
+  }
+
+  static removeSong(songToRemove) {
+    return new Promise( (resolve, reject) => {
+      $.ajax({
+        url: '/api/music/requests/' + songToRemove,
+        method: 'DELETE'
+      }).done( (response) => {
+        resolve()
+      }).fail( (error) => {
+        reject('There was an error when trying to delete this song')
+      })
     })
   }
 }
