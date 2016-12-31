@@ -5,6 +5,7 @@ export default class Player {
   constructor() {
     this.isPlaying = false
   }
+
   static play(callback) {
     let cache = null
     const audio = document.querySelector('audio')

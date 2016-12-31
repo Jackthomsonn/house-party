@@ -19,8 +19,11 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "install": "^0.8.4",
     "mongoose": "^4.6.8",
     "node-restful": "^0.2.5",
+    "npm": "^4.0.5",
+    "request": "^2.79.0",
     "socket.io": "^1.5.1",
     "socket.io-client": "^1.5.1"
   },

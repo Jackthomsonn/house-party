@@ -2,11 +2,12 @@
 'use strict'
 const express = require('express')
 const app = express()
+const request = require('request')
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-const showLogs = false;
+const enableLog = false
 
 server.listen(3000)
 
@@ -24,9 +25,8 @@ app.get('/player', (req, res) => {
 
 io.sockets.on('connection', function (socket) {
   const _id = socket.id
-  showLogs ? showLog(_id, socket) : null
+  enableLog ? showLog(_id, socket) : null
   socket.on('songRequested', (data) => {
-    console.log('Song Requested')
     io.emit('songRequested', data)
   })
 })
