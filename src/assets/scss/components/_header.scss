@@ -1,0 +1,15 @@
+header {
+  background: #E83F6F;
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  @media (min-width: 0) and (max-width: 800px) {
+    & {
+      justify-content: space-between;
+    }
+  }
+  h2, .material-icons {
+    color: #FFF;
+  }
+}

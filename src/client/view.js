@@ -22,7 +22,7 @@ export default class View {
         curr[index].addEventListener('click', () => {
           Service.requestSong(songs[index])
             .then( (response) => {
-              return response
+              return
             }).catch( (error) => {
               Notification.show(error, true)
             })
