@@ -17877,7 +17877,7 @@ var View = function () {
         buttons.forEach(function (button, index, curr) {
           curr[index].addEventListener('click', function () {
             _services2.default.requestSong(songs[index]).then(function (response) {
-              return response;
+              return;
             }).catch(function (error) {
               _notification2.default.show(error, true);
             });

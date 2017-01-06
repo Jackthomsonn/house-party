@@ -23,7 +23,7 @@ app.get('/player', (req, res) => {
   res.status(200).sendFile(__dirname + '/player.html')
 })
 
-io.sockets.on('connection', function (socket) {
+io.sockets.on('connection', (socket) => {
   const _id = socket.id
   enableLog ? showLog(_id, socket) : null
   socket.on('songRequested', (data) => {
