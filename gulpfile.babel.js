@@ -1,11 +1,14 @@
-import gulp from 'gulp';
-import sass from 'gulp-sass';
-import autoprefixer from 'gulp-autoprefixer';
-import nodemon from 'gulp-nodemon';
-import browserify from 'browserify';
-import babelify from 'babelify';
-import cleanCSS from 'gulp-clean-css';
-import source from 'vinyl-source-stream';
+import gulp from 'gulp'
+import sass from 'gulp-sass'
+import autoprefixer from 'gulp-autoprefixer'
+import nodemon from 'gulp-nodemon'
+import browserify from 'browserify'
+import babelify from 'babelify'
+import cleanCSS from 'gulp-clean-css'
+import source from 'vinyl-source-stream'
+import ts from 'gulp-typescript'
+
+const tsProject = ts.createProject('tsconfig.json');
 
 gulp.task('set-dev-node-env', () => {
   return process.env.NODE_ENV = 'development'
@@ -21,13 +24,9 @@ gulp.task('nodemon', ['set-dev-node-env'], () => {
 })
 
 gulp.task('js', () => {
-  browserify({
-    entries: 'src/client/app.js'
-  })
-  .transform(babelify, {presets: ['es2015']})
-  .bundle()
-  .pipe(source('app.js'))
-  .pipe(gulp.dest('dist/app/'))
+  return tsProject.src()
+    .pipe(tsProject())
+    .js.pipe(gulp.dest("dist"));
 })
 
 gulp.task('move', () => {

@@ -2,7 +2,8 @@ import $ from 'jquery';
 import Settings from './settings'
 
 export default class Services {
-  static getSongs(alternativeUrl) {
+
+  public static getSongs(alternativeUrl?: any) {
     return new Promise( (resolve, reject) => {
       $.ajax({
         url: alternativeUrl ? alternativeUrl : '/api/music',
@@ -15,23 +16,21 @@ export default class Services {
     })
   }
 
-  static equalityCheck(requestedSong) {
+  public static equalityCheck(requestedSong: any) {
     let exists = false
     $.ajax({
       url: '/api/music/requests',
       method: 'GET',
       async: false,
     }).done( (responses) => {
-      responses.map( (response) => {
-        if(requestedSong.link === response.link) {
-          exists = true
-        }
+      responses.map( (response: any) => {
+        requestedSong.link === response.link ? true : false
       })
     })
     return exists
   }
 
-  static createRequest(requestedSong) {
+  public static createRequest(requestedSong: any) {
     $.ajax({
       url: '/api/music/requests',
       method: 'POST',
@@ -55,13 +54,13 @@ export default class Services {
     })
   }
 
-  static requestSong(requestedSong) {
-    return new Promise( (resolve, reject) => {
+  public static requestSong(requestedSong: any) {
+    return new Promise( (resolve: any, reject: any) => {
       this.equalityCheck(requestedSong) ? reject('Song is already in queue') : resolve(this.createRequest(requestedSong))
     })
   }
 
-  static removeSong(songToRemove) {
+  public static removeSong(songToRemove: any) {
     return new Promise( (resolve, reject) => {
       $.ajax({
         url: '/api/music/requests/' + songToRemove,

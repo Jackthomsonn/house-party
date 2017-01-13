@@ -2,12 +2,18 @@ import Service from './services'
 import Notification from './notification'
 import $ from 'jquery'
 
-const parent = $('.outer')
-
 export default class View {
-  static makeList(songs) {
-    songs.map( (song, index) => {
-      parent.append(`<div class="card">
+  private parent: any
+  private buttons: any
+
+  constructor() {
+    this.parent = document.querySelector('.outer')
+    this.buttons = document.querySelectorAll('button.list')
+  }
+
+  public makeList(songs: Array<Interfaces.ISong>) {
+    songs.map( (song: any, index: Number) => {
+      this.parent.append(`<div class="card">
         <img src="${song.image}"></img>
         <div class="info">
           <p>${song.artist}</p>
@@ -17,13 +23,12 @@ export default class View {
           <button class="list">Request</button>
         </div>
       </div>`)
-      const buttons = document.querySelectorAll('button.list')
-      buttons.forEach( (button, index, curr) => {
+      this.buttons.forEach( (button: any, index: any, curr: any) => {
         curr[index].addEventListener('click', () => {
           Service.requestSong(songs[index])
-            .then( (response) => {
+            .then( (response: any) => {
               return
-            }).catch( (error) => {
+            }).catch( (error: any) => {
               Notification.show(error, true)
             })
         });
@@ -31,9 +36,9 @@ export default class View {
     })
   }
 
-  static songQueue(songs) {
+  public songQueue(songs: Array<Interfaces.ISong>) {
     songs.map( (song, index) => {
-      parent.append(`<div class="card">
+      this.parent.append(`<div class="card">
         <img src="${song.image}"></img>
         <div class="info">
           <p>${song.artist}</p>
@@ -43,8 +48,8 @@ export default class View {
     })
   }
 
-  static updateSongQueue(song) {
-    parent.append(`<div class="card">
+  public updateSongQueue(song: Interfaces.ISong) {
+    this.parent.append(`<div class="card">
       <img src="${song.image}"></img>
       <div class="info">
         <p>${song.artist}</p>
@@ -53,7 +58,7 @@ export default class View {
     </div>`
   )}
 
-  static removeSongFromQueue() {
-    parent.find('.card').first().remove()
+  public removeSongFromQueue() {
+    this.parent.find('.card').first().remove()
   }
 }

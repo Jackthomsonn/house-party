@@ -5,31 +5,37 @@ import Notification from './notification'
 import Player from './player'
 
 export default class App {
+  public view: View
+  public player: Player
+
   constructor() {
+    this.view = new View()
+    this.player = new Player()
+
     Settings.init()
     Settings.isPlayer() ? this.setupPlayer() : this.setupClient()
-    Settings.socket.on('songRequested', (data) => {
+    Settings.socket.on('songRequested', (data: any) => {
       if(!Settings.isPlayer()) {
         Notification.show(data)
       } else {
-        View.updateSongQueue(data)
-        if(!Player.isPlaying) {
-          Player.play()
-        }
+        this.view.updateSongQueue(data)
+      }
+      if(!this.player.isPlaying) {
+        this.player.play()
       }
     })
   }
 
   setupPlayer() {
-    Player.play(function(songs) {
-      View.songQueue(songs)
+    this.player.play( (songs: any) => {
+      this.view.songQueue(songs)
     })
   }
 
   setupClient() {
     Service.getSongs()
-      .then( (songs) => {
-        View.makeList(songs)
+      .then( (songs: any) => {
+        this.view.makeList(songs)
       })
   }
 }

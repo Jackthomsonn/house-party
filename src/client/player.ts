@@ -2,16 +2,22 @@ import Service from './services'
 import View from './view'
 
 export default class Player {
+  public isPlaying: any
+  public view: any
+  public service: any
+
   constructor() {
     this.isPlaying = false
+    this.view = new View()
+    this.service = new Service();
   }
 
-  static play(callback) {
-    let cache = null
+  public play(callback?: Function) {
+    let cache: Interfaces.ICache = null
     const audio = document.querySelector('audio')
     audio.autoplay = true
-    Service.getSongs('/api/music/requests')
-      .then( (songs) => {
+    this.service.getSongs('/api/music/requests')
+      .then( (songs: any) => {
         if(callback) {
           callback(songs)
         }
@@ -28,17 +34,17 @@ export default class Player {
       })
   }
 
-  static hasEnded(audio) {
+  public hasEnded(audio: Interfaces.IAudio) {
     return audio.duration === audio.currentTime
   }
 
-  static next(cache) {
+  public next(cache: Interfaces.ICache) {
     if(cache) {
-      Service.removeSong(cache._id)
-        .then( (response) => {
-          View.removeSongFromQueue()
+      this.service.removeSong(cache._id)
+        .then( (response: Object) => {
+          this.view.removeSongFromQueue()
           this.play()
-        }).catch( (error) => {
+        }).catch( (error: Object) => {
           return error
         })
     }
