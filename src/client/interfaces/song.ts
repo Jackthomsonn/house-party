@@ -3,5 +3,8 @@ namespace Interfaces {
     image: string
     artist: string
     songName: string
+    currentSong: string
+    duration: number
+    currentTime: number
   }
 }

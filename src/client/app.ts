@@ -14,11 +14,11 @@ export default class App {
 
     Settings.init()
     Settings.isPlayer() ? this.setupPlayer() : this.setupClient()
-    Settings.socket.on('songRequested', (data: any) => {
+    Settings.socket.on('songRequested', (song: Interfaces.ISong) => {
       if(!Settings.isPlayer()) {
-        Notification.show(data)
+        Notification.show(song)
       } else {
-        this.view.updateSongQueue(data)
+        this.view.updateSongQueue(song)
       }
       if(!this.player.isPlaying) {
         this.player.play()
@@ -27,14 +27,14 @@ export default class App {
   }
 
   setupPlayer() {
-    this.player.play( (songs: any) => {
+    this.player.play( (songs: Array<Interfaces.ISong>) => {
       this.view.songQueue(songs)
     })
   }
 
   setupClient() {
     Service.getSongs()
-      .then( (songs: any) => {
+      .then( (songs: Array<Interfaces.ISongLink>) => {
         this.view.makeList(songs)
       })
   }

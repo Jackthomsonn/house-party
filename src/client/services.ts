@@ -3,12 +3,12 @@ import Settings from './settings'
 
 export default class Services {
 
-  public static getSongs(alternativeUrl?: any) {
+  public static getSongs(alternativeUrl?: string) {
     return new Promise( (resolve, reject) => {
       $.ajax({
         url: alternativeUrl ? alternativeUrl : '/api/music',
         method: 'GET'
-      }).done( (results) => {
+      }).done( (results: Array<Interfaces.ISong>) => {
         resolve(results)
       }).fail( (error) => {
         reject('Error getting data from server')
@@ -16,21 +16,21 @@ export default class Services {
     })
   }
 
-  public static equalityCheck(requestedSong: any) {
+  public static equalityCheck(requestedSong: Interfaces.ISongLink) {
     let exists = false
     $.ajax({
       url: '/api/music/requests',
       method: 'GET',
       async: false,
-    }).done( (responses) => {
-      responses.map( (response: any) => {
+    }).done( (responses: Array<Interfaces.ISong>) => {
+      responses.map( (response: Interfaces.ISongLink) => {
         requestedSong.link === response.link ? true : false
       })
     })
     return exists
   }
 
-  public static createRequest(requestedSong: any) {
+  public static createRequest(requestedSong: Interfaces.ISongLink) {
     $.ajax({
       url: '/api/music/requests',
       method: 'POST',
@@ -43,7 +43,7 @@ export default class Services {
         artist: requestedSong.artist,
         link: requestedSong.link
       })
-    }).done( (response) => {
+    }).done( () => {
       Settings.socket.emit('songRequested', {
         image: requestedSong.image,
         artist: requestedSong.artist,
@@ -54,18 +54,18 @@ export default class Services {
     })
   }
 
-  public static requestSong(requestedSong: any) {
+  public static requestSong(requestedSong: Interfaces.ISongLink) {
     return new Promise( (resolve: any, reject: any) => {
       this.equalityCheck(requestedSong) ? reject('Song is already in queue') : resolve(this.createRequest(requestedSong))
     })
   }
 
-  public static removeSong(songToRemove: any) {
+  public static removeSong(songToRemove: string) {
     return new Promise( (resolve, reject) => {
       $.ajax({
         url: '/api/music/requests/' + songToRemove,
         method: 'DELETE'
-      }).done( (response) => {
+      }).done( () => {
         resolve()
       }).fail( (error) => {
         reject('There was an error when trying to delete this song')

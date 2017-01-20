@@ -1,6 +1,5 @@
 namespace Interfaces {
-  export interface IAudio {
-    currentTime: number
-    duration: number
+  export interface ISongLink extends ISong {
+    link: string
   }
 }

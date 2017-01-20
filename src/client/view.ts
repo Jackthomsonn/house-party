@@ -11,8 +11,8 @@ export default class View {
     this.buttons = document.querySelectorAll('button.list')
   }
 
-  public makeList(songs: Array<Interfaces.ISong>) {
-    songs.map( (song: any, index: Number) => {
+  public makeList(songs: Array<Interfaces.ISongLink>) {
+    songs.map( (song: Interfaces.ISong) => {
       this.parent.append(`<div class="card">
         <img src="${song.image}"></img>
         <div class="info">
@@ -37,7 +37,7 @@ export default class View {
   }
 
   public songQueue(songs: Array<Interfaces.ISong>) {
-    songs.map( (song, index) => {
+    songs.map( (song: Interfaces.ISong, index) => {
       this.parent.append(`<div class="card">
         <img src="${song.image}"></img>
         <div class="info">
