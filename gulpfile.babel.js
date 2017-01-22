@@ -7,6 +7,8 @@ import babelify from 'babelify'
 import cleanCSS from 'gulp-clean-css'
 import source from 'vinyl-source-stream'
 import ts from 'gulp-typescript'
+import buffer from 'vinyl-buffer'
+import tsify from 'tsify'
 
 const tsProject = ts.createProject('tsconfig.json');
 
@@ -23,11 +25,17 @@ gulp.task('nodemon', ['set-dev-node-env'], () => {
   })
 })
 
-gulp.task('js', () => {
-  return tsProject.src()
-    .pipe(tsProject())
-    .js.pipe(gulp.dest("dist"));
-})
+gulp.task('compile', function () {  
+  return browserify()
+    .add('./src/client/app.ts')
+    .plugin(tsify)
+    .transform(babelify, {presets: ['es2015']})
+    .bundle()
+    .on('error', function (error) { console.error(error); })
+    .pipe(source('app.js'))
+    .pipe(buffer())
+    .pipe(gulp.dest('./dist/'));
+});
 
 gulp.task('move', () => {
   gulp.src('./src/*.html')
@@ -49,10 +57,10 @@ gulp.task('sass', () => {
 })
 
 gulp.task('watch', () => {
-  gulp.watch('./src/client/**/*.js', ['js'])
+  gulp.watch('./src/client/**/*.ts', ['compile'])
   gulp.watch('./src/server/**/**/*.js', ['move'])
   gulp.watch('./src/*.html', ['move'])
   gulp.watch('./src/assets/scss/**/*.scss', ['sass'])
 })
 
-gulp.task('default', ['nodemon', 'js', 'move', 'sass', 'watch'])
+gulp.task('default', ['nodemon', 'compile', 'move', 'sass', 'watch'])

@@ -1,5 +1,6 @@
-import $ from 'jquery';
+import * as $ from 'jquery';
 import Settings from './settings'
+import * as Promise from 'promise'
 
 export default class Services {
 
@@ -24,7 +25,9 @@ export default class Services {
       async: false,
     }).done( (responses: Array<Interfaces.ISong>) => {
       responses.map( (response: Interfaces.ISongLink) => {
-        requestedSong.link === response.link ? true : false
+        if(requestedSong.link === response.link) {
+          exists = true
+        }
       })
     })
     return exists
@@ -55,13 +58,13 @@ export default class Services {
   }
 
   public static requestSong(requestedSong: Interfaces.ISongLink) {
-    return new Promise( (resolve: any, reject: any) => {
+    return new Promise( (resolve: Function, reject: Function) => {
       this.equalityCheck(requestedSong) ? reject('Song is already in queue') : resolve(this.createRequest(requestedSong))
     })
   }
 
   public static removeSong(songToRemove: string) {
-    return new Promise( (resolve, reject) => {
+    return new Promise( (resolve: Function, reject: Function) => {
       $.ajax({
         url: '/api/music/requests/' + songToRemove,
         method: 'DELETE'

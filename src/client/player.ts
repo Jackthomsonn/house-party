@@ -1,9 +1,9 @@
 import Service from './services'
 import View from './view'
+import Settings from './settings'
 
 export default class Player {
-  public isPlaying: any
-  
+  public isPlaying: boolean
   private view: View
 
   constructor() {
@@ -14,7 +14,7 @@ export default class Player {
   public play(callback?: Function) {
     let cache: Interfaces.ICache = null
     const audio: any = document.querySelector('audio')
-    audio.autoplay = true
+    audio.setAttribute('autoplay', true);
     Service.getSongs('/api/music/requests')
       .then( (songs: Array<Interfaces.ISongLink>) => {
         if(callback) {

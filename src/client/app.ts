@@ -7,20 +7,20 @@ import Player from './player'
 export default class App {
   public view: View
   public player: Player
+  public notification: Notification
 
   constructor() {
     this.view = new View()
     this.player = new Player()
+    this.notification = new Notification()
 
     Settings.init()
     Settings.isPlayer() ? this.setupPlayer() : this.setupClient()
     Settings.socket.on('songRequested', (song: Interfaces.ISong) => {
       if(!Settings.isPlayer()) {
-        Notification.show(song)
+        this.notification.show(song)
       } else {
         this.view.updateSongQueue(song)
-      }
-      if(!this.player.isPlaying) {
         this.player.play()
       }
     })

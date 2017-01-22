@@ -1,18 +1,18 @@
 import Service from './services'
 import Notification from './notification'
-import $ from 'jquery'
+import * as $ from 'jquery'
 
 export default class View {
   private parent: any
-  private buttons: any
+  public notification: Notification
 
   constructor() {
-    this.parent = document.querySelector('.outer')
-    this.buttons = document.querySelectorAll('button.list')
+    this.parent = $('.outer')
+    this.notification = new Notification()
   }
 
   public makeList(songs: Array<Interfaces.ISongLink>) {
-    songs.map( (song: Interfaces.ISong) => {
+    songs.map( (song, index) => {
       this.parent.append(`<div class="card">
         <img src="${song.image}"></img>
         <div class="info">
@@ -23,13 +23,16 @@ export default class View {
           <button class="list">Request</button>
         </div>
       </div>`)
-      this.buttons.forEach( (button: any, index: any, curr: any) => {
+
+      const buttons: any = document.querySelectorAll('button.list')
+
+      buttons.forEach( (button: any, index: any, curr: any) => {
         curr[index].addEventListener('click', () => {
           Service.requestSong(songs[index])
-            .then( (response: any) => {
+            .then( () => {
               return
-            }).catch( (error: any) => {
-              Notification.show(error, true)
+            }).catch( (error) => {
+              this.notification.show(error, true)
             })
         });
       })
@@ -37,7 +40,7 @@ export default class View {
   }
 
   public songQueue(songs: Array<Interfaces.ISong>) {
-    songs.map( (song: Interfaces.ISong, index) => {
+    songs.map( (song, index) => {
       this.parent.append(`<div class="card">
         <img src="${song.image}"></img>
         <div class="info">

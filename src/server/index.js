@@ -11,6 +11,8 @@ const enableLog = false
 
 server.listen(3000)
 
+mongoose.Promise = global.Promise;
+
 mongoose.connect('mongodb://localhost/house_party/')
 
 app.use(express.static('dist'))

@@ -1,4 +1,4 @@
-import io from 'socket.io-client'
+import * as io from 'socket.io-client';
 
 export default class Settings {
   public static socket: any

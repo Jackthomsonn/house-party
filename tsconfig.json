@@ -1,6 +1,7 @@
 {
   "files": ["src/client/*.ts"],
   "compilerOptions": {
+    "module": "commonjs",
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
