@@ -5,7 +5,7 @@ import * as Promise from 'promise'
 export default class Services {
 
   public static getSongs(alternativeUrl?: string) {
-    return new Promise( (resolve, reject) => {
+    return new Promise<Array<Interfaces.ISong>>( (resolve, reject) => {
       $.ajax({
         url: alternativeUrl ? alternativeUrl : '/api/music',
         method: 'GET'
@@ -18,16 +18,14 @@ export default class Services {
   }
 
   public static equalityCheck(requestedSong: Interfaces.ISongLink) {
-    let exists = false
+    let exists: Boolean = false
     $.ajax({
       url: '/api/music/requests',
       method: 'GET',
       async: false,
     }).done( (responses: Array<Interfaces.ISong>) => {
       responses.map( (response: Interfaces.ISongLink) => {
-        if(requestedSong.link === response.link) {
-          exists = true
-        }
+        exists = requestedSong.link === response.link
       })
     })
     return exists
@@ -58,13 +56,13 @@ export default class Services {
   }
 
   public static requestSong(requestedSong: Interfaces.ISongLink) {
-    return new Promise( (resolve: Function, reject: Function) => {
+    return new Promise( (resolve: Function, reject) => {
       this.equalityCheck(requestedSong) ? reject('Song is already in queue') : resolve(this.createRequest(requestedSong))
     })
   }
 
   public static removeSong(songToRemove: string) {
-    return new Promise( (resolve: Function, reject: Function) => {
+    return new Promise( (resolve: Function, reject) => {
       $.ajax({
         url: '/api/music/requests/' + songToRemove,
         method: 'DELETE'

@@ -21,7 +21,9 @@ export default class App {
         this.notification.show(song)
       } else {
         this.view.updateSongQueue(song)
-        this.player.play()
+        if(!this.player.isPlaying) {
+          this.player.play()
+        }
       }
     })
   }
