@@ -29,7 +29,6 @@ let _id = null
 
 app.get('/player', (req, res, next) => {
   res.status(200).sendFile(__dirname + '/player.html')
-
   socketList.map((socket) => {
     if (socket[_id].role === 'client') {
       res.redirect('/')
@@ -40,7 +39,6 @@ app.get('/player', (req, res, next) => {
 io.sockets.on('connection', (socket) => {
   _id = socket.id
   let obj = null
-
   socketList.length === 0 ? obj = { role: 'player' } : obj = { role: 'client' }
 
   if (!obj) {
