@@ -8,6 +8,8 @@ const io = require('socket.io')(server)
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const enableLog = false
+const port = process.env.port || 3000
+const env = process.env.NODE_ENV || 'development'
 
 server.listen(3000)
 
@@ -21,19 +23,50 @@ app.use(bodyParser.json())
 app.use('/api', require('./routes/music.js'))
 app.use('/api', require('./routes/requests.js'))
 
-app.get('/player', (req, res) => {
-  res.status(200).sendFile(__dirname + '/player.html')
-})
+let sockets = {}
+let socketList = []
+let _id = null
 
-io.sockets.on('connection', (socket) => {
-  const _id = socket.id
-  enableLog ? showLog(_id, socket) : null
-  socket.on('songRequested', (data) => {
-    io.emit('songRequested', data)
+app.get('/player', (req, res, next) => {
+  res.status(200).sendFile(__dirname + '/player.html')
+
+  socketList.map((socket) => {
+    if (socket[_id].role === 'client') {
+      res.redirect('/')
+    }
   })
 })
 
+io.sockets.on('connection', (socket) => {
+  _id = socket.id
+  let obj = null
+
+  socketList.length === 0 ? obj = { role: 'player' } : obj = { role: 'client' }
+
+  if (!obj) {
+    return
+  }
+
+  sockets[_id] = obj
+  socketList.push(sockets)
+
+  socket.on('disconnect', () => {
+    socketList.splice(socketList[_id], 1)
+    enableLog ? showLog(_id, socket) : null
+  })
+
+  socket.on('songRequested', (data) => {
+    io.emit('songRequested', data)
+  })
+
+  enableLog ? showLog(_id, socket) : null
+})
+
 function showLog(_id, socket) {
-  console.log('Socket Connected: ' + _id)
-  socket.on('disconnect', () => { console.log('Socket Disconnected: ' + _id) })
+  console.log('-----------------')
+  console.log('House party is running in ' + env + ' mode on port ' + port)
+  console.log('-----------------')
+  console.log('Connected Clients (' + socketList.length + ')')
+  console.log(socketList)
+  console.log('-----------------')
 }

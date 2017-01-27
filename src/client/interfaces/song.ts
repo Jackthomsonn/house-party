@@ -1,10 +1,10 @@
 namespace Interfaces {
   export interface ISong {
-    image: string
-    artist: string
-    songName: string
-    currentSong: string
-    duration: number
-    currentTime: number
+    image: String
+    artist: String
+    songName: String
+    currentSong: String
+    duration: Number
+    currentTime: Number
   }
 }

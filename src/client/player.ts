@@ -3,7 +3,7 @@ import View from './view'
 import Settings from './settings'
 
 export default class Player {
-  public isPlaying: boolean
+  public isPlaying: Boolean
   private view: View
 
   constructor() {
@@ -33,17 +33,17 @@ export default class Player {
       })
   }
 
-  public hasEnded(audio: Interfaces.ISongLink) {
+  private hasEnded(audio: Interfaces.ISong) {
     return audio.duration === audio.currentTime
   }
 
-  public next(cache: Interfaces.ICache) {
+  private next(cache: Interfaces.ICache) {
     if(cache) {
       Service.removeSong(cache._id)
         .then( () => {
           this.view.removeSongFromQueue()
           this.play()
-        }).catch( (error: Object) => {
+        }).catch( (error: String) => {
           return error
         })
     }

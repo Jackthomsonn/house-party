@@ -3,7 +3,7 @@ import Notification from './notification'
 import * as $ from 'jquery'
 
 export default class View {
-  public notification: Notification
+  private notification: Notification
   private parent: any
 
   constructor() {

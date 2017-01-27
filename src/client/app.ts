@@ -5,9 +5,9 @@ import Notification from './notification'
 import Player from './player'
 
 export default class App {
-  public view: View
-  public player: Player
-  public notification: Notification
+  private view: View
+  private player: Player
+  private notification: Notification
 
   constructor() {
     this.view = new View()
@@ -28,13 +28,13 @@ export default class App {
     })
   }
 
-  setupPlayer() {
+  private setupPlayer() {
     this.player.play( (songs: Array<Interfaces.ISong>) => {
       this.view.songQueue(songs)
     })
   }
 
-  setupClient() {
+  private setupClient() {
     Service.getSongs()
       .then( (songs: Array<Interfaces.ISongLink>) => {
         this.view.makeList(songs)

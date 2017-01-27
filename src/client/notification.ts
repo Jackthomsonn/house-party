@@ -1,5 +1,5 @@
 export default class Notification {
-  public notification: any
+  private notification: any
 
   constructor() {
     this.notification = document.querySelector('.notification')

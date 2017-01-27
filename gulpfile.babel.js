@@ -10,18 +10,16 @@ import ts from 'gulp-typescript'
 import buffer from 'vinyl-buffer'
 import tsify from 'tsify'
 
-const tsProject = ts.createProject('tsconfig.json');
+const tsProject = ts.createProject('tsconfig.json')
+const env = process.env.NODE_ENV || 'development'
 
-gulp.task('set-dev-node-env', () => {
-  return process.env.NODE_ENV = 'development'
+gulp.task('set-node-env', () => {
+  return env
 })
 
-gulp.task('nodemon', ['set-dev-node-env'], () => {
+gulp.task('nodemon', ['set-node-env'], () => {
   nodemon({
-    script: './dist/index.js',
-    env: {
-      'NODE_ENV': 'development'
-    }
+    script: './dist/index.js'
   })
 })
 
@@ -31,11 +29,11 @@ gulp.task('compile', function () {
     .plugin(tsify)
     .transform(babelify, {presets: ['es2015']})
     .bundle()
-    .on('error', function (error) { console.error(error); })
+    .on('error', function (error) { console.error(error) })
     .pipe(source('app.js'))
     .pipe(buffer())
-    .pipe(gulp.dest('./dist/'));
-});
+    .pipe(gulp.dest('./dist/'))
+})
 
 gulp.task('move', () => {
   gulp.src('./src/*.html')
