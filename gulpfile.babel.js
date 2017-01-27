@@ -23,13 +23,13 @@ gulp.task('nodemon', ['set-node-env'], () => {
   })
 })
 
-gulp.task('compile', function () {  
+gulp.task('compile', () => {  
   return browserify()
     .add('./src/client/app.ts')
     .plugin(tsify)
     .transform(babelify, {presets: ['es2015']})
     .bundle()
-    .on('error', function (error) { console.error(error) })
+    .on('error', (error) => { console.error(error) })
     .pipe(source('app.js'))
     .pipe(buffer())
     .pipe(gulp.dest('./dist/'))

@@ -19,7 +19,8 @@ export default class Services {
 
   public static requestSong(requestedSong: Interfaces.ISongLink) {
     return new Promise( (resolve: Function, reject) => {
-      this.equalityCheck(requestedSong) ? reject('Song is already in queue') : resolve(this.createRequest(requestedSong))
+      this.equalityCheck(requestedSong) ? reject('Song is already in queue') :
+      resolve(this.createRequest(requestedSong))
     })
   }
 
