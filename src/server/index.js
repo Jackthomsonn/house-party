@@ -27,12 +27,14 @@ let sockets = {}
 let socketList = []
 let _id = null
 
-app.get('/player', (req, res, next) => {
-  res.status(200).sendFile(__dirname + '/player.html')
+app.get('/player', (req, res) => {
   socketList.map((socket) => {
     if (socket[_id].role === 'client') {
       res.redirect('/')
+      return
     }
+
+    res.status(200).sendFile(__dirname + '/player.html')
   })
 })
 

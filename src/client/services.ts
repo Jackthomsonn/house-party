@@ -18,14 +18,14 @@ export default class Services {
   }
 
   public static requestSong(requestedSong: Interfaces.ISongLink) {
-    return new Promise( (resolve: Function, reject) => {
+    return new Promise( (resolve: any, reject) => {
       this.equalityCheck(requestedSong) ? reject('Song is already in queue') :
       resolve(this.createRequest(requestedSong))
     })
   }
 
   public static removeSong(songToRemove: String) {
-    return new Promise( (resolve: Function, reject) => {
+    return new Promise( (resolve: any, reject) => {
       $.ajax({
         url: '/api/music/requests/' + songToRemove,
         method: 'DELETE'

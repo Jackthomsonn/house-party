@@ -12,7 +12,7 @@ export default class View {
   }
 
   public makeList(songs: Array<Interfaces.ISongLink>) {
-    songs.map( (song, index) => {
+    songs.map( (song: Interfaces.ISong, index) => {
       this.parent.append(`<div class="card">
         <img src="${song.image}"></img>
         <div class="info">
@@ -40,7 +40,7 @@ export default class View {
   }
 
   public songQueue(songs: Array<Interfaces.ISong>) {
-    songs.map( (song, index) => {
+    songs.map( (song: Interfaces.ISong, index) => {
       this.parent.append(`<div class="card">
         <img src="${song.image}"></img>
         <div class="info">
