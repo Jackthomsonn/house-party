@@ -1,14 +1,14 @@
 import * as $ from 'jquery';
-import Settings from './settings'
 import * as Promise from 'promise'
+import Settings from './settings'
 
 export default class Services {
 
   public static getSongs(alternativeUrl?: any) {
     return new Promise<Array<Interfaces.ISong>>( (resolve, reject) => {
       $.ajax({
+        method: 'GET',
         url: alternativeUrl ? alternativeUrl : '/api/music',
-        method: 'GET'
       }).done( (results: Array<Interfaces.ISong>) => {
         resolve(results)
       }).fail( (error) => {
@@ -27,8 +27,8 @@ export default class Services {
   public static removeSong(songToRemove: String) {
     return new Promise( (resolve: any, reject) => {
       $.ajax({
-        url: '/api/music/requests/' + songToRemove,
-        method: 'DELETE'
+        method: 'DELETE',
+        url: '/api/music/requests/' + songToRemove
       }).done( () => {
         resolve()
       }).fail( (error) => {
@@ -40,12 +40,12 @@ export default class Services {
   private static equalityCheck(requestedSong: Interfaces.ISongLink) {
     let exists = false
     $.ajax({
-      url: '/api/music/requests',
-      method: 'GET',
       async: false,
+      method: 'GET',
+      url: '/api/music/requests'
     }).done( (responses: Array<Interfaces.ISong>) => {
       responses.map( (response: Interfaces.ISongLink) => {
-        if(requestedSong.link === response.link) {
+        if (requestedSong.link === response.link) {
           exists = true
         }
       })
@@ -55,21 +55,21 @@ export default class Services {
 
   private static createRequest(requestedSong: Interfaces.ISongLink) {
     $.ajax({
-      url: '/api/music/requests',
-      method: 'POST',
-      contentType: 'application/json; charset=utf-8',
-      dataType: 'json',
       async: false,
+      contentType: 'application/json; charset=utf-8',
       data: JSON.stringify({
-        image: requestedSong.image,
-        songName: requestedSong.songName,
         artist: requestedSong.artist,
-        link: requestedSong.link
-      })
+        image: requestedSong.image,
+        link: requestedSong.link,
+        songName: requestedSong.songName,
+      }),
+      dataType: 'json',
+      method: 'POST',
+      url: '/api/music/requests',
     }).done( () => {
       Settings.socket.emit('songRequested', {
-        image: requestedSong.image,
         artist: requestedSong.artist,
+        image: requestedSong.image,
         songName: requestedSong.songName
       })
     }).fail( (error) => {

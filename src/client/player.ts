@@ -1,6 +1,6 @@
 import Service from './services'
-import View from './view'
 import Settings from './settings'
+import View from './view'
 
 export default class Player {
   public isPlaying: Boolean
@@ -17,10 +17,10 @@ export default class Player {
     audio.setAttribute('autoplay', true);
     Service.getSongs('/api/music/requests')
       .then( (songs: Array<Interfaces.ISongLink>) => {
-        if(callback) {
+        if (callback) {
           callback(songs)
         }
-        if(songs.length > 0) {
+        if (songs.length > 0) {
           this.isPlaying = true
           cache = songs[0]
           audio.src = cache.link
@@ -38,7 +38,7 @@ export default class Player {
   }
 
   private next(cache: Interfaces.ICache) {
-    if(cache) {
+    if (cache) {
       Service.removeSong(cache._id)
         .then( () => {
           this.view.removeSongFromQueue()

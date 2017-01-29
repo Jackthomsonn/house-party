@@ -1,0 +1,38 @@
+{
+  "extends": "tslint:latest",
+  "rules": {
+    "callable-types": true,
+    "interface-name": [],
+    "interface-over-type-literal": true,
+    "file-header": [false],
+    "semicolon": [false],
+    "quotemark": [false],
+    "max-line-length": [true, 140],
+    "member-ordering": [true,
+      "public-before-private",
+      "static-before-instance",
+      "variables-before-functions"
+    ],
+    "no-angle-bracket-type-assertion": true,
+    "no-default-export": false,
+    "no-empty-interface": true,
+    "no-unused-new": false,
+    "eofline": false,
+    "no-string-throw": true,
+    "prefer-const": true,
+    "no-unused-expression": false,
+    "trailing-comma": [
+      false
+    ],
+    "no-namespace": [
+      false
+    ],
+    "array-type": [],
+    "variable-name": [true,
+      "ban-keywords",
+      "check-format",
+      "allow-leading-underscore",
+      "allow-pascal-case"
+    ]
+  }
+}

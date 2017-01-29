@@ -23,8 +23,8 @@ app.use(bodyParser.json())
 app.use('/api', require('./routes/music.js'))
 app.use('/api', require('./routes/requests.js'))
 
-let sockets = {}
-let socketList = []
+const sockets = {}
+const socketList = []
 let _id = null
 
 app.get('/player', (req, res) => {

@@ -1,8 +1,8 @@
-import Service from './services'
-import View from './view'
-import Settings from './settings'
 import Notification from './notification'
 import Player from './player'
+import Service from './services'
+import Settings from './settings'
+import View from './view'
 
 export default class App {
   private view: View
@@ -17,11 +17,11 @@ export default class App {
     Settings.init()
     Settings.isPlayer() ? this.setupPlayer() : this.setupClient()
     Settings.socket.on('songRequested', (song: Interfaces.ISong) => {
-      if(!Settings.isPlayer()) {
+      if (!Settings.isPlayer()) {
         this.notification.show(song)
       } else {
         this.view.updateSongQueue(song)
-        if(!this.player.isPlaying) {
+        if (!this.player.isPlaying) {
           this.player.play()
         }
       }

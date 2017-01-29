@@ -1,6 +1,6 @@
-import Service from './services'
-import Notification from './notification'
 import * as $ from 'jquery'
+import Notification from './notification'
+import Service from './services'
 
 export default class View {
   private notification: Notification
@@ -12,7 +12,7 @@ export default class View {
   }
 
   public makeList(songs: Array<Interfaces.ISongLink>) {
-    songs.map( (song: Interfaces.ISong, index) => {
+    songs.map( (song: Interfaces.ISong) => {
       this.parent.append(`<div class="card">
         <img src="${song.image}"></img>
         <div class="info">
