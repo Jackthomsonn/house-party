@@ -23,14 +23,14 @@ app.use(bodyParser.json())
 app.use('/api', require('./routes/music.js'))
 app.use('/api', require('./routes/requests.js'))
 
-const sockets = {}
+const socketObj = {}
 const socketList = []
 let _id = null
 
 app.get('/player', (req, res) => {
-  socketList.map((socket) => {
+  socketList.find((socket) => {
     if (socket[_id].role === 'client') {
-      res.redirect('/')
+      res.status(403).redirect('/')
       return
     }
 
@@ -47,8 +47,8 @@ io.sockets.on('connection', (socket) => {
     return
   }
 
-  sockets[_id] = obj
-  socketList.push(sockets)
+  socketObj[_id] = obj
+  socketList.push(socketObj)
 
   socket.on('disconnect', () => {
     socketList.splice(socketList[_id], 1)

@@ -1,6 +1,6 @@
 header {
-  background: #E83F6F;
-  padding: 1em;
+  background: $theme-color;
+  padding: 1.2em;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -11,5 +11,22 @@ header {
   }
   h2, .material-icons {
     color: #FFF;
+  }
+  .material-icons {
+    font-size: 1.6em;
+    cursor: pointer;
+    align-items: center;
+    display: flex;
+    background: #FFF;
+    color: $theme-color;
+    padding: .1em;
+    border-radius: .1em;
+    box-shadow: 7px 7px 5px darken($theme-color, 5%);
+  }
+  span {
+    color: $theme-color;
+    font-size: .55em;
+    font-weight: 500;
+    margin: 0 1em;
   }
 }
