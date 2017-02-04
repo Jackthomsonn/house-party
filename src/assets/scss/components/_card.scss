@@ -1,8 +1,9 @@
+@import '../_variables';
+
 .outer {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-flow: column wrap;
+  justify-content: flex-start;
+  flex-flow: row wrap;
 }
 
 .card {
@@ -25,31 +26,30 @@
     color: #264653;
   }
   &:nth-of-type(even) {
-    background: darken(#FFF, 1%);
+    background: darken($white, 1%);
   }
   &:not(:last-of-type) {
-    border-bottom: 1px solid darken(#FFF, 2%);
+    border-bottom: 1px solid darken($white, 1%);
   }
   .info {
     display: flex;
     flex-flow: column wrap;
     flex: 1;
     padding: 0 2em;
-    p {
-      font-size: 1em;
-    }
     p:first-of-type {
       font-weight: 700;
+      font-size: 1em;
     }
     p:last-of-type {
-      font-size: .85em;
+      font-size: .75em;
+      color: lighten($theme-color, 2%);
     }
   }
   .actions {
     display: flex;
     button {
       background: #FFF;
-      color: #E83F6F;
+      color: $theme-color;
       border: 1px solid #DDD;
       width: 7em;
       text-transform: uppercase;
@@ -60,7 +60,7 @@
       transition: all ease-in-out .2s;
       &.player {
         background: #FFF;
-        color: #E83F6F;
+        color: $theme-color;
         border: 1px solid #DDD;
         cursor: default;
       }

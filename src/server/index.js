@@ -13,7 +13,7 @@ const env = process.env.NODE_ENV || 'development'
 
 server.listen(3000)
 
-mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise
 
 mongoose.connect('mongodb://localhost/house_party/')
 
@@ -23,19 +23,12 @@ app.use(bodyParser.json())
 app.use('/api', require('./routes/music.js'))
 app.use('/api', require('./routes/requests.js'))
 
-const sockets = {}
+const socketObj = {}
 const socketList = []
 let _id = null
 
 app.get('/player', (req, res) => {
-  socketList.map((socket) => {
-    if (socket[_id].role === 'client') {
-      res.redirect('/')
-      return
-    }
-
-    res.status(200).sendFile(__dirname + '/player.html')
-  })
+  res.status(200).sendFile(__dirname + '/player.html')
 })
 
 io.sockets.on('connection', (socket) => {
@@ -47,16 +40,19 @@ io.sockets.on('connection', (socket) => {
     return
   }
 
-  sockets[_id] = obj
-  socketList.push(sockets)
+  socketObj[_id] = obj
+  socketList.push(socketObj)
 
   socket.on('disconnect', () => {
     socketList.splice(socketList[_id], 1)
-    enableLog ? showLog(_id, socket) : null
   })
 
   socket.on('songRequested', (data) => {
     io.emit('songRequested', data)
+  })
+  
+  socket.on('songChanged', (data) => {
+    io.emit('songChanged', data)
   })
 
   enableLog ? showLog(_id, socket) : null
