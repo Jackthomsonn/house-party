@@ -8,6 +8,7 @@ export default class View {
   private songRequestHeader: any
   private songRequestList: any
   private body: any
+  private currentlyPlaying: any
 
   constructor() {
     this.notification = new Notification()
@@ -15,6 +16,7 @@ export default class View {
     this.songRequestHeader = $('.song-queue_header')
     this.songRequestList = $('.song-queue_list')
     this.body = $('body')
+    this.currentlyPlaying = $('.currently-playing')
   }
 
   public makeList(songs: Array<Interfaces.ISongLink>) {
@@ -90,5 +92,9 @@ export default class View {
 
   public removeSongFromQueue() {
     this.parent.find('.card').first().remove()
+  }
+
+  public setCurrentPlaying(songs: Array<Interfaces.ISong>) {
+    this.currentlyPlaying.html(`Currently playing: ${songs[0].artist} - ${songs[0].songName}`)
   }
 }

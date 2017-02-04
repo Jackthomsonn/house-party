@@ -41,6 +41,7 @@ export default class Player {
     if (cache) {
       Service.removeSong(cache._id)
         .then( () => {
+          Settings.socket.emit('songChanged', true)
           this.view.removeSongFromQueue()
           this.play()
         }).catch( (error: String) => {

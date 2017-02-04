@@ -11,8 +11,10 @@
     justify-content: space-between;
     border-bottom: 1px solid darken($white, 10%);
     background: #FFF;
-    @media (min-width: 0) and (max-width: 800px) {
+    @media (min-width: 0) and (max-width: 600px) {
       & {
+        flex-flow: column wrap;
+        height: 30vh;
         justify-content: space-between;
       }
     }
@@ -35,6 +37,9 @@
       font-size: .55em;
       font-weight: 500;
       margin: 0 1em;
+      &.currently-playing {
+        font-size: .75em;
+      }
     }
   }
   &_list {
