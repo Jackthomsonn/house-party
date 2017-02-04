@@ -3,20 +3,20 @@ import Notification from './notification'
 import Service from './services'
 
 export default class View {
+  private body: any
+  private currentlyPlaying: any
   private notification: Notification
   private parent: any
   private songRequestHeader: any
   private songRequestList: any
-  private body: any
-  private currentlyPlaying: any
 
   constructor() {
+    this.body = $('body')
+    this.currentlyPlaying = $('.currently-playing')
     this.notification = new Notification()
     this.parent = $('.outer')
     this.songRequestHeader = $('.song-queue_header')
     this.songRequestList = $('.song-queue_list')
-    this.body = $('body')
-    this.currentlyPlaying = $('.currently-playing')
   }
 
   public makeList(songs: Array<Interfaces.ISongLink>) {

@@ -6,12 +6,12 @@ import Settings from './settings'
 import View from './view'
 
 export default class App {
+  private closeList: any
   private events: Events
   private notification: Notification
   private player: Player
   private view: View
   private viewList: any
-  private closeList: any
 
   constructor() {
     this.events = new Events()
@@ -27,14 +27,17 @@ export default class App {
     }
 
     this.getCurrentSong()
+
     Settings.init()
     Settings.isPlayer() ? this.setupPlayer() : this.setupClient()
+
     Settings.socket.on('songChanged', () => {
       Service.getSongs('/api/music/requests')
-        .then( (songs) => {
+        .then((songs) => {
           this.view.setCurrentSong(songs)
         })
     })
+
     Settings.socket.on('songRequested', (song: Interfaces.ISong) => {
       if (!Settings.isPlayer()) {
         this.notification.show(song)
@@ -62,7 +65,7 @@ export default class App {
 
   private getCurrentSong() {
     Service.getSongs('/api/music/requests')
-      .then( (songs) => {
+      .then((songs) => {
         this.view.setCurrentSong(songs)
       })
   }
