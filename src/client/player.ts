@@ -14,7 +14,7 @@ export default class Player {
   public play(callback?: Function) {
     let cache: Interfaces.ICache = null
     const audio: any = document.querySelector('audio')
-    audio.setAttribute('autoplay', true);
+    audio.setAttribute('autoplay', true)
     Service.getSongs('/api/music/requests')
       .then( (songs: Array<Interfaces.ISongLink>) => {
         if (callback) {
@@ -47,5 +47,6 @@ export default class Player {
           return error
         })
     }
+    return
   }
 }

@@ -1,4 +1,4 @@
-import * as $ from 'jquery';
+import * as $ from 'jquery'
 import * as Promise from 'promise'
 import Settings from './settings'
 

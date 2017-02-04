@@ -13,7 +13,7 @@ const env = process.env.NODE_ENV || 'development'
 
 server.listen(3000)
 
-mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise
 
 mongoose.connect('mongodb://localhost/house_party/')
 
@@ -28,14 +28,7 @@ const socketList = []
 let _id = null
 
 app.get('/player', (req, res) => {
-  socketList.find((socket) => {
-    if (socket[_id].role === 'client') {
-      res.status(403).redirect('/')
-      return
-    }
-
-    res.status(200).sendFile(__dirname + '/player.html')
-  })
+  res.status(200).sendFile(__dirname + '/player.html')
 })
 
 io.sockets.on('connection', (socket) => {
@@ -52,7 +45,6 @@ io.sockets.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     socketList.splice(socketList[_id], 1)
-    enableLog ? showLog(_id, socket) : null
   })
 
   socket.on('songRequested', (data) => {

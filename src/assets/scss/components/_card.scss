@@ -2,9 +2,8 @@
 
 .outer {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-flow: column wrap;
+  justify-content: flex-start;
+  flex-flow: row wrap;
 }
 
 .card {
@@ -27,10 +26,10 @@
     color: #264653;
   }
   &:nth-of-type(even) {
-    background: darken(#FFF, 1%);
+    background: darken($white, 1%);
   }
   &:not(:last-of-type) {
-    border-bottom: 1px solid darken(#FFF, 1%);
+    border-bottom: 1px solid darken($white, 1%);
   }
   .info {
     display: flex;
@@ -42,7 +41,8 @@
       font-size: 1em;
     }
     p:last-of-type {
-      font-size: .85em;
+      font-size: .75em;
+      color: lighten($theme-color, 2%);
     }
   }
   .actions {

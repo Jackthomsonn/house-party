@@ -2,6 +2,7 @@
 @import './components/_card';
 @import './components/_header';
 @import './components/_notification';
+@import './components/_song_queue';
 
 * {
   margin: 0; padding: 0;
@@ -10,5 +11,5 @@
 }
 
 html,body {
-  background: #FFF;
+  background: $white;
 }

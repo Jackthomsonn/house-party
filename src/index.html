@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
-  <link rel="stylesheet" href="assets/main.css" />
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel='stylesheet' href='assets/main.css' />
+  <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
 </head>
+
 <body>
   <header>
     <h2>House Party</h2>
-    <i class='material-icons'>list <span>See songs in queue</span></i>
+    <i class='material-icons view-list'>list <span>See songs in queue</span></i>
   </header>
-  <div class="outer">
+  <div class='outer'></div>
+  <div class='song-queue'>
+    <div class='song-queue_header'>
+      <h2>Upcoming tracks</h2>
+      <i class='material-icons close-list'>close <span>Go back to song list</span></i>
+    </div>
+    <div class='song-queue_list'></div>
   </div>
   <div class='notification'></div>
   <script src='app.js'></script>
 </body>
+
 </html>

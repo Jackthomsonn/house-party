@@ -1,0 +1,53 @@
+.song-queue {
+  background: #FFF;
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  &_header {
+    padding: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid darken($white, 10%);
+    background: #FFF;
+    @media (min-width: 0) and (max-width: 800px) {
+      & {
+        justify-content: space-between;
+      }
+    }
+    h2, .material-icons {
+      color: $theme-color;
+    }
+    .material-icons {
+      font-size: 1.6em;
+      cursor: pointer;
+      align-items: center;
+      display: flex;
+      background: #FFF;
+      color: $theme-color;
+      padding: .1em;
+      border-radius: .1em;
+      border: 1px solid darken($white, 10%);
+    }
+    span {
+      color: $theme-color;
+      font-size: .55em;
+      font-weight: 500;
+      margin: 0 1em;
+    }
+  }
+  &_list {
+    display: flex;
+    flex-flow: row wrap;
+    box-shadow: 0 5px 10px darken($white, 15%);
+    background: darken($theme-color, 20%);
+    .card {
+      background: darken($theme-color, 20%);
+      border: none;
+      .info > p {
+        color: #FFF;
+      }
+    }
+  }
+}
