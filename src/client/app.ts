@@ -26,13 +26,13 @@ export default class App {
       this.closeList.addEventListener('click', this.events.closeSongRequestList)
     }
 
-    this.setCurrentlyPlaying()
+    this.getCurrentSong()
     Settings.init()
     Settings.isPlayer() ? this.setupPlayer() : this.setupClient()
     Settings.socket.on('songChanged', () => {
       Service.getSongs('/api/music/requests')
         .then( (songs) => {
-          this.view.setCurrentPlaying(songs)
+          this.view.setCurrentSong(songs)
         })
     })
     Settings.socket.on('songRequested', (song: Interfaces.ISong) => {
@@ -60,10 +60,10 @@ export default class App {
       })
   }
 
-  private setCurrentlyPlaying() {
+  private getCurrentSong() {
     Service.getSongs('/api/music/requests')
       .then( (songs) => {
-        this.view.setCurrentPlaying(songs)
+        this.view.setCurrentSong(songs)
       })
   }
 }

@@ -94,7 +94,7 @@ export default class View {
     this.parent.find('.card').first().remove()
   }
 
-  public setCurrentPlaying(songs: Array<Interfaces.ISong>) {
+  public setCurrentSong(songs: Array<Interfaces.ISong>) {
     this.currentlyPlaying.html(`Currently playing: ${songs[0].artist} - ${songs[0].songName}`)
   }
 }
