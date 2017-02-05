@@ -45,7 +45,7 @@
   &_list {
     display: flex;
     flex-flow: row wrap;
-    box-shadow: 0 5px 10px darken($white, 15%);
+    box-shadow: 0 5px 20px lighten($theme-color, 2%);
     background: darken($theme-color, 20%);
     .card {
       background: darken($theme-color, 20%);

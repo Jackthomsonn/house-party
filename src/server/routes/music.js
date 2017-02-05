@@ -1,10 +1,12 @@
 'use strict'
+const contains = require('string-contains-string')
+const CLIENT_ID = process.env.CLIENT_ID
 const express = require('express')
 const router = express.Router()
 const request = require('request')
-const CLIENT_ID = process.env.CLIENT_ID
 
 router.get('/music', (req, res) => {
+  const q = req.query.q
   const options = {
     url: 'http://api.soundcloud.com/playlists/287765171?' + CLIENT_ID,
     method: req.method
@@ -21,7 +23,18 @@ router.get('/music', (req, res) => {
         artist: track.user.username
       })
     })
-    res.status(200).send(tracks)
+    let results = []
+    if(req.query.q) {
+      tracks.find( (track) => {
+        contains(q, track.artist) ||
+        contains(q, track.songName) ||
+        contains(q, track.artist.toLowerCase()) ||
+        contains(q, track.songName.toLowerCase()) ? results.push(track) : null
+      })
+    } else {
+      results = tracks
+    }
+    res.status(200).send(results)
   })
 })
 

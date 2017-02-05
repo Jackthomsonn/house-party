@@ -35,3 +35,24 @@ header {
     }
   }
 }
+
+.sub-header {
+  padding: 1.2em;
+  display: flex;
+  border-bottom: 1px solid darken($white, 10%);
+  input {
+    width: 100vw;
+    border: none;
+    background: none;
+    outline: none;
+    font-size: .8em;
+    color: $theme-color;
+    text-transform: capitalize;
+    &::-webkit-input-placeholder {
+      color: $theme-color;
+    }
+  }
+  i {
+    cursor: pointer;
+  }
+}
