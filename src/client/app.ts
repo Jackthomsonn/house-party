@@ -23,7 +23,7 @@ export default class App {
     this.view = new View()
     this.viewList = document.querySelector('.view-list')
 
-    this.setupViewList()
+    this.setupEventListeners()
     this.getCurrentSong()
     this.setupSockets()
   }
@@ -74,7 +74,7 @@ export default class App {
       })
   }
 
-  private setupViewList() {
+  private setupEventListeners() {
     if (this.viewList) {
       this.closeList.addEventListener('click', this.events.closeSongRequestList)
       this.search.addEventListener('input', this.events.search)
