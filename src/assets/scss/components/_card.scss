@@ -12,6 +12,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+  border-right: 1px solid #EEE;
   @media (min-width: 0) and (max-width: 800px) {
     & {
       width: 100vw;

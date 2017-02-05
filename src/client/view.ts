@@ -19,7 +19,10 @@ export default class View {
     this.songRequestList = $('.song-queue_list')
   }
 
-  public makeList(songs: Array<Interfaces.ISongLink>) {
+  public makeList(songs: Array<Interfaces.ISongLink>, isFilter?: Boolean) {
+    if (isFilter) {
+      this.parent.find('.card').remove()
+    }
     songs.map((song: Interfaces.ISong) => {
       this.parent.append(`<div class="card">
         <img src="${song.image}"></img>

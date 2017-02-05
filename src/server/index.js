@@ -50,12 +50,20 @@ io.sockets.on('connection', (socket) => {
   socket.on('songRequested', (data) => {
     io.emit('songRequested', data)
   })
-  
+
   socket.on('songChanged', (data) => {
     io.emit('songChanged', data)
   })
 
   enableLog ? showLog(_id, socket) : null
+})
+
+process.on('uncaughtException', (exception) => {
+  try {
+    throw new Error('An uncaught exception was initiated - ' + exception)
+  } catch (e) {
+    console.error(e)
+  }
 })
 
 function showLog(_id, socket) {

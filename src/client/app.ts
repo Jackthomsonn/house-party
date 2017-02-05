@@ -10,27 +10,38 @@ export default class App {
   private events: Events
   private notification: Notification
   private player: Player
+  private search: any
   private view: View
   private viewList: any
 
   constructor() {
+    this.closeList = document.querySelector('.close-list')
     this.events = new Events()
     this.notification = new Notification()
     this.player = new Player()
+    this.search = document.querySelector('.search')
     this.view = new View()
     this.viewList = document.querySelector('.view-list')
 
-    if (this.viewList) {
-      this.closeList = document.querySelector('.close-list')
-      this.viewList.addEventListener('click', this.events.getSongRequestsList)
-      this.closeList.addEventListener('click', this.events.closeSongRequestList)
-    }
-
+    this.setupEventListeners()
     this.getCurrentSong()
+    this.setupSockets()
+  }
 
+  private getCurrentSong() {
+    Service.getSongs('/api/music/requests')
+      .then((songs) => {
+        this.view.setCurrentSong(songs)
+      })
+  }
+
+  private initialiseSettings() {
     Settings.init()
     Settings.isPlayer() ? this.setupPlayer() : this.setupClient()
+  }
 
+  private setupSockets() {
+    this.initialiseSettings()
     Settings.socket.on('songChanged', () => {
       Service.getSongs('/api/music/requests')
         .then((songs) => {
@@ -63,11 +74,12 @@ export default class App {
       })
   }
 
-  private getCurrentSong() {
-    Service.getSongs('/api/music/requests')
-      .then((songs) => {
-        this.view.setCurrentSong(songs)
-      })
+  private setupEventListeners() {
+    if (this.viewList) {
+      this.closeList.addEventListener('click', this.events.closeSongRequestList)
+      this.search.addEventListener('input', this.events.search)
+      this.viewList.addEventListener('click', this.events.getSongRequestsList)
+    }
   }
 }
 

@@ -5,33 +5,34 @@ import Settings from './settings'
 export default class Services {
 
   public static getSongs(alternativeUrl?: any) {
-    return new Promise<Array<Interfaces.ISong>>( (resolve, reject) => {
+    return new Promise<Array<Interfaces.ISong>>((resolve, reject) => {
       $.ajax({
         method: 'GET',
         url: alternativeUrl ? alternativeUrl : '/api/music',
-      }).done( (results: Array<Interfaces.ISong>) => {
+      }).done((results: Array<Interfaces.ISong>) => {
         resolve(results)
-      }).fail( (error) => {
+      }).fail((error) => {
         reject('Error getting data from server')
       })
     })
   }
 
   public static requestSong(requestedSong: Interfaces.ISongLink) {
-    return new Promise( (resolve: any, reject) => {
+    Settings.socket.emit('songChanged', true)
+    return new Promise((resolve: any, reject) => {
       this.equalityCheck(requestedSong) ? reject('Song is already in queue') :
-      resolve(this.createRequest(requestedSong))
+        resolve(this.createRequest(requestedSong))
     })
   }
 
   public static removeSong(songToRemove: String) {
-    return new Promise( (resolve: any, reject) => {
+    return new Promise((resolve: any, reject) => {
       $.ajax({
         method: 'DELETE',
         url: '/api/music/requests/' + songToRemove
-      }).done( () => {
+      }).done(() => {
         resolve()
-      }).fail( (error) => {
+      }).fail((error) => {
         reject('There was an error when trying to delete this song')
       })
     })
@@ -43,8 +44,8 @@ export default class Services {
       async: false,
       method: 'GET',
       url: '/api/music/requests'
-    }).done( (responses: Array<Interfaces.ISong>) => {
-      responses.map( (response: Interfaces.ISongLink) => {
+    }).done((responses: Array<Interfaces.ISong>) => {
+      responses.map((response: Interfaces.ISongLink) => {
         if (requestedSong.link === response.link) {
           exists = true
         }
@@ -66,13 +67,13 @@ export default class Services {
       dataType: 'json',
       method: 'POST',
       url: '/api/music/requests',
-    }).done( () => {
+    }).done(() => {
       Settings.socket.emit('songRequested', {
         artist: requestedSong.artist,
         image: requestedSong.image,
         songName: requestedSong.songName
       })
-    }).fail( (error) => {
+    }).fail((error) => {
       return error
     })
   }
