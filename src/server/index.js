@@ -60,11 +60,11 @@ io.sockets.on('connection', (socket) => {
 
 process.on('uncaughtException', (exception) => {
   try {
-    throw new Error('An uncaught exception was initiated - ' + exception);
+    throw new Error('An uncaught exception was initiated - ' + exception)
   } catch (e) {
-    console.error(e);
+    console.error(e)
   }
-});
+})
 
 function showLog(_id, socket) {
   console.log('-----------------')

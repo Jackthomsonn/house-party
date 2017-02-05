@@ -4,7 +4,6 @@ import View from './view'
 
 export default class Events {
   private view: View
-  private value: any
 
   constructor() {
     this.view = new View()
