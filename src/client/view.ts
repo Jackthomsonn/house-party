@@ -29,8 +29,8 @@ export default class View {
       this.parent.append(`<div class="card">
         <img src="${song.image}"></img>
         <div class="info">
-          <p>${song.artist}</p>
           <p>${song.songName}</p>
+          <p>${song.artist}</p>
         </div>
         <div class="actions">
           <button class="list">Request</button>
