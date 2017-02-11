@@ -25,7 +25,7 @@ export default class View {
     if (isFilter) {
       this.parent.find('.card').remove()
     }
-    songs.map((song: Interfaces.ISong) => {
+    songs.map((song: Interfaces.ISong, index: any) => {
       this.parent.append(`<div class="card">
         <img src="${song.image}"></img>
         <div class="info">
@@ -38,16 +38,13 @@ export default class View {
       </div>`)
 
       const buttons: any = document.querySelectorAll('button.list')
-
-      buttons.forEach((button: any, index: any, curr: any) => {
-        curr[index].addEventListener('click', () => {
-          Service.requestSong(songs[index])
-            .then(() => {
-              return
-            }).catch((error) => {
-              this.notification.show(error, true)
-            })
-        })
+      buttons[index].addEventListener('click', () => {
+        Service.requestSong(songs[index])
+          .then(() => {
+            return
+          }).catch((error) => {
+            this.notification.show(error, true)
+          })
       })
     })
   }
