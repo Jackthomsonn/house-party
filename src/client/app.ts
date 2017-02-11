@@ -7,6 +7,7 @@ import View from './view'
 
 export default class App {
   private closeList: any
+  private clearSearch: any
   private events: Events
   private notification: Notification
   private player: Player
@@ -16,6 +17,7 @@ export default class App {
 
   constructor() {
     this.closeList = document.querySelector('.close-list')
+    this.clearSearch = document.querySelector('.close')
     this.events = new Events()
     this.notification = new Notification()
     this.player = new Player()
@@ -75,6 +77,7 @@ export default class App {
       this.closeList.addEventListener('click', this.events.closeSongRequestList)
       this.search.addEventListener('input', this.events.search)
       this.viewList.addEventListener('click', this.events.getSongRequestsList)
+      this.clearSearch.addEventListener('click', this.events.clearSearch)
     }
   }
 }

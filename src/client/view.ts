@@ -9,6 +9,7 @@ export default class View {
   private parent: any
   private songRequestHeader: any
   private songRequestList: any
+  private clearSearchButton: any
 
   constructor() {
     this.body = $('body')
@@ -17,6 +18,7 @@ export default class View {
     this.parent = $('.outer')
     this.songRequestHeader = $('.song-queue_header')
     this.songRequestList = $('.song-queue_list')
+    this.clearSearchButton = $('.close')
   }
 
   public makeList(songs: Array<Interfaces.ISongLink>, isFilter?: Boolean) {
@@ -102,5 +104,9 @@ export default class View {
       this.currentlyPlaying.html('There are no songs in the queue yet');
     }
     this.currentlyPlaying.html(`Currently playing: ${songs[0].artist} - ${songs[0].songName}`)
+  }
+
+  public clearSearch(value: Boolean) {
+    value ? this.clearSearchButton.css('visibility', 'visible') : this.clearSearchButton.css('visibility', 'hidden')
   }
 }
