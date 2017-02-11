@@ -98,6 +98,9 @@ export default class View {
   }
 
   public setCurrentSong(songs: Array<Interfaces.ISong>) {
+    if (songs.length === 0) {
+      this.currentlyPlaying.html('There are no songs in the queue yet');
+    }
     this.currentlyPlaying.html(`Currently playing: ${songs[0].artist} - ${songs[0].songName}`)
   }
 }
