@@ -35,13 +35,9 @@ export default class App {
       })
   }
 
-  private initialiseSettings() {
+  private setupSockets() {
     Settings.init()
     Settings.isPlayer() ? this.setupPlayer() : this.setupClient()
-  }
-
-  private setupSockets() {
-    this.initialiseSettings()
     Settings.socket.on('songChanged', () => {
       Service.getSongs('/api/music/requests')
         .then((songs) => {

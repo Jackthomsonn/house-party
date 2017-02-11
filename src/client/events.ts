@@ -22,11 +22,9 @@ export default class Events {
 
   public search = (e: any) => {
     const value = e.srcElement.value
-    return new Promise((resolve, reject) => {
-      Services.getSongs('/api/music?q=' + value)
-        .then((songs: Array<Interfaces.ISongLink>) => {
-          this.view.makeList(songs, true)
-        })
-    })
+    Services.getSongs('/api/music?q=' + value)
+      .then((songs: Array<Interfaces.ISongLink>) => {
+        this.view.makeList(songs, true)
+      })
   }
 }
