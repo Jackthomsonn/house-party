@@ -19,7 +19,7 @@ export default class Services {
       }).done((results: Array<Interfaces.ISong>) => {
         if (alternativeUrl === '/api/music/requests') {
           results.map((song) => {
-            if (song.partyId === Services.partyId) {
+            if (song.shortName === Services.partyId) {
               partySongs.push(song)
               resolve(partySongs)
             }
@@ -85,7 +85,7 @@ export default class Services {
       url: '/api/house-parties'
     }).done((parties) => {
       parties.map((party: any) => {
-        if (party._id === this.partyId) {
+        if (party.shortName === this.partyId) {
           exists(true)
         } else {
           exists(false)
@@ -102,7 +102,7 @@ export default class Services {
       url: '/api/music/requests'
     }).done((responses: Array<Interfaces.ISong>) => {
       responses.map((response: Interfaces.ISongLink) => {
-        if (response.partyId === this.partyId) {
+        if (response.shortName === this.partyId) {
           if (requestedSong.link === response.link) {
             exists = true
           }
@@ -120,7 +120,7 @@ export default class Services {
         artist: requestedSong.artist,
         image: requestedSong.image,
         link: requestedSong.link,
-        partyId: this.partyId,
+        shortName: this.partyId,
         songName: requestedSong.songName
       }),
       dataType: 'json',
@@ -130,7 +130,7 @@ export default class Services {
       Settings.socket.emit('songRequested', {
         artist: requestedSong.artist,
         image: requestedSong.image,
-        partyId: this.partyId,
+        shortName: this.partyId,
         songName: requestedSong.songName
       })
     }).fail((error) => {

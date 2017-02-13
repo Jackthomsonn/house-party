@@ -45,18 +45,15 @@ io.sockets.on('connection', (socket) => {
   })
 
   socket.on('joinRoom', (data) => {
-    console.log('Join Room')
-    console.log(data)
     socket.join(data)
   })
 
   socket.on('songRequested', (data) => {
-    console.log(data)
-    io.sockets.in(data.partyId).emit('songRequested', data)
+    io.sockets.in(data.shortName).emit('songRequested', data)
   })
 
   socket.on('songChanged', (data) => {
-    io.sockets.in(data.partyId).emit('songChanged', data)
+    io.sockets.in(data.shortName).emit('songChanged', data)
   })
 })
 

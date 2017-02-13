@@ -73,7 +73,7 @@ export default class View {
 
   public songQueue(songs: Array<Interfaces.ISong>) {
     songs.map((song: Interfaces.ISong, index) => {
-      if (song.partyId === Service.partyId) {
+      if (song.shortName === Service.partyId) {
         this.parent.append(`<div class="card">
           <img src="${song.image}"></img>
           <div class="info">
@@ -86,7 +86,6 @@ export default class View {
   }
 
   public updateSongQueue(song: Interfaces.ISong) {
-    console.log('Update Song Queue Was Called')
     this.parent.append(`<div class="card">
         <img src="${song.image}"></img>
         <div class="info">

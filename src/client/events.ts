@@ -68,6 +68,7 @@ export default class Events {
     Services.partyExists((exists: Boolean) => {
       if (exists) {
         this.view.closeSplash()
+        this.getCurrentSong()
         Services.getSongs()
           .then((songs: Array<Interfaces.ISongLink>) => {
             this.view.makeList(songs)
@@ -90,5 +91,14 @@ export default class Events {
           })
       }
     })
+  }
+
+  public getCurrentSong() {
+    if (Services.partyId) {
+      Services.getSongs('/api/music/requests')
+        .then((songs) => {
+          this.view.setCurrentSong(songs)
+        })
+    }
   }
 }

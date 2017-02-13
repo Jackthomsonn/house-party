@@ -5,6 +5,7 @@ const requestsSchema = new mongoose.Schema({
   artist: String,
   link: String,
   partyId: String,
+  shortName: String,
   image: String
 })
 

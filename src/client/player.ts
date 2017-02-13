@@ -41,7 +41,7 @@ export default class Player {
         .then(() => {
           Settings.socket.emit('songChanged', {
             changed: true,
-            partyId: Service.partyId
+            shortName: Service.partyId
           })
           this.view.removeSongFromQueue()
           this.play()

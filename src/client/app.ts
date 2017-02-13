@@ -52,17 +52,7 @@ export default class App {
     this.startParty = document.querySelector('.start-party')
 
     this.setupEventListeners()
-    this.getCurrentSong()
     this.setupSockets()
-  }
-
-  private getCurrentSong() {
-    if (Service.partyId) {
-      Service.getSongs('/api/music/requests')
-        .then((songs) => {
-          this.view.setCurrentSong(songs)
-        })
-    }
   }
 
   private setupSockets() {
