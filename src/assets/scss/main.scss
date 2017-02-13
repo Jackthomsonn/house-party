@@ -13,3 +13,29 @@
 html,body {
   background: $white;
 }
+
+.splash {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  input {
+    border-top: none;
+    border-right: none;
+    border-bottom: 5px solid #EEE;
+    border-left: none;
+    width: 50vw;
+    font-size: 2em;
+    outline: none;
+  }
+  button {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    i {
+      color: $theme-color;
+      font-size: 3em;
+    }
+  }
+}

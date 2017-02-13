@@ -1,16 +1,32 @@
 import * as $ from 'jquery'
 import * as Promise from 'promise'
+import * as shortId from 'shortid'
 import Settings from './settings'
 
 export default class Services {
+  public static partyId: String
 
   public static getSongs(alternativeUrl?: any) {
+    alternativeUrl = alternativeUrl
+    if (!this.partyId) {
+      return
+    }
     return new Promise<Array<Interfaces.ISong>>((resolve, reject) => {
+      const partySongs: any = []
       $.ajax({
         method: 'GET',
         url: alternativeUrl ? alternativeUrl : '/api/music',
       }).done((results: Array<Interfaces.ISong>) => {
-        resolve(results)
+        if (alternativeUrl === '/api/music/requests') {
+          results.map((song) => {
+            if (song.partyId === Services.partyId) {
+              partySongs.push(song)
+              resolve(partySongs)
+            }
+          })
+        } else {
+          resolve(results)
+        }
       }).fail((error) => {
         reject('Error getting data from server')
       })
@@ -18,7 +34,10 @@ export default class Services {
   }
 
   public static requestSong(requestedSong: Interfaces.ISongLink) {
-    Settings.socket.emit('songChanged', true)
+    Settings.socket.emit('songChanged', {
+      changed: true,
+      partyId: this.partyId
+    })
     return new Promise((resolve: any, reject) => {
       this.equalityCheck(requestedSong) ? reject('Song is already in queue') :
         resolve(this.createRequest(requestedSong))
@@ -38,6 +57,43 @@ export default class Services {
     })
   }
 
+  public static createParty(houseParty: Interfaces.IHouseParty) {
+    if (!houseParty.name) {
+      return
+    }
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({
+          name: houseParty.name,
+          shortName: shortId.generate()
+        }),
+        dataType: 'json',
+        method: 'POST',
+        url: '/api/house-parties',
+      }).done(() => {
+        resolve('Party Created')
+      }).fail((error) => {
+        reject(error)
+      })
+    })
+  }
+
+  public static partyExists(exists: Function) {
+    $.ajax({
+      method: 'GET',
+      url: '/api/house-parties'
+    }).done((parties) => {
+      parties.map((party: any) => {
+        if (party._id === this.partyId) {
+          exists(true)
+        } else {
+          exists(false)
+        }
+      })
+    })
+  }
+
   private static equalityCheck(requestedSong: Interfaces.ISongLink) {
     let exists = false
     $.ajax({
@@ -46,8 +102,10 @@ export default class Services {
       url: '/api/music/requests'
     }).done((responses: Array<Interfaces.ISong>) => {
       responses.map((response: Interfaces.ISongLink) => {
-        if (requestedSong.link === response.link) {
-          exists = true
+        if (response.partyId === this.partyId) {
+          if (requestedSong.link === response.link) {
+            exists = true
+          }
         }
       })
     })
@@ -62,7 +120,8 @@ export default class Services {
         artist: requestedSong.artist,
         image: requestedSong.image,
         link: requestedSong.link,
-        songName: requestedSong.songName,
+        partyId: this.partyId,
+        songName: requestedSong.songName
       }),
       dataType: 'json',
       method: 'POST',
@@ -71,6 +130,7 @@ export default class Services {
       Settings.socket.emit('songRequested', {
         artist: requestedSong.artist,
         image: requestedSong.image,
+        partyId: this.partyId,
         songName: requestedSong.songName
       })
     }).fail((error) => {

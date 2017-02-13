@@ -28,6 +28,7 @@
     "node-restful": "^0.2.5",
     "npm": "^4.0.5",
     "request": "^2.79.0",
+    "shortid": "^2.2.6",
     "socket.io": "^1.5.1",
     "socket.io-client": "^1.5.1",
     "string-contains-string": "^1.0.0",

@@ -10,6 +10,7 @@ export default class View {
   private songRequestHeader: any
   private songRequestList: any
   private clearSearchButton: any
+  private splash: any
 
   constructor() {
     this.body = $('body')
@@ -19,6 +20,7 @@ export default class View {
     this.songRequestHeader = $('.song-queue_header')
     this.songRequestList = $('.song-queue_list')
     this.clearSearchButton = $('.close')
+    this.splash = $('.splash')
   }
 
   public makeList(songs: Array<Interfaces.ISongLink>, isFilter?: Boolean) {
@@ -71,25 +73,27 @@ export default class View {
 
   public songQueue(songs: Array<Interfaces.ISong>) {
     songs.map((song: Interfaces.ISong, index) => {
-      this.parent.append(`<div class="card">
+      if (song.partyId === Service.partyId) {
+        this.parent.append(`<div class="card">
+          <img src="${song.image}"></img>
+          <div class="info">
+            <p>${song.artist}</p>
+            <p>${song.songName}</p>
+          </div>
+        </div>`)
+      }
+    })
+  }
+
+  public updateSongQueue(song: Interfaces.ISong) {
+    console.log('Update Song Queue Was Called')
+    this.parent.append(`<div class="card">
         <img src="${song.image}"></img>
         <div class="info">
           <p>${song.artist}</p>
           <p>${song.songName}</p>
         </div>
       </div>`)
-    })
-  }
-
-  public updateSongQueue(song: Interfaces.ISong) {
-    this.parent.append(`<div class="card">
-      <img src="${song.image}"></img>
-      <div class="info">
-        <p>${song.artist}</p>
-        <p>${song.songName}</p>
-      </div>
-    </div>`
-    )
   }
 
   public removeSongFromQueue() {
@@ -105,5 +109,9 @@ export default class View {
 
   public clearSearch(value: Boolean) {
     value ? this.clearSearchButton.css('visibility', 'visible') : this.clearSearchButton.css('visibility', 'hidden')
+  }
+
+  public closeSplash() {
+    this.splash.hide()
   }
 }

@@ -22,6 +22,7 @@ app.use(express.static('dist'))
 app.use(bodyParser.json())
 app.use('/api', require('./routes/music.js'))
 app.use('/api', require('./routes/requests.js'))
+app.use('/api', require('./routes/party.js'))
 
 app.get('/player', (req, res) => {
   res.status(200).sendFile(__dirname + '/player.html')
@@ -43,12 +44,19 @@ io.sockets.on('connection', (socket) => {
     socketList.splice(socketList[_id], 1)
   })
 
+  socket.on('joinRoom', (data) => {
+    console.log('Join Room')
+    console.log(data)
+    socket.join(data)
+  })
+
   socket.on('songRequested', (data) => {
-    io.emit('songRequested', data)
+    console.log(data)
+    io.sockets.in(data.partyId).emit('songRequested', data)
   })
 
   socket.on('songChanged', (data) => {
-    io.emit('songChanged', data)
+    io.sockets.in(data.partyId).emit('songChanged', data)
   })
 })
 
