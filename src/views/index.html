@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <link rel='stylesheet' href='../assets/main.css' />
+  <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+  <link rel="apple-touch-icon" href="../assets/images/icon@2x.png">
+  <meta name="apple-mobile-web-app-title" content="House Party">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="translucent black">
+  <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no'>
+  <title>House Party</title>
+</head>
+
+<body>
+  <div class='splash'>
+    <div class='splash_header'>
+      <h2>Join a House Party</h2>
+      <a href='./create'>
+        <button>Want to create your own party? <i class='material-icons'>arrow_forward</i></button>
+      </a>
+    </div>
+    <div class='splash_inner'>
+      <input type='text' placeholder='Your name' class='user-name' />
+      <input type='text' placeholder='ID of party to join' class='party-id' />
+      <button><i class='material-icons join-party'>arrow_forward</i></button>
+    </div>
+  </div>
+  <header>
+    <h2></h2>
+    <span class='currently-playing'></span>
+    <i class='material-icons view-list'>list <span>See songs in queue</span></i>
+  </header>
+  <div class='sub-header'>
+    <input type='text' class='search' placeholder='Search for a song'></input>
+    <i class='material-icons close'>close</i>
+  </div>
+  <div class='outer'></div>
+  <div class='song-queue'>
+    <div class='song-queue_header'>
+      <h2>Song Queue</h2>
+      <span class='currently-playing'></span>
+      <i class='material-icons close-list'>close <span>Go back to song list</span></i>
+    </div>
+    <div class='song-queue_list'></div>
+  </div>
+  <div class='notification'></div>
+  <script src='../app.js'></script>
+  <script>
+    (function (document, navigator, standalone) {
+      if ((standalone in navigator) && navigator[standalone]) {
+        var curnode, location = document.location, stop = /^(a|html)$/i;
+        document.addEventListener('click', function (e) {
+          curnode = e.target;
+          while (!(stop).test(curnode.nodeName)) {
+            curnode = curnode.parentNode;
+          }
+          if ('href' in curnode && (curnode.href.indexOf('http') || ~curnode.href.indexOf(location.host))) {
+            e.preventDefault();
+            location.href = curnode.href;
+          }
+        }, false);
+      }
+    })(document, window.navigator, 'standalone');
+  </script>
+</body>
+
+</html>

@@ -1,24 +1,64 @@
 import * as $ from 'jquery'
 import * as Promise from 'promise'
+import * as shortId from 'shortid'
 import Settings from './settings'
 
 export default class Services {
+  public static partyId: String
+  public static username: String
 
   public static getSongs(alternativeUrl?: any) {
+    alternativeUrl = alternativeUrl
     return new Promise<Array<Interfaces.ISong>>((resolve, reject) => {
+      if (!this.partyId) {
+        reject('It looks like no party has been selected')
+        return
+      }
+      const partySongs: Array<Interfaces.ISong> = []
       $.ajax({
         method: 'GET',
         url: alternativeUrl ? alternativeUrl : '/api/music',
       }).done((results: Array<Interfaces.ISong>) => {
-        resolve(results)
+        if (alternativeUrl === '/api/music/requests') {
+          if (results.length === 0) {
+            resolve([])
+            return
+          }
+          results.map((song) => {
+            if (song.shortName === Services.partyId) {
+              partySongs.push(song)
+              resolve(partySongs)
+            }
+          })
+        } else {
+          resolve(results)
+        }
       }).fail((error) => {
-        reject('Error getting data from server')
+        reject('Whoops! It looks like house party is having some technical difficulties. Please try again later')
+      })
+    })
+  }
+
+  public static getPartyName(partyId: String) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        method: 'GET',
+        url: '/api/house-parties'
+      }).done((parties) => {
+        parties.map((party: Interfaces.IHouseParty) => {
+          if (party.shortName === partyId) {
+            resolve(party.name)
+          }
+        })
       })
     })
   }
 
   public static requestSong(requestedSong: Interfaces.ISongLink) {
-    Settings.socket.emit('songChanged', true)
+    Settings.socket.emit('songChanged', {
+      changed: true,
+      partyId: this.partyId
+    })
     return new Promise((resolve: any, reject) => {
       this.equalityCheck(requestedSong) ? reject('Song is already in queue') :
         resolve(this.createRequest(requestedSong))
@@ -38,6 +78,44 @@ export default class Services {
     })
   }
 
+  public static createParty(houseParty: Interfaces.IHouseParty) {
+    return new Promise((resolve, reject) => {
+      if (!houseParty.name) {
+        reject('Please provide a name for your house party')
+        return
+      }
+      $.ajax({
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({
+          name: houseParty.name,
+          shortName: shortId.generate()
+        }),
+        dataType: 'json',
+        method: 'POST',
+        url: '/api/house-parties',
+      }).done((party) => {
+        resolve(party)
+      }).fail((error) => {
+        reject(`Whoops! It looks like house party is having some technical difficulties. Please try again later`)
+      })
+    })
+  }
+
+  public static partyExists(exists: Function) {
+    $.ajax({
+      method: 'GET',
+      url: '/api/house-parties'
+    }).done((parties) => {
+      parties.map((party: Interfaces.IHouseParty) => {
+        if (party.shortName === this.partyId) {
+          exists(true)
+        } else {
+          exists(false)
+        }
+      })
+    })
+  }
+
   private static equalityCheck(requestedSong: Interfaces.ISongLink) {
     let exists = false
     $.ajax({
@@ -46,8 +124,10 @@ export default class Services {
       url: '/api/music/requests'
     }).done((responses: Array<Interfaces.ISong>) => {
       responses.map((response: Interfaces.ISongLink) => {
-        if (requestedSong.link === response.link) {
-          exists = true
+        if (response.shortName === this.partyId) {
+          if (requestedSong.link === response.link) {
+            exists = true
+          }
         }
       })
     })
@@ -62,7 +142,9 @@ export default class Services {
         artist: requestedSong.artist,
         image: requestedSong.image,
         link: requestedSong.link,
+        shortName: this.partyId,
         songName: requestedSong.songName,
+        username: this.username
       }),
       dataType: 'json',
       method: 'POST',
@@ -71,7 +153,9 @@ export default class Services {
       Settings.socket.emit('songRequested', {
         artist: requestedSong.artist,
         image: requestedSong.image,
-        songName: requestedSong.songName
+        shortName: this.partyId,
+        songName: requestedSong.songName,
+        username: this.username ? this.username : 'Someone'
       })
     }).fail((error) => {
       return error

@@ -3,6 +3,8 @@
 @import './components/_header';
 @import './components/_notification';
 @import './components/_song_queue';
+@import './components/_splash';
+@import './components/_animations';
 
 * {
   margin: 0; padding: 0;
@@ -12,4 +14,8 @@
 
 html,body {
   background: $white;
+}
+
+a {
+  text-decoration: none;
 }

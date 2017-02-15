@@ -6,5 +6,8 @@ namespace Interfaces {
     currentSong: String
     duration: Number
     currentTime: Number
+    partyId: String
+    shortName: String
+    username: String
   }
 }

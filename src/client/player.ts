@@ -7,30 +7,28 @@ export default class Player {
   private view: View
 
   constructor() {
-    this.isPlaying = false
     this.view = new View()
   }
 
   public play(callback?: Function) {
-    let cache: Interfaces.ICache = null
-    const audio: any = document.querySelector('audio')
-    audio.setAttribute('autoplay', true)
-    Service.getSongs('/api/music/requests')
-      .then( (songs: Array<Interfaces.ISongLink>) => {
-        if (callback) {
-          callback(songs)
-        }
-        if (songs.length > 0) {
-          this.isPlaying = true
-          cache = songs[0]
-          audio.src = cache.link
-          setInterval( () => {
-            this.hasEnded(audio) ? this.next(cache) && (cache = null) : undefined
-          }, 1000)
-        } else {
-          this.isPlaying = false
-        }
-      })
+    if (Service.partyId) {
+      let cache: Interfaces.ICache = null
+      const audio: any = document.querySelector('audio')
+      audio.setAttribute('autoplay', true)
+      Service.getSongs('/api/music/requests')
+        .then((songs: Array<Interfaces.ISongLink>) => {
+          if (callback) {
+            callback(songs)
+          }
+          if (songs.length > 0) {
+            cache = songs[0]
+            audio.src = cache.link
+            setInterval(() => {
+              this.hasEnded(audio) ? this.next(cache) && (cache = null) : undefined
+            }, 1000)
+          }
+        })
+    }
   }
 
   private hasEnded(audio: Interfaces.ISong) {
@@ -40,11 +38,14 @@ export default class Player {
   private next(cache: Interfaces.ICache) {
     if (cache) {
       Service.removeSong(cache._id)
-        .then( () => {
-          Settings.socket.emit('songChanged', true)
+        .then(() => {
+          Settings.socket.emit('songChanged', {
+            changed: true,
+            shortName: Service.partyId
+          })
           this.view.removeSongFromQueue()
           this.play()
-        }).catch( (error: String) => {
+        }).catch((error: String) => {
           return error
         })
     }
