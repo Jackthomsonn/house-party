@@ -1,0 +1,13 @@
+.loading-container {
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  margin: 0 auto;
+  &--loader {
+    background: $theme-color;
+    width: 100vw;
+    height: .2em;
+    transform: translateX(-100vw);
+    animation: loading 2s ease-in-out infinite forwards;
+  }
+}

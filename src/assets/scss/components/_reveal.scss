@@ -1,0 +1,46 @@
+.reveal {
+  display: none;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  text-align: center;
+  &_inner {
+    @extend .reveal;
+    justify-content: space-around;
+    height: 30vh;
+    &__code {
+      padding: 1em;
+      border-radius: 3px;
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      font-size: 1.1em;
+      i {
+        font-size: 1.1em;
+        margin: 0 0 0 .5em;
+        cursor: pointer;
+      }
+    }
+  }
+  .show {
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    i {
+      margin: 0 .5em;
+    }
+  }
+}
+
+.slide-left {
+  animation: slideLeft 1s forwards;
+}
+
+.slide-right {
+  animation: slideRight 1s forwards;
+}
+
+.show {
+  animation: show 1s forwards;
+}

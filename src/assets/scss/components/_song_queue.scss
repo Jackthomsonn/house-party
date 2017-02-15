@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: darken($white, 2%);
+    background: $white;
     @media (min-width: 0) and (max-width: 600px) {
       & {
         flex-flow: column wrap;

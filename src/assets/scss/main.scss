@@ -5,6 +5,8 @@
 @import './components/_song_queue';
 @import './components/_splash';
 @import './components/_animations';
+@import './components/_loader';
+@import './components/reveal';
 
 * {
   margin: 0; padding: 0;
@@ -19,23 +21,3 @@ html,body {
 a {
   text-decoration: none;
 }
-
-.loading-container {
-  width: 100vw;
-  position: absolute;
-  top: 0;
-  margin: 0 auto;
-  &--loader {
-    background: $theme-color;
-    width: 100vw;
-    height: .2em;
-    transform: translateX(-100vw);
-    animation: loading 2s ease-in-out infinite forwards;
-  }
-}
-
-@keyframes loading {
-    to {
-      transform: translateX(100%);
-    }
-  }
