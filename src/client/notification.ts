@@ -1,3 +1,5 @@
+import Service from './services'
+
 export default class Notification {
   private notification: any
 
@@ -5,15 +7,14 @@ export default class Notification {
     this.notification = document.querySelector('.notification')
   }
 
-  public show = (data: Interfaces.INotification, isError?: Boolean) => {
+  public show = (data: any, isCustom?: Boolean) => {
     this.notification.style.transform = 'translateY(0)'
-    isError ? this.notification.innerHTML = data :
+    isCustom ? this.notification.innerHTML = data :
       this.notification.innerHTML = `${data.username} just requested ${data.artist} - ${data.songName}`
     setTimeout(this.hide, 3000)
   }
 
   public hide = () => {
-    console.log('Hide')
-    this.notification.style.transform = 'translateY(100vh)'
+    this.notification.style.transform = 'translateY(5em)'
   }
 }

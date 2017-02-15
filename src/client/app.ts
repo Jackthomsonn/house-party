@@ -67,7 +67,6 @@ export default class App {
     })
 
     Settings.socket.on('songRequested', (song: Interfaces.ISong) => {
-      this.events.getCurrentSong()
       if (Settings.isPlayer()) {
         this.view.updateSongQueue(song)
         if (!this.player.isPlaying) {
@@ -76,6 +75,12 @@ export default class App {
         }
         return
       }
+      this.events.getCurrentSong()
+
+      if (song.username === Service.username) {
+        song.username = 'You'
+      }
+
       this.notification.show(song)
     })
   }

@@ -9,11 +9,12 @@ export default class Services {
 
   public static getSongs(alternativeUrl?: any) {
     alternativeUrl = alternativeUrl
-    if (!this.partyId) {
-      return
-    }
     return new Promise<Array<Interfaces.ISong>>((resolve, reject) => {
-      const partySongs: any = []
+      if (!this.partyId) {
+        reject('It looks like no party has been selected')
+        return
+      }
+      const partySongs: Array<Interfaces.ISong> = []
       $.ajax({
         method: 'GET',
         url: alternativeUrl ? alternativeUrl : '/api/music',
@@ -33,7 +34,7 @@ export default class Services {
           resolve(results)
         }
       }).fail((error) => {
-        reject('Error getting data from server')
+        reject('Whoops! It looks like house party is having some technical difficulties. Please try again later')
       })
     })
   }
@@ -78,10 +79,11 @@ export default class Services {
   }
 
   public static createParty(houseParty: Interfaces.IHouseParty) {
-    if (!houseParty.name) {
-      return
-    }
     return new Promise((resolve, reject) => {
+      if (!houseParty.name) {
+        reject('Please provide a name for your house party')
+        return
+      }
       $.ajax({
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({
@@ -94,7 +96,7 @@ export default class Services {
       }).done((party) => {
         resolve(party)
       }).fail((error) => {
-        reject(error)
+        reject(`Whoops! It looks like house party is having some technical difficulties. Please try again later`)
       })
     })
   }
@@ -104,7 +106,7 @@ export default class Services {
       method: 'GET',
       url: '/api/house-parties'
     }).done((parties) => {
-      parties.map((party: any) => {
+      parties.map((party: Interfaces.IHouseParty) => {
         if (party.shortName === this.partyId) {
           exists(true)
         } else {

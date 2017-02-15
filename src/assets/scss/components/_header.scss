@@ -3,7 +3,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid darken($white, 2%);
+  border-bottom: 1px solid darken($white, 3%);
   @media (min-width: 0) and (max-width: 600px) {
     & {
       flex-flow: column wrap;
@@ -40,7 +40,7 @@ header {
 .sub-header {
   padding: 1.2em;
   display: flex;
-  border-bottom: 1px solid darken($white, 10%);
+  border-bottom: 1px solid darken($white, 3%);
   input {
     width: 100vw;
     border: none;

@@ -5,9 +5,9 @@ namespace Interfaces {
     songName: String
     currentSong: String
     duration: Number
-    currentTime: Number,
-    partyId: String,
-    shortName: String,
+    currentTime: Number
+    partyId: String
+    shortName: String
     username: String
   }
 }

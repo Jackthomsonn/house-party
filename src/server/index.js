@@ -24,8 +24,16 @@ app.use('/api', require('./routes/music.js'))
 app.use('/api', require('./routes/requests.js'))
 app.use('/api', require('./routes/party.js'))
 
+app.get('/', (req, res) => {
+  res.status(200).sendFile(__dirname + '/views/index.html')
+})
+
 app.get('/player', (req, res) => {
-  res.status(200).sendFile(__dirname + '/player/index.html')
+  res.status(200).sendFile(__dirname + '/views/player/index.html')
+})
+
+app.get('/create', (req, res) => {
+  res.status(200).sendFile(__dirname + '/views/create/index.html')
 })
 
 io.sockets.on('connection', (socket) => {

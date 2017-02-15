@@ -1,4 +1,5 @@
 import * as Promise from 'promise'
+import Notification from './notification'
 import Player from './player'
 import Services from './services'
 import Settings from './settings'
@@ -7,12 +8,14 @@ import View from './view'
 export default class Events {
   public username: String
 
+  private notification: Notification
   private player: Player
   private view: View
   private partyName: String
   private partyId: String
 
   constructor() {
+    this.notification = new Notification()
     this.player = new Player()
     this.view = new View()
   }
@@ -59,27 +62,32 @@ export default class Events {
       name: this.partyName
     }).then((result: Interfaces.IHouseParty) => {
       this.view.showCreatedParty(result)
+      this.notification.show(`${result.name} was successfully created`, true)
     }).catch((error) => {
-      return error
+      this.notification.show(`${error}`, true)
     })
   }
 
   public joinParty = () => {
     Services.partyId = this.partyId
     Settings.socket.emit('joinRoom', this.partyId)
-    Services.getPartyName(this.partyId).then((partyName: String) => {
-      this.view.updateHeader(partyName)
-    })
+    Services.getPartyName(this.partyId)
+      .then((partyName: String) => {
+        this.partyName = partyName
+        this.view.updateHeader(partyName)
+      })
     Services.partyExists((exists: Boolean) => {
       if (exists) {
         this.view.closeSplash()
         this.getCurrentSong()
+        this.notification.show(`You have successfully connected to ${this.partyName}`, true)
         Services.getSongs()
           .then((songs: Array<Interfaces.ISongLink>) => {
             this.view.makeList(songs)
             this.player.play()
           })
-        return
+      } else {
+        this.notification.show(`It looks like that party doesn't exist. Please make sure the ID you have supplied is correct`, true)
       }
     })
   }
@@ -94,6 +102,9 @@ export default class Events {
           .then((songs: Array<Interfaces.ISongLink>) => {
             this.view.songQueue(songs)
           })
+        this.notification.show(`Party successfully started`, true)
+      } else {
+        this.notification.show(`It looks like that party doesn't exist. Please make sure the ID you have supplied is correct`, true)
       }
     })
   }

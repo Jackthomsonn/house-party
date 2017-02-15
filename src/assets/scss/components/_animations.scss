@@ -1,15 +1,13 @@
 .reveal {
-  display: flex;
+  display: none;
   flex-flow: column wrap;
   justify-content: center;
   align-items: center;
   height: 70vh;
   text-align: center;
   &_inner {
-    display: flex;
-    flex-flow: column wrap;
+    @extend .reveal;
     justify-content: space-around;
-    align-items: center;
     height: 30vh;
     &__code {
       padding: 1em;
@@ -23,17 +21,6 @@
         margin: 0 0 0 .5em;
         cursor: pointer;
       }
-    }
-    button {
-      font-size: 1em;
-      cursor: pointer;
-      align-items: center;
-      display: flex;
-      background: $white;
-      color: $theme-color;
-      padding: .4em;
-      border: none;
-      outline: none;
     }
   }
   .show {

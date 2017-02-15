@@ -17,6 +17,7 @@ export default class View {
   private splashInner: any
   private splashInput: any
   private splashButton: any
+  private revealContainer: any
   private reveal: any
   private revealPartyId: any
 
@@ -35,7 +36,8 @@ export default class View {
     this.splashInner = $('.splash .splash_inner')
     this.splashInput = $('.splash .splash_inner input')
     this.splashButton = $('.splash .splash_inner button')
-    this.reveal = $('.splash .reveal h2, a')
+    this.revealContainer = $('.splash').find('.reveal, .reveal_inner')
+    this.reveal = $('.splash .reveal .reveal_inner > h2')
     this.revealPartyId = $('.splash .reveal h3')
   }
 
@@ -138,6 +140,7 @@ export default class View {
     this.splashInput.addClass('slide-left')
     this.splashButton.addClass('slide-right')
     setTimeout(() => {
+      this.revealContainer.attr('style', 'display: flex')
       this.splashInner.remove()
       this.revealPartyId.html(`${createdParty.shortName}`)
       this.revealPartyId.addClass('show')
