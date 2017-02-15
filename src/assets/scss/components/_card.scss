@@ -51,7 +51,8 @@
     button {
       background: $white;
       color: $theme-color;
-      border: 1px solid #DDD;
+      border: 1px solid darken($white, 10%);
+      box-shadow: 0 5px 30px darken($white, 5%);
       width: 7em;
       text-transform: uppercase;
       border-radius: 3px;

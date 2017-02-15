@@ -25,10 +25,11 @@
       display: flex;
       align-items: center;
       background: none;
+      box-shadow: 0 5px 30px darken($white, 10%);
       color: $theme-color;
       padding: .7em;
       border-radius: 3px;
-      border: 1px solid $theme-color;
+      border: 1px solid darken($white, 10%);
       outline: none;
       cursor: pointer;
       i {

@@ -9,6 +9,7 @@ export default class View {
   private currentlyPlaying: any
   private notification: Notification
   private header: any
+  private loading: any
   private parent: any
   private songRequestHeader: any
   private songRequestList: any
@@ -28,6 +29,7 @@ export default class View {
     this.currentlyPlaying = $('.currently-playing')
     this.notification = new Notification()
     this.header = $('header > h2')
+    this.loading = $('.loading-container').hide()
     this.parent = $('.outer')
     this.songRequestHeader = $('.song-queue_header')
     this.songRequestList = $('.song-queue_list')
@@ -146,5 +148,13 @@ export default class View {
       this.revealPartyId.addClass('show')
       this.reveal.addClass('show')
     }, 700)
+  }
+
+  public showLoader() {
+    this.loading.show()
+  }
+
+  public hideLoader() {
+    this.loading.hide()
   }
 }

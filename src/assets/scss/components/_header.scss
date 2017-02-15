@@ -24,6 +24,7 @@ header {
     padding: .1em;
     border-radius: 3px;
     border: 1px solid darken($white, 10%);
+    box-shadow: 0 5px 30px darken($white, 5%);
   }
   span {
     color: $theme-color;

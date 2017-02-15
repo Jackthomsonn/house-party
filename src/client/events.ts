@@ -32,20 +32,24 @@ export default class Events {
   }
 
   public search = (e: any) => {
+    this.view.showLoader();
     const value = e.srcElement.value
     value.length > 0 ? this.view.clearSearch(true) : this.view.clearSearch(false)
     Services.getSongs('/api/music?q=' + value)
       .then((songs: Array<Interfaces.ISongLink>) => {
+        this.view.hideLoader()
         this.view.makeList(songs, true)
       })
   }
 
   public clearSearch = (e: any) => {
+    this.view.showLoader()
     Services.getSongs('/api/music')
       .then((songs: Array<Interfaces.ISongLink>) => {
-        this.view.makeList(songs, true)
         e.srcElement.previousElementSibling.value = ''
+        this.view.hideLoader()
         this.view.clearSearch(false)
+        this.view.makeList(songs, true)
       })
   }
 
@@ -58,31 +62,36 @@ export default class Events {
   }
 
   public createParty = () => {
+    this.view.showLoader()
     Services.createParty({
       name: this.partyName
     }).then((result: Interfaces.IHouseParty) => {
       this.view.showCreatedParty(result)
       this.notification.show(`${result.name} was successfully created`, true)
+      this.view.hideLoader()
     }).catch((error) => {
       this.notification.show(`${error}`, true)
+      this.view.hideLoader()
     })
   }
 
   public joinParty = () => {
     Services.partyId = this.partyId
-    Settings.socket.emit('joinRoom', this.partyId)
-    Services.getPartyName(this.partyId)
-      .then((partyName: String) => {
-        this.partyName = partyName
-        this.view.updateHeader(partyName)
-      })
     Services.partyExists((exists: Boolean) => {
       if (exists) {
         this.view.closeSplash()
         this.getCurrentSong()
-        this.notification.show(`You have successfully connected to ${this.partyName}`, true)
+        this.view.showLoader()
+        Settings.socket.emit('joinRoom', this.partyId)
+        Services.getPartyName(this.partyId)
+          .then((partyName: String) => {
+            this.partyName = partyName
+            this.view.updateHeader(partyName)
+            this.notification.show(`You have successfully connected to ${this.partyName}`, true)
+          })
         Services.getSongs()
           .then((songs: Array<Interfaces.ISongLink>) => {
+            this.view.hideLoader()
             this.view.makeList(songs)
             this.player.play()
           })
@@ -95,16 +104,19 @@ export default class Events {
   public startParty = () => {
     Services.partyId = this.partyId
     Settings.socket.emit('joinRoom', this.partyId)
+    this.view.showLoader();
     Services.partyExists((exists: Boolean) => {
       if (exists) {
         this.view.closeSplash()
         Services.getSongs('/api/music/requests')
           .then((songs: Array<Interfaces.ISongLink>) => {
+            this.view.hideLoader()
             this.view.songQueue(songs)
           })
         this.notification.show(`Party successfully started`, true)
       } else {
         this.notification.show(`It looks like that party doesn't exist. Please make sure the ID you have supplied is correct`, true)
+        this.view.hideLoader()
       }
     })
   }
