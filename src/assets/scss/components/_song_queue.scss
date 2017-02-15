@@ -1,5 +1,5 @@
 .song-queue {
-  background: #FFF;
+  background: $white;
   visibility: hidden;
   position: absolute;
   top: 0;
@@ -9,13 +9,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid darken($white, 10%);
-    background: #FFF;
+    background: darken($white, 2%);
     @media (min-width: 0) and (max-width: 600px) {
       & {
         flex-flow: column wrap;
         height: 30vh;
-        justify-content: space-between;
+        justify-content: space-around;
       }
     }
     h2, .material-icons {
@@ -26,10 +25,10 @@
       cursor: pointer;
       align-items: center;
       display: flex;
-      background: #FFF;
+      background: $white;
       color: $theme-color;
       padding: .1em;
-      border-radius: .1em;
+      border-radius: 3px;
       border: 1px solid darken($white, 10%);
     }
     span {
@@ -47,12 +46,12 @@
     display: flex;
     flex-flow: row wrap;
     box-shadow: 0 5px 20px lighten($theme-color, 2%);
-    background: darken($theme-color, 20%);
+    background: $theme-color;
     .card {
-      background: darken($theme-color, 20%);
+      background: $theme-color;
       border: none;
       .info > p {
-        color: #FFF;
+        color: $white;
       }
     }
   }

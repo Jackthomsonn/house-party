@@ -5,6 +5,7 @@ import Settings from './settings'
 
 export default class Services {
   public static partyId: String
+  public static username: String
 
   public static getSongs(alternativeUrl?: any) {
     alternativeUrl = alternativeUrl
@@ -18,6 +19,10 @@ export default class Services {
         url: alternativeUrl ? alternativeUrl : '/api/music',
       }).done((results: Array<Interfaces.ISong>) => {
         if (alternativeUrl === '/api/music/requests') {
+          if (results.length === 0) {
+            resolve([])
+            return
+          }
           results.map((song) => {
             if (song.shortName === Services.partyId) {
               partySongs.push(song)
@@ -29,6 +34,21 @@ export default class Services {
         }
       }).fail((error) => {
         reject('Error getting data from server')
+      })
+    })
+  }
+
+  public static getPartyName(partyId: String) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        method: 'GET',
+        url: '/api/house-parties'
+      }).done((parties) => {
+        parties.map((party: Interfaces.IHouseParty) => {
+          if (party.shortName === partyId) {
+            resolve(party.name)
+          }
+        })
       })
     })
   }
@@ -71,8 +91,8 @@ export default class Services {
         dataType: 'json',
         method: 'POST',
         url: '/api/house-parties',
-      }).done(() => {
-        resolve('Party Created')
+      }).done((party) => {
+        resolve(party)
       }).fail((error) => {
         reject(error)
       })
@@ -121,7 +141,8 @@ export default class Services {
         image: requestedSong.image,
         link: requestedSong.link,
         shortName: this.partyId,
-        songName: requestedSong.songName
+        songName: requestedSong.songName,
+        username: this.username
       }),
       dataType: 'json',
       method: 'POST',
@@ -131,7 +152,8 @@ export default class Services {
         artist: requestedSong.artist,
         image: requestedSong.image,
         shortName: this.partyId,
-        songName: requestedSong.songName
+        songName: requestedSong.songName,
+        username: this.username ? this.username : 'Someone'
       })
     }).fail((error) => {
       return error

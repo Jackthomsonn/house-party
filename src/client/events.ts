@@ -5,6 +5,8 @@ import Settings from './settings'
 import View from './view'
 
 export default class Events {
+  public username: String
+
   private player: Player
   private view: View
   private partyName: String
@@ -55,8 +57,8 @@ export default class Events {
   public createParty = () => {
     Services.createParty({
       name: this.partyName
-    }).then((result) => {
-      return result
+    }).then((result: Interfaces.IHouseParty) => {
+      this.view.showCreatedParty(result)
     }).catch((error) => {
       return error
     })
@@ -65,6 +67,9 @@ export default class Events {
   public joinParty = () => {
     Services.partyId = this.partyId
     Settings.socket.emit('joinRoom', this.partyId)
+    Services.getPartyName(this.partyId).then((partyName: String) => {
+      this.view.updateHeader(partyName)
+    })
     Services.partyExists((exists: Boolean) => {
       if (exists) {
         this.view.closeSplash()
@@ -99,6 +104,23 @@ export default class Events {
         .then((songs) => {
           this.view.setCurrentSong(songs)
         })
+    }
+  }
+
+  public getUsername(e: any) {
+    Services.username = e.srcElement.value
+  }
+
+  public copyCode(e: any) {
+    window.getSelection().removeAllRanges();
+    const code = document.querySelector('.code');
+    const range = document.createRange();
+    range.selectNode(code);
+    window.getSelection().addRange(range);
+    try {
+      document.execCommand('copy');
+    } catch (err) {
+      return err
     }
   }
 }

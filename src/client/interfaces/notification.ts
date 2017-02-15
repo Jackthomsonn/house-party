@@ -1,6 +1,7 @@
 namespace Interfaces {
   export interface INotification {
-    artist: String,
+    artist: String
     songName: String
+    username: String
   }
 }

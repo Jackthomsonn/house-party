@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Jackthomsonn/house-party#readme",
   "dependencies": {
+    "@types/clipboard": "^1.5.31",
     "@types/jquery": "^2.0.39",
     "@types/promise": "^7.1.30",
     "@types/socket.io-client": "^1.4.29",

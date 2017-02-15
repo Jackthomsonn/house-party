@@ -8,11 +8,12 @@ export default class Notification {
   public show = (data: Interfaces.INotification, isError?: Boolean) => {
     this.notification.style.transform = 'translateY(0)'
     isError ? this.notification.innerHTML = data :
-    this.notification.innerHTML = `Someone just requested ${data.artist} - ${data.songName}`
+      this.notification.innerHTML = `${data.username} just requested ${data.artist} - ${data.songName}`
     setTimeout(this.hide, 3000)
   }
 
   public hide = () => {
+    console.log('Hide')
     this.notification.style.transform = 'translateY(100vh)'
   }
 }

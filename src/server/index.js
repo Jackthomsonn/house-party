@@ -25,7 +25,7 @@ app.use('/api', require('./routes/requests.js'))
 app.use('/api', require('./routes/party.js'))
 
 app.get('/player', (req, res) => {
-  res.status(200).sendFile(__dirname + '/player.html')
+  res.status(200).sendFile(__dirname + '/player/index.html')
 })
 
 io.sockets.on('connection', (socket) => {

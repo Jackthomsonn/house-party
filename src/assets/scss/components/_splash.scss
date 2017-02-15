@@ -1,0 +1,77 @@
+.splash {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-flow: column wrap;
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  background: $white;
+  &_header {
+    width: 100vw;
+    padding: 1.2em;
+    display: flex;
+    flex-flow: column wrap;
+    height: 30vh;
+    justify-content: space-around;
+    align-items: center;
+    background: darken($white, 2%);
+    h2 {
+      color: $theme-color;
+      width: 70vw;
+      text-align: center;
+    }
+    button {
+      display: flex;
+      align-items: center;
+      background: none;
+      color: $theme-color;
+      padding: .7em;
+      border-radius: 3px;
+      border: 1px solid $theme-color;
+      outline: none;
+      cursor: pointer;
+      i {
+        font-size: 1.2em;
+        margin: 0 0 0 .4em;
+      }
+    }
+  }
+  &_inner {
+    display: flex;
+    height: 70vh;
+    @media (min-width: 0) and (max-width: 800px) {
+      & {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-flow: column wrap;
+      }
+    }
+    button {
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      i {
+        color: $theme-color;
+        font-size: 3em;
+      }
+    }
+    input {
+      border: none;
+      width: 40vw;
+      font-size: 2em;
+      outline: none;
+      background: none;
+      color: $theme-color;
+      font-size: 1.8em;
+      @media (min-width: 0) and (max-width: 800px) {
+        & {
+          width: 100vw;
+          text-align: center;
+        }
+      }
+    }
+  }
+}

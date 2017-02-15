@@ -21,9 +21,11 @@ export default class App {
   // Create Screen
   private createParty: any
   private partyName: any
+  private copyCode: any
 
   // Main Screen
   private joinParty: any
+  private userName: any
 
   // Player Screen
   private startParty: any
@@ -31,6 +33,7 @@ export default class App {
   constructor() {
     this.closeList = document.querySelector('.close-list')
     this.clearSearch = document.querySelector('.close')
+    this.copyCode = document.querySelector('.copy-code')
     this.events = new Events()
     this.notification = new Notification()
     this.player = new Player()
@@ -47,6 +50,7 @@ export default class App {
 
     // Main Screen
     this.joinParty = document.querySelector('.join-party')
+    this.userName = document.querySelector('.user-name')
 
     // Player Screen
     this.startParty = document.querySelector('.start-party')
@@ -59,13 +63,11 @@ export default class App {
     Settings.init()
     Settings.isPlayer() ? this.setupPlayer() : this.setupClient()
     Settings.socket.on('songChanged', () => {
-      Service.getSongs('/api/music/requests')
-        .then((songs) => {
-          this.view.setCurrentSong(songs)
-        })
+      this.events.getCurrentSong()
     })
 
     Settings.socket.on('songRequested', (song: Interfaces.ISong) => {
+      this.events.getCurrentSong()
       if (Settings.isPlayer()) {
         this.view.updateSongQueue(song)
         if (!this.player.isPlaying) {
@@ -101,15 +103,11 @@ export default class App {
       this.clearSearch.addEventListener('click', this.events.clearSearch)
     }
 
-    // Main Screen And Player Screen
-    if (!this.createParty) {
-      this.partyId.addEventListener('input', this.events.setPartyId)
-    }
-
     // Create Screen
     if (this.createParty) {
       this.createParty.addEventListener('click', this.events.createParty)
       this.partyName.addEventListener('input', this.events.setPartyName)
+      this.copyCode.addEventListener('click', this.events.copyCode)
     }
 
     // Player Screen
@@ -120,6 +118,12 @@ export default class App {
     // Main Screen
     if (this.joinParty) {
       this.joinParty.addEventListener('click', this.events.joinParty)
+      this.userName.addEventListener('input', this.events.getUsername)
+    }
+
+    // Main Screen And Player Screen
+    if (!this.createParty) {
+      this.partyId.addEventListener('input', this.events.setPartyId)
     }
 
   }
