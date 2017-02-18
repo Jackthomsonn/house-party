@@ -3,14 +3,24 @@
   flex-flow: column wrap;
   justify-content: center;
   align-items: center;
-  height: 70vh;
+  height: 60vh;
   text-align: center;
   &_inner {
     @extend .reveal;
     justify-content: space-around;
-    height: 30vh;
+    height: 40vh;
+    h2, p {
+      color: $theme-color;
+    }
+    h2 {
+      font-size: 1.5em;
+    }
+    p {
+      width: 50vw;
+      text-align: center;
+    }
     &__code {
-      padding: 1em;
+      color: $theme-color;
       border-radius: 3px;
       display: flex;
       flex-flow: row wrap;
@@ -31,16 +41,4 @@
       margin: 0 .5em;
     }
   }
-}
-
-.slide-left {
-  animation: slideLeft 1s forwards;
-}
-
-.slide-right {
-  animation: slideRight 1s forwards;
-}
-
-.show {
-  animation: show 1s forwards;
 }

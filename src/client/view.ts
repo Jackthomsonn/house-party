@@ -10,11 +10,13 @@ export default class View {
   private notification: Notification
   private header: any
   private loading: any
+  private outerBody: any
   private parent: any
   private songRequestHeader: any
   private songRequestList: any
   private clearSearchButton: any
   private splash: any
+  private splashHeader: any
   private splashInner: any
   private splashInput: any
   private splashButton: any
@@ -29,17 +31,19 @@ export default class View {
     this.currentlyPlaying = $('.currently-playing')
     this.notification = new Notification()
     this.header = $('header > h2')
-    this.loading = $('.loading-container').hide()
+    this.loading = $('.loading-container')
+    this.outerBody = $('.outer, header, .sub-header')
     this.parent = $('.outer')
     this.songRequestHeader = $('.song-queue_header')
     this.songRequestList = $('.song-queue_list')
     this.clearSearchButton = $('.close')
     this.splash = $('.splash')
+    this.splashHeader = $('.splash .splash_header')
     this.splashInner = $('.splash .splash_inner')
     this.splashInput = $('.splash .splash_inner input')
     this.splashButton = $('.splash .splash_inner button')
     this.revealContainer = $('.splash').find('.reveal, .reveal_inner')
-    this.reveal = $('.splash .reveal .reveal_inner > h2')
+    this.reveal = $('.splash .reveal .reveal_inner > h2, p')
     this.revealPartyId = $('.splash .reveal h3')
   }
 
@@ -135,7 +139,14 @@ export default class View {
   }
 
   public closeSplash() {
-    this.splash.hide()
+    this.outerBody.hide()
+    this.splashInput.addClass('slide-left')
+    this.splashButton.addClass('slide-right')
+    this.splashHeader.addClass('slide-up')
+    setTimeout( () => {
+      this.splash.hide()
+      this.outerBody.fadeIn(700)
+    }, 700)
   }
 
   public showCreatedParty(createdParty: Interfaces.IHouseParty) {

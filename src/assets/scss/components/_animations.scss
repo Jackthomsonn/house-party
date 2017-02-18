@@ -1,6 +1,6 @@
 @keyframes slideLeft {
   0% {
-    transform: translateX(0px)
+    transform: translateX(0)
   }
   100% {
     transform: translateX(-100vw)
@@ -9,10 +9,19 @@
 
 @keyframes slideRight {
   0% {
-    transform: translateX(0px)
+    transform: translateX(0)
   }
   100% {
     transform: translateX(100vw)
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(0)
+  }
+  100% {
+    transform: translateY(-100vh)
   }
 }
 
@@ -29,4 +38,20 @@
   to {
     transform: translateX(100%);
   }
+}
+
+.slide-left {
+  animation: slideLeft 1s forwards;
+}
+
+.slide-right {
+  animation: slideRight 1s forwards;
+}
+
+.slide-up {
+  animation: slideUp 1s forwards;
+}
+
+.show {
+  animation: show 1s forwards;
 }

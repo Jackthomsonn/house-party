@@ -101,18 +101,13 @@ export default class Services {
     })
   }
 
-  public static partyExists(exists: Function) {
+  public static partyExists(callback: Function) {
     $.ajax({
       method: 'GET',
       url: '/api/house-parties'
     }).done((parties) => {
-      parties.map((party: Interfaces.IHouseParty) => {
-        if (party.shortName === this.partyId) {
-          exists(true)
-        } else {
-          exists(false)
-        }
-      })
+      const exists = parties.some((party: Interfaces.IHouseParty) => party.shortName === this.partyId)
+      exists ? callback(true) : callback(false)
     })
   }
 

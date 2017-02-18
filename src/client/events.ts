@@ -76,47 +76,48 @@ export default class Events {
   }
 
   public joinParty = () => {
+    this.view.showLoader()
     Services.partyId = this.partyId
     Services.partyExists((exists: Boolean) => {
       if (exists) {
-        this.view.closeSplash()
-        this.getCurrentSong()
-        this.view.showLoader()
         Settings.socket.emit('joinRoom', this.partyId)
         Services.getPartyName(this.partyId)
           .then((partyName: String) => {
             this.partyName = partyName
             this.view.updateHeader(partyName)
-            this.notification.show(`You have successfully connected to ${this.partyName}`, true)
-          })
-        Services.getSongs()
-          .then((songs: Array<Interfaces.ISongLink>) => {
-            this.view.hideLoader()
-            this.view.makeList(songs)
-            this.player.play()
+            Services.getSongs()
+              .then((songs: Array<Interfaces.ISongLink>) => {
+                this.notification.show(`You have successfully connected to ${this.partyName}`, true)
+                this.view.closeSplash()
+                this.getCurrentSong()
+                this.view.hideLoader()
+                this.view.makeList(songs)
+                this.player.play()
+              })
           })
       } else {
+        this.view.hideLoader()
         this.notification.show(`It looks like that party doesn't exist. Please make sure the ID you have supplied is correct`, true)
       }
     })
   }
 
   public startParty = () => {
+    this.view.showLoader()
     Services.partyId = this.partyId
     Settings.socket.emit('joinRoom', this.partyId)
-    this.view.showLoader();
     Services.partyExists((exists: Boolean) => {
       if (exists) {
         this.view.closeSplash()
         Services.getSongs('/api/music/requests')
           .then((songs: Array<Interfaces.ISongLink>) => {
-            this.view.hideLoader()
             this.view.songQueue(songs)
+            this.view.hideLoader()
+            this.notification.show(`Party successfully started`, true)
           })
-        this.notification.show(`Party successfully started`, true)
       } else {
-        this.notification.show(`It looks like that party doesn't exist. Please make sure the ID you have supplied is correct`, true)
         this.view.hideLoader()
+        this.notification.show(`It looks like that party doesn't exist. Please make sure the ID you have supplied is correct`, true)
       }
     })
   }
@@ -134,16 +135,17 @@ export default class Events {
     Services.username = e.srcElement.value
   }
 
-  public copyCode(e: any) {
+  public copyCode = () => {
     window.getSelection().removeAllRanges();
     const code = document.querySelector('.code');
     const range = document.createRange();
     range.selectNode(code);
     window.getSelection().addRange(range);
     try {
-      document.execCommand('copy');
+      document.execCommand('copy')
+      this.notification.show('Party ID successfully copied to clipboard', true)
     } catch (err) {
-      return err
+      this.notification.show('There was an error when trying to copy the party ID to your clipboard', true)
     }
   }
 }

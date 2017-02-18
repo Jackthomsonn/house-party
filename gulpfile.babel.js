@@ -36,7 +36,7 @@ gulp.task('compile', () => {
 })
 
 gulp.task('move', () => {
-  gulp.src('./src/**/*.html')
+  gulp.src('./src/**/**/*.html')
     .pipe(gulp.dest('./dist/'))
 
   gulp.src(['./src/server/**/**/*.js'])

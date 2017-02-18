@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Lato:300');
 @import './components/_card';
 @import './components/_header';
 @import './components/_notification';
@@ -11,7 +11,7 @@
 * {
   margin: 0; padding: 0;
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Lato', sans-serif;
 }
 
 html,body {
