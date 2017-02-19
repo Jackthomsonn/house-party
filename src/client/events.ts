@@ -32,7 +32,7 @@ export default class Events {
   }
 
   public search = (e: any) => {
-    this.view.showLoader();
+    this.view.showLoader()
     const value = e.srcElement.value
     value.length > 0 ? this.view.clearSearch(true) : this.view.clearSearch(false)
     Services.getSongs('/api/music?q=' + value)
@@ -143,11 +143,11 @@ export default class Events {
   }
 
   public copyCode = () => {
-    window.getSelection().removeAllRanges();
-    const code = document.querySelector('.code');
-    const range = document.createRange();
-    range.selectNode(code);
-    window.getSelection().addRange(range);
+    window.getSelection().removeAllRanges()
+    const code = document.querySelector('.code')
+    const range = document.createRange()
+    range.selectNode(code)
+    window.getSelection().addRange(range)
     try {
       document.execCommand('copy')
       this.notification.show('Party ID successfully copied to clipboard', true)
