@@ -19407,6 +19407,9 @@ var App = (function () {
                 }
                 _this.notification.show(song);
             });
+            settings_1.default.socket.on('updateCount', function (online) {
+                _this.view.updateCount(online);
+            });
         });
     };
     App.prototype.setupPlayer = function () {
@@ -19897,6 +19900,7 @@ var View = (function () {
         this.songRequestHeader = $('.song-queue_header');
         this.songRequestList = $('.song-queue_list');
         this.clearSearchButton = $('.close');
+        this.onlineCount = $('.online-count');
         this.splash = $('.splash');
         this.splashHeader = $('.splash .splash_header');
         this.splashInner = $('.splash .splash_inner');
@@ -19991,6 +19995,9 @@ var View = (function () {
     };
     View.prototype.hideLoader = function () {
         this.loading.hide();
+    };
+    View.prototype.updateCount = function (online) {
+        this.onlineCount.html("Partygoers online: " + online);
     };
     return View;
 }());

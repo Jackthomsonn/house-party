@@ -34,6 +34,22 @@ header {
       margin: 0 0 0 .4em;
     }
   }
+  button.online-count {
+    display: flex;
+    align-items: center;
+    background: none;
+    color: $theme-color;
+    padding: .7em;
+    border-radius: 3px;
+    border: 1px solid darken($white, 10%);
+    outline: none;
+    text-transform: uppercase;
+    font-size: .6em;
+    i {
+      font-size: 1.2em;
+      margin: 0 0 0 .4em;
+    }
+  }
   div {
     display: -webkit-inline-box;
   }

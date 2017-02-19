@@ -15,6 +15,7 @@ export default class View {
   private songRequestHeader: any
   private songRequestList: any
   private clearSearchButton: any
+  private onlineCount: any
   private splash: any
   private splashHeader: any
   private splashInner: any
@@ -37,6 +38,7 @@ export default class View {
     this.songRequestHeader = $('.song-queue_header')
     this.songRequestList = $('.song-queue_list')
     this.clearSearchButton = $('.close')
+    this.onlineCount = $('.online-count')
     this.splash = $('.splash')
     this.splashHeader = $('.splash .splash_header')
     this.splashInner = $('.splash .splash_inner')
@@ -167,5 +169,9 @@ export default class View {
 
   public hideLoader() {
     this.loading.hide()
+  }
+
+  public updateCount(online: Number) {
+    this.onlineCount.html(`Partygoers online: ${online}`)
   }
 }

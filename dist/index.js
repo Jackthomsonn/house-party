@@ -52,9 +52,11 @@ io.sockets.on('connection', (socket) => {
   _id = socket.id
 
   socket.on('joinRoom', (room) => {
-    room = room
+    socket.room = room
     socket.join(room)
     socketList.push({ id: _id, room: room })
+
+    updateCount(room)
 
     if (!enableLog) {
       return
@@ -72,6 +74,7 @@ io.sockets.on('connection', (socket) => {
   })
 
   socket.on('disconnect', () => {
+    updateCount(socket.room)
     socketList.splice(socketList[_id], 1)
     socket.leave(room)
   })
@@ -84,6 +87,20 @@ process.on('uncaughtException', (exception) => {
     console.error(e)
   }
 })
+
+function updateCount(room) {
+  if(!room) {
+    return
+  }
+
+  const clients = io.sockets.adapter.rooms[room].sockets
+  const numClients = (typeof clients !== 'undefined') ? Object.keys(clients).length : 0
+
+  for (const clientId in clients) {
+    var clientSocket = io.sockets.connected[clientId]
+    clientSocket.emit('updateCount', numClients)
+  }
+}
 
 function showLog() {
   console.log('--------------- User List ---------------')

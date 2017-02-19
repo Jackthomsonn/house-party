@@ -83,6 +83,9 @@ export default class App {
 
           this.notification.show(song)
         })
+        Settings.socket.on('updateCount', (online: any) => {
+          this.view.updateCount(online)
+        })
       })
   }
 
