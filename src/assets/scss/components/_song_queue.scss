@@ -68,9 +68,9 @@
     display: flex;
     flex-flow: row wrap;
     box-shadow: 0 5px 20px lighten($theme-color, 2%);
-    background: $theme-color;
+    background: darken($theme-color, 15%);
     .card {
-      background: $theme-color;
+      background: darken($theme-color, 15%);
       border: none;
       .info > p {
         color: $white;

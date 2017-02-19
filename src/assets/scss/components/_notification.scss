@@ -1,5 +1,5 @@
 .notification {
-  background: $theme-color;
+  background: darken($theme-color, 15%);
   width: 40em;
   min-height: 3em;
   height: auto;

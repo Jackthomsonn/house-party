@@ -89,12 +89,12 @@ process.on('uncaughtException', (exception) => {
 })
 
 function updateCount(room) {
-  if(!room) {
+  if (!room || !io.sockets.adapter.rooms[room]) {
     return
   }
 
   const clients = io.sockets.adapter.rooms[room].sockets
-  const numClients = (typeof clients !== 'undefined') ? Object.keys(clients).length : 0
+  const numClients = (typeof clients !== 'undefined') ? Object.keys(clients).length - 1 : 0
 
   for (const clientId in clients) {
     const clientSocket = io.sockets.connected[clientId]
