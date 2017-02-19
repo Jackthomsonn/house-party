@@ -19,7 +19,7 @@ server.listen(port)
 
 mongoose.Promise = global.Promise
 
-if(process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
   mongoURI = process.env.MONGO_URI
   app.use(express.static(__dirname))
 } else {
@@ -29,11 +29,11 @@ if(process.env.NODE_ENV === 'production') {
 
 mongoose.connect(mongoURI)
 
-
 app.use(bodyParser.json())
 app.use('/api', require('./routes/music.js'))
 app.use('/api', require('./routes/requests.js'))
 app.use('/api', require('./routes/party.js'))
+app.use('/api', require('./routes/settings.js'))
 
 app.get('/', (req, res) => {
   res.status(200).sendFile(__dirname + '/views/index.html')
@@ -56,7 +56,7 @@ io.sockets.on('connection', (socket) => {
     socket.join(room)
     socketList.push({ id: _id, room: room })
 
-    if(!enableLog) {
+    if (!enableLog) {
       return
     }
 

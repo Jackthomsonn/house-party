@@ -111,6 +111,15 @@ export default class Services {
     })
   }
 
+  public static getSocketUri(callback: Function) {
+    $.ajax({
+      method: 'GET',
+      url: '/api/settings'
+    }).done( (result: String) => {
+      callback(result)
+    })
+  }
+
   private static equalityCheck(requestedSong: Interfaces.ISongLink) {
     let exists = false
     $.ajax({

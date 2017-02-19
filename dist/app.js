@@ -19386,25 +19386,27 @@ var App = (function () {
     }
     App.prototype.setupSockets = function () {
         var _this = this;
-        settings_1.default.init();
-        settings_1.default.isPlayer() ? this.setupPlayer() : this.setupClient();
-        settings_1.default.socket.on('songChanged', function () {
-            _this.events.getCurrentSong();
-        });
-        settings_1.default.socket.on('songRequested', function (song) {
-            if (settings_1.default.isPlayer()) {
-                _this.view.updateSongQueue(song);
-                if (!_this.player.isPlaying) {
-                    _this.player.isPlaying = true;
-                    _this.player.play();
+        settings_1.default.init()
+            .then(function () {
+            settings_1.default.isPlayer() ? _this.setupPlayer() : _this.setupClient();
+            settings_1.default.socket.on('songChanged', function () {
+                _this.events.getCurrentSong();
+            });
+            settings_1.default.socket.on('songRequested', function (song) {
+                if (settings_1.default.isPlayer()) {
+                    _this.view.updateSongQueue(song);
+                    if (!_this.player.isPlaying) {
+                        _this.player.isPlaying = true;
+                        _this.player.play();
+                    }
+                    return;
                 }
-                return;
-            }
-            _this.events.getCurrentSong();
-            if (song.username === services_1.default.username) {
-                song.username = 'You';
-            }
-            _this.notification.show(song);
+                _this.events.getCurrentSong();
+                if (song.username === services_1.default.username) {
+                    song.username = 'You';
+                }
+                _this.notification.show(song);
+            });
         });
     };
     App.prototype.setupPlayer = function () {
@@ -19789,6 +19791,14 @@ var Services = (function () {
             exists ? callback(true) : callback(false);
         });
     };
+    Services.getSocketUri = function (callback) {
+        $.ajax({
+            method: 'GET',
+            url: '/api/settings'
+        }).done(function (result) {
+            callback(result);
+        });
+    };
     Services.equalityCheck = function (requestedSong) {
         var _this = this;
         var exists = false;
@@ -19842,12 +19852,17 @@ exports.default = Services;
 
 },{"./settings":75,"jquery":3,"promise":4,"shortid":14}],75:[function(require,module,exports){
 "use strict";
+var Promise = require("promise");
 var io = require("socket.io-client");
+var services_1 = require("./services");
 var Settings = (function () {
     function Settings() {
     }
     Settings.init = function () {
-        this.socket = io.connect('https://house-party.herokuapp.com/');
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            services_1.default.getSocketUri(function (uri) { return (resolve(_this.socket = io.connect(uri))); });
+        });
     };
     Settings.isPlayer = function () {
         return document.querySelector('audio');
@@ -19857,7 +19872,7 @@ var Settings = (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Settings;
 
-},{"socket.io-client":23}],76:[function(require,module,exports){
+},{"./services":74,"promise":4,"socket.io-client":23}],76:[function(require,module,exports){
 "use strict";
 var $ = require("jquery");
 var notification_1 = require("./notification");

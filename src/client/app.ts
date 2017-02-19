@@ -61,28 +61,29 @@ export default class App {
 
   private setupSockets() {
     Settings.init()
-    Settings.isPlayer() ? this.setupPlayer() : this.setupClient()
-    Settings.socket.on('songChanged', () => {
-      this.events.getCurrentSong()
-    })
+      .then(() => {
+        Settings.isPlayer() ? this.setupPlayer() : this.setupClient()
+        Settings.socket.on('songChanged', () => {
+          this.events.getCurrentSong()
+        })
+        Settings.socket.on('songRequested', (song: Interfaces.ISong) => {
+          if (Settings.isPlayer()) {
+            this.view.updateSongQueue(song)
+            if (!this.player.isPlaying) {
+              this.player.isPlaying = true
+              this.player.play()
+            }
+            return
+          }
+          this.events.getCurrentSong()
 
-    Settings.socket.on('songRequested', (song: Interfaces.ISong) => {
-      if (Settings.isPlayer()) {
-        this.view.updateSongQueue(song)
-        if (!this.player.isPlaying) {
-          this.player.isPlaying = true
-          this.player.play()
-        }
-        return
-      }
-      this.events.getCurrentSong()
+          if (song.username === Service.username) {
+            song.username = 'You'
+          }
 
-      if (song.username === Service.username) {
-        song.username = 'You'
-      }
-
-      this.notification.show(song)
-    })
+          this.notification.show(song)
+        })
+      })
   }
 
   private setupPlayer() {
