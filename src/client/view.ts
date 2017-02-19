@@ -172,6 +172,6 @@ export default class View {
   }
 
   public updateCount(online: Number) {
-    this.onlineCount.html(`Partygoers online: ${online}`)
+    this.onlineCount.html(`Partygoers connected: ${online}`)
   }
 }

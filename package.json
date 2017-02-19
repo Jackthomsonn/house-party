@@ -19,6 +19,7 @@
   "dependencies": {
     "@types/jquery": "^2.0.39",
     "@types/promise": "^7.1.30",
+    "@types/shortid": "0.0.28",
     "@types/socket.io-client": "^1.4.29",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
@@ -27,6 +28,7 @@
     "mongoose": "^4.6.8",
     "node-restful": "^0.2.5",
     "npm": "^4.0.5",
+    "promise": "^7.1.1",
     "request": "^2.79.0",
     "shortid": "^2.2.6",
     "socket.io": "^1.5.1",
@@ -48,7 +50,6 @@
     "gulp-clean-css": "^2.0.13",
     "gulp-nodemon": "^2.2.1",
     "gulp-sass": "^2.3.2",
-    "jQuery": "^1.7.4",
     "jquery": "^3.1.1",
     "tsify": "^3.0.0",
     "vinyl-buffer": "^1.0.0",
