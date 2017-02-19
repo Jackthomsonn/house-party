@@ -30,7 +30,7 @@ export default class View {
     this.code = $('.code')
     this.currentlyPlaying = $('.currently-playing')
     this.notification = new Notification()
-    this.header = $('header > h2')
+    this.header = $('header > div h2')
     this.loading = $('.loading-container')
     this.outerBody = $('.outer, header, .sub-header')
     this.parent = $('.outer')

@@ -111,9 +111,16 @@ export default class Events {
         this.view.closeSplash()
         Services.getSongs('/api/music/requests')
           .then((songs: Array<Interfaces.ISongLink>) => {
-            this.view.songQueue(songs)
             this.view.hideLoader()
+            this.view.songQueue(songs)
             this.notification.show(`Party successfully started`, true)
+          })
+
+        Services.getPartyName(this.partyId)
+          .then((partyName: String) => {
+            this.view.hideLoader()
+            this.partyName = partyName
+            this.view.updateHeader(partyName)
           })
       } else {
         this.view.hideLoader()

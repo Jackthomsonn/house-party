@@ -19,6 +19,8 @@
     }
     h2, .material-icons {
       color: $theme-color;
+      font-size: 1.1em;
+      margin: .3em auto;
     }
     button.close-list {
       display: flex;
@@ -36,6 +38,19 @@
       i {
         font-size: 1.2em;
         margin: 0 0 0 .4em;
+      }
+    }
+    div {
+      display: -webkit-inline-box;
+    }
+    img {
+      width: 2em;
+      height: auto;
+      border-radius: 5px;
+      @media (min-width: 0) and (max-width: 600px) {
+        & {
+          display: none;
+        }
       }
     }
     span {

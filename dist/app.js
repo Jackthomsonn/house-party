@@ -19551,9 +19551,15 @@ var Events = (function () {
                     _this.view.closeSplash();
                     services_1.default.getSongs('/api/music/requests')
                         .then(function (songs) {
-                        _this.view.songQueue(songs);
                         _this.view.hideLoader();
+                        _this.view.songQueue(songs);
                         _this.notification.show("Party successfully started", true);
+                    });
+                    services_1.default.getPartyName(_this.partyId)
+                        .then(function (partyName) {
+                        _this.view.hideLoader();
+                        _this.partyName = partyName;
+                        _this.view.updateHeader(partyName);
                     });
                 }
                 else {
@@ -19884,7 +19890,7 @@ var View = (function () {
         this.code = $('.code');
         this.currentlyPlaying = $('.currently-playing');
         this.notification = new notification_1.default();
-        this.header = $('header > h2');
+        this.header = $('header > div h2');
         this.loading = $('.loading-container');
         this.outerBody = $('.outer, header, .sub-header');
         this.parent = $('.outer');
