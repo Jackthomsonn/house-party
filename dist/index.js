@@ -97,7 +97,7 @@ function updateCount(room) {
   const numClients = (typeof clients !== 'undefined') ? Object.keys(clients).length : 0
 
   for (const clientId in clients) {
-    var clientSocket = io.sockets.connected[clientId]
+    const clientSocket = io.sockets.connected[clientId]
     clientSocket.emit('updateCount', numClients)
   }
 }
