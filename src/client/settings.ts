@@ -6,8 +6,15 @@ export default class Settings {
   public static socket: any
 
   public static init() {
-    return new Promise( (resolve, reject) => {
-      Services.getSocketUri( (uri: String) => (resolve(this.socket = io.connect(uri))))
+    return new Promise((resolve, reject) => {
+      Services.getSocketUri((uri: string) => {
+        resolve(this.socket = io.connect(uri, {
+          reconnection: true,
+          reconnectionAttempts: 99999,
+          reconnectionDelay: 1000,
+          reconnectionDelayMax: 5000,
+        }))
+      })
     })
   }
 

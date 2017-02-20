@@ -86,6 +86,13 @@ export default class App {
         Settings.socket.on('updateCount', (online: any) => {
           this.view.updateCount(online)
         })
+        Settings.socket.on('reconnect', () => {
+          if (this.joinParty) {
+            this.events.joinParty()
+          } else {
+            this.events.startParty()
+          }
+        })
       })
   }
 

@@ -19414,6 +19414,14 @@ var App = (function () {
             settings_1.default.socket.on('updateCount', function (online) {
                 _this.view.updateCount(online);
             });
+            settings_1.default.socket.on('reconnect', function () {
+                if (_this.joinParty) {
+                    _this.events.joinParty();
+                }
+                else {
+                    _this.events.startParty();
+                }
+            });
         });
     };
     App.prototype.setupPlayer = function () {
@@ -19874,7 +19882,14 @@ var Settings = (function () {
     Settings.init = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            services_1.default.getSocketUri(function (uri) { return (resolve(_this.socket = io.connect(uri))); });
+            services_1.default.getSocketUri(function (uri) {
+                resolve(_this.socket = io.connect(uri, {
+                    reconnection: true,
+                    reconnectionAttempts: 99999,
+                    reconnectionDelay: 1000,
+                    reconnectionDelayMax: 5000,
+                }));
+            });
         });
     };
     Settings.isPlayer = function () {
@@ -19950,6 +19965,7 @@ var View = (function () {
     };
     View.prototype.songQueue = function (songs) {
         var _this = this;
+        this.parent.find('.card').remove();
         songs.map(function (song, index) {
             if (song.shortName === services_1.default.partyId) {
                 _this.parent.append("<div class=\"card\">\n          <img src=\"" + song.image + "\"></img>\n          <div class=\"info\">\n            <p>" + song.artist + "</p>\n            <p>" + song.songName + "</p>\n          </div>\n        </div>");
@@ -20001,7 +20017,7 @@ var View = (function () {
         this.loading.hide();
     };
     View.prototype.updateCount = function (online) {
-        this.onlineCount.html("Partygoers connected: " + online);
+        this.onlineCount.html("Clients connected: " + online);
     };
     return View;
 }());

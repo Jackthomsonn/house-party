@@ -102,6 +102,7 @@ export default class View {
   }
 
   public songQueue(songs: Array<Interfaces.ISong>) {
+    this.parent.find('.card').remove()
     songs.map((song: Interfaces.ISong, index) => {
       if (song.shortName === Service.partyId) {
         this.parent.append(`<div class="card">
@@ -172,6 +173,6 @@ export default class View {
   }
 
   public updateCount(online: Number) {
-    this.onlineCount.html(`Partygoers connected: ${online}`)
+    this.onlineCount.html(`Clients connected: ${online}`)
   }
 }
