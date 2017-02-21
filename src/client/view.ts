@@ -50,9 +50,7 @@ export default class View {
   }
 
   public makeList(songs: Array<Interfaces.ISongLink>, isFilter?: Boolean) {
-    if (isFilter) {
-      this.parent.find('.card').remove()
-    }
+    this.parent.find('.card').remove()
     songs.map((song: Interfaces.ISong, index: any) => {
       this.parent.append(`<div class="card">
         <img src="${song.image}"></img>
@@ -146,7 +144,7 @@ export default class View {
     this.splashInput.addClass('slide-left')
     this.splashButton.addClass('slide-right')
     this.splashHeader.addClass('slide-up')
-    setTimeout( () => {
+    setTimeout(() => {
       this.splash.hide()
       this.outerBody.fadeIn(700)
     }, 700)

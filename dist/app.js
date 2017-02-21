@@ -19946,9 +19946,7 @@ var View = (function () {
     }
     View.prototype.makeList = function (songs, isFilter) {
         var _this = this;
-        if (isFilter) {
-            this.parent.find('.card').remove();
-        }
+        this.parent.find('.card').remove();
         songs.map(function (song, index) {
             _this.parent.append("<div class=\"card\">\n        <img src=\"" + song.image + "\"></img>\n        <div class=\"info\">\n          <p>" + song.songName + "</p>\n          <p>" + song.artist + "</p>\n        </div>\n        <div class=\"actions\">\n          <button class=\"list\">Request</button>\n        </div>\n      </div>");
             var buttons = document.querySelectorAll('button.list');
