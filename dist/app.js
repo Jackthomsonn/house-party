@@ -19369,22 +19369,18 @@ var App = (function () {
         this.closeList = document.querySelector('.close-list');
         this.clearSearch = document.querySelector('.close');
         this.copyCode = document.querySelector('.copy-code');
+        this.createParty = document.querySelector('.create-party');
         this.events = new events_1.default();
+        this.joinParty = document.querySelector('.join-party');
         this.notification = new notification_1.default();
+        this.partyId = document.querySelector('.party-id');
+        this.partyName = document.querySelector('.party-name');
         this.player = new player_1.default();
         this.search = document.querySelector('.search');
+        this.startParty = document.querySelector('.start-party');
+        this.userName = document.querySelector('.user-name');
         this.view = new view_1.default();
         this.viewList = document.querySelector('.view-list');
-        // Use for all inputs
-        this.partyId = document.querySelector('.party-id');
-        // Create Screen
-        this.createParty = document.querySelector('.create-party');
-        this.partyName = document.querySelector('.party-name');
-        // Main Screen
-        this.joinParty = document.querySelector('.join-party');
-        this.userName = document.querySelector('.user-name');
-        // Player Screen
-        this.startParty = document.querySelector('.start-party');
         this.setupEventListeners();
         this.setupSockets();
     }
@@ -19446,22 +19442,18 @@ var App = (function () {
             this.viewList.addEventListener('click', this.events.getSongRequestsList);
             this.clearSearch.addEventListener('click', this.events.clearSearch);
         }
-        // Create Screen
         if (this.createParty) {
             this.createParty.addEventListener('click', this.events.createParty);
             this.partyName.addEventListener('input', this.events.setPartyName);
             this.copyCode.addEventListener('click', this.events.copyCode);
         }
-        // Player Screen
         if (this.startParty) {
             this.startParty.addEventListener('click', this.events.startParty);
         }
-        // Main Screen
         if (this.joinParty) {
             this.joinParty.addEventListener('click', this.events.joinParty);
             this.userName.addEventListener('input', this.events.getUsername);
         }
-        // Main Screen And Player Screen
         if (!this.createParty) {
             this.partyId.addEventListener('input', this.events.setPartyId);
         }
@@ -19885,7 +19877,7 @@ var Settings = (function () {
             services_1.default.getSocketUri(function (uri) {
                 resolve(_this.socket = io.connect(uri, {
                     reconnection: true,
-                    reconnectionAttempts: 99999,
+                    reconnectionAttempts: Infinity,
                     reconnectionDelay: 1000,
                     reconnectionDelayMax: 5000,
                 }));

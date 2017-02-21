@@ -10,7 +10,7 @@ export default class Settings {
       Services.getSocketUri((uri: string) => {
         resolve(this.socket = io.connect(uri, {
           reconnection: true,
-          reconnectionAttempts: 99999,
+          reconnectionAttempts: Infinity,
           reconnectionDelay: 1000,
           reconnectionDelayMax: 5000,
         }))

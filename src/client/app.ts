@@ -8,52 +8,36 @@ import View from './view'
 export default class App {
   private closeList: any
   private clearSearch: any
+  private createParty: any
+  private copyCode: any
   private events: Events
+  private joinParty: any
   private notification: Notification
   private player: Player
+  private partyId: any
+  private partyName: any
   private search: any
+  private startParty: any
+  private userName: any
   private view: View
   private viewList: any
-
-  // All inputs
-  private partyId: any
-
-  // Create Screen
-  private createParty: any
-  private partyName: any
-  private copyCode: any
-
-  // Main Screen
-  private joinParty: any
-  private userName: any
-
-  // Player Screen
-  private startParty: any
 
   constructor() {
     this.closeList = document.querySelector('.close-list')
     this.clearSearch = document.querySelector('.close')
     this.copyCode = document.querySelector('.copy-code')
+    this.createParty = document.querySelector('.create-party')
     this.events = new Events()
+    this.joinParty = document.querySelector('.join-party')
     this.notification = new Notification()
+    this.partyId = document.querySelector('.party-id')
+    this.partyName = document.querySelector('.party-name')
     this.player = new Player()
     this.search = document.querySelector('.search')
+    this.startParty = document.querySelector('.start-party')
+    this.userName = document.querySelector('.user-name')
     this.view = new View()
     this.viewList = document.querySelector('.view-list')
-
-    // Use for all inputs
-    this.partyId = document.querySelector('.party-id')
-
-    // Create Screen
-    this.createParty = document.querySelector('.create-party')
-    this.partyName = document.querySelector('.party-name')
-
-    // Main Screen
-    this.joinParty = document.querySelector('.join-party')
-    this.userName = document.querySelector('.user-name')
-
-    // Player Screen
-    this.startParty = document.querySelector('.start-party')
 
     this.setupEventListeners()
     this.setupSockets()
@@ -63,9 +47,11 @@ export default class App {
     Settings.init()
       .then(() => {
         Settings.isPlayer() ? this.setupPlayer() : this.setupClient()
+
         Settings.socket.on('songChanged', () => {
           this.events.getCurrentSong()
         })
+
         Settings.socket.on('songRequested', (song: Interfaces.ISong) => {
           if (Settings.isPlayer()) {
             this.view.updateSongQueue(song)
@@ -83,9 +69,11 @@ export default class App {
 
           this.notification.show(song)
         })
+
         Settings.socket.on('updateCount', (online: any) => {
           this.view.updateCount(online)
         })
+
         Settings.socket.on('reconnect', () => {
           if (this.joinParty) {
             this.events.joinParty()
@@ -119,25 +107,21 @@ export default class App {
       this.clearSearch.addEventListener('click', this.events.clearSearch)
     }
 
-    // Create Screen
     if (this.createParty) {
       this.createParty.addEventListener('click', this.events.createParty)
       this.partyName.addEventListener('input', this.events.setPartyName)
       this.copyCode.addEventListener('click', this.events.copyCode)
     }
 
-    // Player Screen
     if (this.startParty) {
       this.startParty.addEventListener('click', this.events.startParty)
     }
 
-    // Main Screen
     if (this.joinParty) {
       this.joinParty.addEventListener('click', this.events.joinParty)
       this.userName.addEventListener('input', this.events.getUsername)
     }
 
-    // Main Screen And Player Screen
     if (!this.createParty) {
       this.partyId.addEventListener('input', this.events.setPartyId)
     }
