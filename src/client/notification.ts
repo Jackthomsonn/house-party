@@ -11,7 +11,7 @@ export default class Notification {
     this.showTimeout
   }
 
-  public show = (data: any, isCustom?: Boolean) => {
+  public show = (data: any, isCustom?: Boolean, autoHide: Boolean = true) => {
     this.hide()
     clearTimeout(this.hideTimeout)
     clearTimeout(this.showTimeout)
@@ -19,7 +19,7 @@ export default class Notification {
       this.notification.style.transform = 'translateY(0)'
       isCustom ? this.notification.innerHTML = data :
         this.notification.innerHTML = `${data.username} just requested ${data.artist} - ${data.songName}`
-      this.hideTimeout = setTimeout(this.hide, 3000)
+      autoHide ? this.hideTimeout = setTimeout(this.hide, 3000) : null
     }, 400)
   }
 

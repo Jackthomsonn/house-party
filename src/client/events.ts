@@ -75,7 +75,7 @@ export default class Events {
     })
   }
 
-  public joinParty = () => {
+  public joinParty = (e: any) => {
     this.view.showLoader()
     Services.partyId = this.partyId
     Services.partyExists((exists: Boolean) => {
@@ -87,8 +87,12 @@ export default class Events {
             this.view.updateHeader(partyName)
             Services.getSongs()
               .then((songs: Array<Interfaces.ISongLink>) => {
-                this.notification.show(`You have successfully connected to ${this.partyName}`, true)
-                this.view.closeSplash()
+                if (!e.hasReconnected) {
+                  this.notification.show(`You have successfully connected to ${this.partyName}`, true)
+                  this.view.closeSplash()
+                } else {
+                  this.notification.show(`You have successfully been reconnected to ${this.partyName}`, true)
+                }
                 this.getCurrentSong()
                 this.view.hideLoader()
                 this.view.makeList(songs)
@@ -102,18 +106,24 @@ export default class Events {
     })
   }
 
-  public startParty = () => {
+  public startParty = (e: any) => {
     this.view.showLoader()
     Services.partyId = this.partyId
     Settings.socket.emit('joinRoom', this.partyId)
     Services.partyExists((exists: Boolean) => {
       if (exists) {
-        this.view.closeSplash()
+        if (!e.hasReconnected) {
+          this.view.closeSplash()
+        }
         Services.getSongs('/api/music/requests')
           .then((songs: Array<Interfaces.ISongLink>) => {
             this.view.hideLoader()
             this.view.songQueue(songs)
-            this.notification.show(`Party successfully started`, true)
+            if(!e.hasReconnected) {
+              this.notification.show(`Party successfully started`, true)
+            } else {
+              this.notification.show(`Party successfully reconnected`, true)
+            }
           })
 
         Services.getPartyName(this.partyId)

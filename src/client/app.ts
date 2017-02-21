@@ -74,11 +74,22 @@ export default class App {
           this.view.updateCount(online)
         })
 
+        Settings.socket.on('disconnect', () => {
+          this.view.showLoader()
+          this.notification.show('Connection to the party has been lost, reconnecting..', true, false)
+        })
+
         Settings.socket.on('reconnect', () => {
           if (this.joinParty) {
-            this.events.joinParty()
+            this.events.joinParty({
+              hasReconnected: true
+            })
+            this.view.hideLoader()
+            this.notification.hide()
           } else {
-            this.events.startParty()
+            this.events.startParty({
+              hasReconnected: true
+            })
           }
         })
       })

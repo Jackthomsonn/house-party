@@ -19410,12 +19410,22 @@ var App = (function () {
             settings_1.default.socket.on('updateCount', function (online) {
                 _this.view.updateCount(online);
             });
+            settings_1.default.socket.on('disconnect', function () {
+                _this.view.showLoader();
+                _this.notification.show('Connection to the party has been lost, reconnecting..', true, false);
+            });
             settings_1.default.socket.on('reconnect', function () {
                 if (_this.joinParty) {
-                    _this.events.joinParty();
+                    _this.events.joinParty({
+                        hasReconnected: true
+                    });
+                    _this.view.hideLoader();
+                    _this.notification.hide();
                 }
                 else {
-                    _this.events.startParty();
+                    _this.events.startParty({
+                        hasReconnected: true
+                    });
                 }
             });
         });
@@ -19522,7 +19532,7 @@ var Events = (function () {
                 _this.view.hideLoader();
             });
         };
-        this.joinParty = function () {
+        this.joinParty = function (e) {
             _this.view.showLoader();
             services_1.default.partyId = _this.partyId;
             services_1.default.partyExists(function (exists) {
@@ -19534,8 +19544,13 @@ var Events = (function () {
                         _this.view.updateHeader(partyName);
                         services_1.default.getSongs()
                             .then(function (songs) {
-                            _this.notification.show("You have successfully connected to " + _this.partyName, true);
-                            _this.view.closeSplash();
+                            if (!e.hasReconnected) {
+                                _this.notification.show("You have successfully connected to " + _this.partyName, true);
+                                _this.view.closeSplash();
+                            }
+                            else {
+                                _this.notification.show("You have successfully been reconnected to " + _this.partyName, true);
+                            }
                             _this.getCurrentSong();
                             _this.view.hideLoader();
                             _this.view.makeList(songs);
@@ -19549,18 +19564,25 @@ var Events = (function () {
                 }
             });
         };
-        this.startParty = function () {
+        this.startParty = function (e) {
             _this.view.showLoader();
             services_1.default.partyId = _this.partyId;
             settings_1.default.socket.emit('joinRoom', _this.partyId);
             services_1.default.partyExists(function (exists) {
                 if (exists) {
-                    _this.view.closeSplash();
+                    if (!e.hasReconnected) {
+                        _this.view.closeSplash();
+                    }
                     services_1.default.getSongs('/api/music/requests')
                         .then(function (songs) {
                         _this.view.hideLoader();
                         _this.view.songQueue(songs);
-                        _this.notification.show("Party successfully started", true);
+                        if (!e.hasReconnected) {
+                            _this.notification.show("Party successfully started", true);
+                        }
+                        else {
+                            _this.notification.show("Party successfully reconnected", true);
+                        }
                     });
                     services_1.default.getPartyName(_this.partyId)
                         .then(function (partyName) {
@@ -19615,7 +19637,8 @@ exports.default = Events;
 var Notification = (function () {
     function Notification() {
         var _this = this;
-        this.show = function (data, isCustom) {
+        this.show = function (data, isCustom, autoHide) {
+            if (autoHide === void 0) { autoHide = true; }
             _this.hide();
             clearTimeout(_this.hideTimeout);
             clearTimeout(_this.showTimeout);
@@ -19623,7 +19646,7 @@ var Notification = (function () {
                 _this.notification.style.transform = 'translateY(0)';
                 isCustom ? _this.notification.innerHTML = data :
                     _this.notification.innerHTML = data.username + " just requested " + data.artist + " - " + data.songName;
-                _this.hideTimeout = setTimeout(_this.hide, 3000);
+                autoHide ? _this.hideTimeout = setTimeout(_this.hide, 3000) : null;
             }, 400);
         };
         this.hide = function () {
