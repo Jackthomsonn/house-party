@@ -12,8 +12,8 @@ const env = process.env.NODE_ENV || 'development'
 const enableLog = false
 const socketList = []
 const room = undefined
-let mongoURI = null
-let _id = null
+let mongoURI = undefined
+let _id = undefined
 
 server.listen(port)
 
@@ -46,7 +46,6 @@ app.get('/player', (req, res) => {
 app.get('/create', (req, res) => {
   res.status(200).sendFile(__dirname + '/views/create/index.html')
 })
-
 
 io.sockets.on('connection', (socket) => {
   _id = socket.id
@@ -104,6 +103,6 @@ function updateCount(room) {
 
 function showLog() {
   console.log('--------------- User List ---------------')
-  console.log(JSON.stringify(socketList, null, 2))
+  console.log(JSON.stringify(socketList, undefined, 2))
   console.log('-----------------------------------------')
 }

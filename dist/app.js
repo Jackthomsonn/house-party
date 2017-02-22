@@ -19644,7 +19644,7 @@ var Notification = (function () {
                 _this.notification.style.transform = 'translateY(0)';
                 isCustom ? _this.notification.innerHTML = data :
                     _this.notification.innerHTML = data.username + " just requested " + data.artist + " - " + data.songName;
-                autoHide ? _this.hideTimeout = setTimeout(_this.hide, 3000) : null;
+                autoHide ? _this.hideTimeout = setTimeout(_this.hide, 3000) : undefined;
             }, 400);
         };
         this.hide = function () {
@@ -19670,7 +19670,7 @@ var Player = (function () {
     Player.prototype.play = function (callback) {
         var _this = this;
         if (services_1.Services.partyId) {
-            var cache_1 = null;
+            var cache_1 = undefined;
             var audio_1 = document.querySelector('audio');
             audio_1.setAttribute('autoplay', true);
             services_1.Services.getSongs('/api/music/requests')
@@ -19682,7 +19682,7 @@ var Player = (function () {
                     cache_1 = songs[0];
                     audio_1.src = cache_1.link;
                     setInterval(function () {
-                        _this.hasEnded(audio_1) ? _this.next(cache_1) && (cache_1 = null) : undefined;
+                        _this.hasEnded(audio_1) ? _this.next(cache_1) && (cache_1 = undefined) : undefined;
                     }, 1000);
                 }
             });

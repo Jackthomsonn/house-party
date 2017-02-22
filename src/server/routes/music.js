@@ -29,7 +29,7 @@ router.get('/music', (req, res) => {
         contains(q, track.artist) ||
         contains(q, track.songName) ||
         contains(q, track.artist.toLowerCase()) ||
-        contains(q, track.songName.toLowerCase()) ? results.push(track) : null
+        contains(q, track.songName.toLowerCase()) ? results.push(track) : undefined
       })
     } else {
       results = tracks

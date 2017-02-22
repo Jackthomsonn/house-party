@@ -17,7 +17,7 @@ export class Notification {
       this.notification.style.transform = 'translateY(0)'
       isCustom ? this.notification.innerHTML = data :
         this.notification.innerHTML = `${data.username} just requested ${data.artist} - ${data.songName}`
-      autoHide ? this.hideTimeout = setTimeout(this.hide, 3000) : null
+      autoHide ? this.hideTimeout = setTimeout(this.hide, 3000) : undefined
     }, 400)
   }
 

@@ -12,7 +12,7 @@ export class Player {
 
   public play(callback?: Function) {
     if (Services.partyId) {
-      let cache: Interfaces.ICache = null
+      let cache: Interfaces.ICache = undefined
       const audio: any = document.querySelector('audio')
       audio.setAttribute('autoplay', true)
       Services.getSongs('/api/music/requests')
@@ -24,7 +24,7 @@ export class Player {
             cache = songs[0]
             audio.src = cache.link
             setInterval(() => {
-              this.hasEnded(audio) ? this.next(cache) && (cache = null) : undefined
+              this.hasEnded(audio) ? this.next(cache) && (cache = undefined) : undefined
             }, 1000)
           }
         })
