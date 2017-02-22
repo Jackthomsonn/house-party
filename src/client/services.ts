@@ -1,9 +1,9 @@
 import * as $ from 'jquery'
 import * as Promise from 'promise'
 import * as shortId from 'shortid'
-import Settings from './settings'
+import { Settings } from './settings'
 
-export default class Services {
+export class Services {
   public static partyId: String
   public static username: String
 

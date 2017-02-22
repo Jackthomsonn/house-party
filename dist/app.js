@@ -19370,30 +19370,30 @@ var App = (function () {
         this.clearSearch = document.querySelector('.close');
         this.copyCode = document.querySelector('.copy-code');
         this.createParty = document.querySelector('.create-party');
-        this.events = new events_1.default();
+        this.events = new events_1.Events();
         this.joinParty = document.querySelector('.join-party');
-        this.notification = new notification_1.default();
+        this.notification = new notification_1.Notification();
         this.partyId = document.querySelector('.party-id');
         this.partyName = document.querySelector('.party-name');
-        this.player = new player_1.default();
+        this.player = new player_1.Player();
         this.search = document.querySelector('.search');
         this.startParty = document.querySelector('.start-party');
         this.userName = document.querySelector('.user-name');
-        this.view = new view_1.default();
+        this.view = new view_1.View();
         this.viewList = document.querySelector('.view-list');
         this.setupEventListeners();
         this.setupSockets();
     }
     App.prototype.setupSockets = function () {
         var _this = this;
-        settings_1.default.init()
+        settings_1.Settings.init()
             .then(function () {
-            settings_1.default.isPlayer() ? _this.setupPlayer() : _this.setupClient();
-            settings_1.default.socket.on('songChanged', function () {
+            settings_1.Settings.isPlayer() ? _this.setupPlayer() : _this.setupClient();
+            settings_1.Settings.socket.on('songChanged', function () {
                 _this.events.getCurrentSong();
             });
-            settings_1.default.socket.on('songRequested', function (song) {
-                if (settings_1.default.isPlayer()) {
+            settings_1.Settings.socket.on('songRequested', function (song) {
+                if (settings_1.Settings.isPlayer()) {
                     _this.view.updateSongQueue(song);
                     if (!_this.player.isPlaying) {
                         _this.player.isPlaying = true;
@@ -19402,19 +19402,19 @@ var App = (function () {
                     return;
                 }
                 _this.events.getCurrentSong();
-                if (song.username === services_1.default.username) {
+                if (song.username === services_1.Services.username) {
                     song.username = 'You';
                 }
                 _this.notification.show(song);
             });
-            settings_1.default.socket.on('updateCount', function (online) {
+            settings_1.Settings.socket.on('updateCount', function (online) {
                 _this.view.updateCount(online);
             });
-            settings_1.default.socket.on('disconnect', function () {
+            settings_1.Settings.socket.on('disconnect', function () {
                 _this.view.showLoader();
                 _this.notification.show('Connection to the party has been lost, reconnecting..', true, false);
             });
-            settings_1.default.socket.on('reconnect', function () {
+            settings_1.Settings.socket.on('reconnect', function () {
                 if (_this.joinParty) {
                     _this.events.joinParty({
                         hasReconnected: true
@@ -19438,8 +19438,8 @@ var App = (function () {
     };
     App.prototype.setupClient = function () {
         var _this = this;
-        if (services_1.default.partyId) {
-            services_1.default.getSongs()
+        if (services_1.Services.partyId) {
+            services_1.Services.getSongs()
                 .then(function (songs) {
                 _this.view.makeList(songs);
             });
@@ -19470,8 +19470,7 @@ var App = (function () {
     };
     return App;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = App;
+exports.App = App;
 new App();
 
 },{"./events":73,"./notification":74,"./player":75,"./services":76,"./settings":77,"./view":78}],73:[function(require,module,exports){
@@ -19485,7 +19484,7 @@ var Events = (function () {
     function Events() {
         var _this = this;
         this.getSongRequestsList = function () {
-            services_1.default.getSongs('/api/music/requests')
+            services_1.Services.getSongs('/api/music/requests')
                 .then(function (songs) {
                 _this.view.showSongRequestList(songs);
             });
@@ -19497,7 +19496,7 @@ var Events = (function () {
             _this.view.showLoader();
             var value = e.srcElement.value;
             value.length > 0 ? _this.view.clearSearch(true) : _this.view.clearSearch(false);
-            services_1.default.getSongs('/api/music?q=' + value)
+            services_1.Services.getSongs('/api/music?q=' + value)
                 .then(function (songs) {
                 _this.view.hideLoader();
                 _this.view.makeList(songs, true);
@@ -19505,7 +19504,7 @@ var Events = (function () {
         };
         this.clearSearch = function (e) {
             _this.view.showLoader();
-            services_1.default.getSongs('/api/music')
+            services_1.Services.getSongs('/api/music')
                 .then(function (songs) {
                 e.srcElement.previousElementSibling.value = '';
                 _this.view.hideLoader();
@@ -19521,7 +19520,7 @@ var Events = (function () {
         };
         this.createParty = function () {
             _this.view.showLoader();
-            services_1.default.createParty({
+            services_1.Services.createParty({
                 name: _this.partyName
             }).then(function (result) {
                 _this.view.showCreatedParty(result);
@@ -19534,15 +19533,15 @@ var Events = (function () {
         };
         this.joinParty = function (e) {
             _this.view.showLoader();
-            services_1.default.partyId = _this.partyId;
-            services_1.default.partyExists(function (exists) {
+            services_1.Services.partyId = _this.partyId;
+            services_1.Services.partyExists(function (exists) {
                 if (exists) {
-                    settings_1.default.socket.emit('joinRoom', _this.partyId);
-                    services_1.default.getPartyName(_this.partyId)
+                    settings_1.Settings.socket.emit('joinRoom', _this.partyId);
+                    services_1.Services.getPartyName(_this.partyId)
                         .then(function (partyName) {
                         _this.partyName = partyName;
                         _this.view.updateHeader(partyName);
-                        services_1.default.getSongs()
+                        services_1.Services.getSongs()
                             .then(function (songs) {
                             if (!e.hasReconnected) {
                                 _this.notification.show("You have successfully connected to " + _this.partyName, true);
@@ -19566,14 +19565,14 @@ var Events = (function () {
         };
         this.startParty = function (e) {
             _this.view.showLoader();
-            services_1.default.partyId = _this.partyId;
-            settings_1.default.socket.emit('joinRoom', _this.partyId);
-            services_1.default.partyExists(function (exists) {
+            services_1.Services.partyId = _this.partyId;
+            settings_1.Settings.socket.emit('joinRoom', _this.partyId);
+            services_1.Services.partyExists(function (exists) {
                 if (exists) {
                     if (!e.hasReconnected) {
                         _this.view.closeSplash();
                     }
-                    services_1.default.getSongs('/api/music/requests')
+                    services_1.Services.getSongs('/api/music/requests')
                         .then(function (songs) {
                         _this.view.hideLoader();
                         _this.view.songQueue(songs);
@@ -19584,7 +19583,7 @@ var Events = (function () {
                             _this.notification.show("Party successfully reconnected", true);
                         }
                     });
-                    services_1.default.getPartyName(_this.partyId)
+                    services_1.Services.getPartyName(_this.partyId)
                         .then(function (partyName) {
                         _this.view.hideLoader();
                         _this.partyName = partyName;
@@ -19611,26 +19610,25 @@ var Events = (function () {
                 _this.notification.show('There was an error when trying to copy the party ID to your clipboard', true);
             }
         };
-        this.notification = new notification_1.default();
-        this.player = new player_1.default();
-        this.view = new view_1.default();
+        this.notification = new notification_1.Notification();
+        this.player = new player_1.Player();
+        this.view = new view_1.View();
     }
     Events.prototype.getCurrentSong = function () {
         var _this = this;
-        if (services_1.default.partyId) {
-            services_1.default.getSongs('/api/music/requests')
+        if (services_1.Services.partyId) {
+            services_1.Services.getSongs('/api/music/requests')
                 .then(function (songs) {
                 _this.view.setCurrentSong(songs);
             });
         }
     };
     Events.prototype.getUsername = function (e) {
-        services_1.default.username = e.srcElement.value;
+        services_1.Services.username = e.srcElement.value;
     };
     return Events;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Events;
+exports.Events = Events;
 
 },{"./notification":74,"./player":75,"./services":76,"./settings":77,"./view":78}],74:[function(require,module,exports){
 "use strict";
@@ -19658,8 +19656,7 @@ var Notification = (function () {
     }
     return Notification;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Notification;
+exports.Notification = Notification;
 
 },{}],75:[function(require,module,exports){
 "use strict";
@@ -19668,15 +19665,15 @@ var settings_1 = require("./settings");
 var view_1 = require("./view");
 var Player = (function () {
     function Player() {
-        this.view = new view_1.default();
+        this.view = new view_1.View();
     }
     Player.prototype.play = function (callback) {
         var _this = this;
-        if (services_1.default.partyId) {
+        if (services_1.Services.partyId) {
             var cache_1 = null;
             var audio_1 = document.querySelector('audio');
             audio_1.setAttribute('autoplay', true);
-            services_1.default.getSongs('/api/music/requests')
+            services_1.Services.getSongs('/api/music/requests')
                 .then(function (songs) {
                 if (callback) {
                     callback(songs);
@@ -19697,11 +19694,11 @@ var Player = (function () {
     Player.prototype.next = function (cache) {
         var _this = this;
         if (cache) {
-            services_1.default.removeSong(cache._id)
+            services_1.Services.removeSong(cache._id)
                 .then(function () {
-                settings_1.default.socket.emit('songChanged', {
+                settings_1.Settings.socket.emit('songChanged', {
                     changed: true,
-                    shortName: services_1.default.partyId
+                    shortName: services_1.Services.partyId
                 });
                 _this.view.removeSongFromQueue();
                 _this.play();
@@ -19713,8 +19710,7 @@ var Player = (function () {
     };
     return Player;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Player;
+exports.Player = Player;
 
 },{"./services":76,"./settings":77,"./view":78}],76:[function(require,module,exports){
 "use strict";
@@ -19774,7 +19770,7 @@ var Services = (function () {
     };
     Services.requestSong = function (requestedSong) {
         var _this = this;
-        settings_1.default.socket.emit('songChanged', {
+        settings_1.Settings.socket.emit('songChanged', {
             changed: true,
             partyId: this.partyId
         });
@@ -19870,7 +19866,7 @@ var Services = (function () {
             method: 'POST',
             url: '/api/music/requests',
         }).done(function () {
-            settings_1.default.socket.emit('songRequested', {
+            settings_1.Settings.socket.emit('songRequested', {
                 artist: requestedSong.artist,
                 image: requestedSong.image,
                 shortName: _this.partyId,
@@ -19883,8 +19879,7 @@ var Services = (function () {
     };
     return Services;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Services;
+exports.Services = Services;
 
 },{"./settings":77,"jquery":31,"promise":38,"shortid":46}],77:[function(require,module,exports){
 "use strict";
@@ -19897,7 +19892,7 @@ var Settings = (function () {
     Settings.init = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            services_1.default.getSocketUri(function (uri) {
+            services_1.Services.getSocketUri(function (uri) {
                 resolve(_this.socket = io.connect(uri, {
                     reconnection: true,
                     reconnectionAttempts: Infinity,
@@ -19912,8 +19907,7 @@ var Settings = (function () {
     };
     return Settings;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Settings;
+exports.Settings = Settings;
 
 },{"./services":76,"promise":38,"socket.io-client":55}],78:[function(require,module,exports){
 "use strict";
@@ -19926,7 +19920,7 @@ var View = (function () {
         this.codeButton = $('.copy-code');
         this.code = $('.code');
         this.currentlyPlaying = $('.currently-playing');
-        this.notification = new notification_1.default();
+        this.notification = new notification_1.Notification();
         this.header = $('header > div h2');
         this.loading = $('.loading-container');
         this.outerBody = $('.outer, header, .sub-header');
@@ -19951,7 +19945,7 @@ var View = (function () {
             _this.parent.append("<div class=\"card\">\n        <img src=\"" + song.image + "\"></img>\n        <div class=\"info\">\n          <p>" + song.songName + "</p>\n          <p>" + song.artist + "</p>\n        </div>\n        <div class=\"actions\">\n          <button class=\"list\">Request</button>\n        </div>\n      </div>");
             var buttons = document.querySelectorAll('button.list');
             buttons[index].addEventListener('click', function () {
-                services_1.default.requestSong(songs[index])
+                services_1.Services.requestSong(songs[index])
                     .then(function () {
                     return;
                 }).catch(function (error) {
@@ -19980,7 +19974,7 @@ var View = (function () {
         var _this = this;
         this.parent.find('.card').remove();
         songs.map(function (song, index) {
-            if (song.shortName === services_1.default.partyId) {
+            if (song.shortName === services_1.Services.partyId) {
                 _this.parent.append("<div class=\"card\">\n          <img src=\"" + song.image + "\"></img>\n          <div class=\"info\">\n            <p>" + song.artist + "</p>\n            <p>" + song.songName + "</p>\n          </div>\n        </div>");
             }
         });
@@ -20034,7 +20028,6 @@ var View = (function () {
     };
     return View;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = View;
+exports.View = View;
 
 },{"./notification":74,"./services":76,"jquery":31}]},{},[72]);

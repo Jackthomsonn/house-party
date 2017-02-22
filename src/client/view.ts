@@ -1,8 +1,8 @@
 import * as $ from 'jquery'
-import Notification from './notification'
-import Service from './services'
+import { Notification } from './notification'
+import { Services } from './services'
 
-export default class View {
+export class View {
   private body: any
   private codeButton: any
   private code: any
@@ -65,7 +65,7 @@ export default class View {
 
       const buttons: any = document.querySelectorAll('button.list')
       buttons[index].addEventListener('click', () => {
-        Service.requestSong(songs[index])
+        Services.requestSong(songs[index])
           .then(() => {
             return
           }).catch((error) => {
@@ -102,7 +102,7 @@ export default class View {
   public songQueue(songs: Array<Interfaces.ISong>) {
     this.parent.find('.card').remove()
     songs.map((song: Interfaces.ISong, index) => {
-      if (song.shortName === Service.partyId) {
+      if (song.shortName === Services.partyId) {
         this.parent.append(`<div class="card">
           <img src="${song.image}"></img>
           <div class="info">

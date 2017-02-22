@@ -1,11 +1,11 @@
 import * as Promise from 'promise'
-import Notification from './notification'
-import Player from './player'
-import Services from './services'
-import Settings from './settings'
-import View from './view'
+import { Notification } from './notification'
+import { Player } from './player'
+import { Services } from './services'
+import { Settings } from './settings'
+import { View } from './view'
 
-export default class Events {
+export class Events {
   public username: String
 
   private notification: Notification
@@ -119,7 +119,7 @@ export default class Events {
           .then((songs: Array<Interfaces.ISongLink>) => {
             this.view.hideLoader()
             this.view.songQueue(songs)
-            if(!e.hasReconnected) {
+            if (!e.hasReconnected) {
               this.notification.show(`Party successfully started`, true)
             } else {
               this.notification.show(`Party successfully reconnected`, true)

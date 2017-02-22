@@ -1,6 +1,4 @@
-import Service from './services'
-
-export default class Notification {
+export class Notification {
   private notification: any
   private hideTimeout: any
   private showTimeout: any

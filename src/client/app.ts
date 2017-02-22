@@ -1,11 +1,11 @@
-import Events from './events'
-import Notification from './notification'
-import Player from './player'
-import Service from './services'
-import Settings from './settings'
-import View from './view'
+import { Events } from './events'
+import { Notification } from './notification'
+import { Player } from './player'
+import { Services } from './services'
+import { Settings } from './settings'
+import { View } from './view'
 
-export default class App {
+export class App {
   private closeList: any
   private clearSearch: any
   private createParty: any
@@ -63,7 +63,7 @@ export default class App {
           }
           this.events.getCurrentSong()
 
-          if (song.username === Service.username) {
+          if (song.username === Services.username) {
             song.username = 'You'
           }
 
@@ -102,8 +102,8 @@ export default class App {
   }
 
   private setupClient() {
-    if (Service.partyId) {
-      Service.getSongs()
+    if (Services.partyId) {
+      Services.getSongs()
         .then((songs: Array<Interfaces.ISongLink>) => {
           this.view.makeList(songs)
         })

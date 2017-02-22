@@ -1,8 +1,8 @@
-import Service from './services'
-import Settings from './settings'
-import View from './view'
+import { Services } from './services'
+import { Settings } from './settings'
+import { View } from './view'
 
-export default class Player {
+export class Player {
   public isPlaying: Boolean
   private view: View
 
@@ -11,11 +11,11 @@ export default class Player {
   }
 
   public play(callback?: Function) {
-    if (Service.partyId) {
+    if (Services.partyId) {
       let cache: Interfaces.ICache = null
       const audio: any = document.querySelector('audio')
       audio.setAttribute('autoplay', true)
-      Service.getSongs('/api/music/requests')
+      Services.getSongs('/api/music/requests')
         .then((songs: Array<Interfaces.ISongLink>) => {
           if (callback) {
             callback(songs)
@@ -37,11 +37,11 @@ export default class Player {
 
   private next(cache: Interfaces.ICache) {
     if (cache) {
-      Service.removeSong(cache._id)
+      Services.removeSong(cache._id)
         .then(() => {
           Settings.socket.emit('songChanged', {
             changed: true,
-            shortName: Service.partyId
+            shortName: Services.partyId
           })
           this.view.removeSongFromQueue()
           this.play()

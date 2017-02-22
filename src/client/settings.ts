@@ -1,8 +1,8 @@
 import * as Promise from 'promise'
 import * as io from 'socket.io-client'
-import Services from './services'
+import { Services } from './services'
 
-export default class Settings {
+export class Settings {
   public static socket: any
 
   public static init() {
