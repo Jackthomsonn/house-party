@@ -19366,107 +19366,82 @@ var settings_1 = require("./settings");
 var view_1 = require("./view");
 var App = (function () {
     function App() {
-        this.closeList = document.querySelector('.close-list');
-        this.clearSearch = document.querySelector('.close');
-        this.copyCode = document.querySelector('.copy-code');
-        this.createParty = document.querySelector('.create-party');
         this.events = new events_1.Events();
-        this.joinParty = document.querySelector('.join-party');
         this.notification = new notification_1.Notification();
-        this.partyId = document.querySelector('.party-id');
-        this.partyName = document.querySelector('.party-name');
         this.player = new player_1.Player();
-        this.search = document.querySelector('.search');
-        this.startParty = document.querySelector('.start-party');
-        this.userName = document.querySelector('.user-name');
         this.view = new view_1.View();
-        this.viewList = document.querySelector('.view-list');
         this.setupEventListeners();
         this.setupSockets();
     }
+    App.prototype.attemptReconnection = function () {
+        if (this.view.joinParty) {
+            this.events.joinParty({
+                hasReconnected: true
+            });
+            this.view.hideLoader();
+            this.notification.hide();
+        }
+        else {
+            this.events.startParty({
+                hasReconnected: true
+            });
+        }
+    };
+    App.prototype.disconnect = function () {
+        this.view.showLoader();
+        this.notification.show('Connection to the party has been lost, reconnecting..', true, false);
+    };
     App.prototype.setupSockets = function () {
         var _this = this;
         settings_1.Settings.init()
             .then(function () {
-            settings_1.Settings.isPlayer() ? _this.setupPlayer() : _this.setupClient();
-            settings_1.Settings.socket.on('songChanged', function () {
-                _this.events.getCurrentSong();
-            });
-            settings_1.Settings.socket.on('songRequested', function (song) {
-                if (settings_1.Settings.isPlayer()) {
-                    _this.view.updateSongQueue(song);
-                    if (!_this.player.isPlaying) {
-                        _this.player.isPlaying = true;
-                        _this.player.play();
-                    }
-                    return;
-                }
-                _this.events.getCurrentSong();
-                if (song.username === services_1.Services.username) {
-                    song.username = 'You';
-                }
-                _this.notification.show(song);
-            });
-            settings_1.Settings.socket.on('updateCount', function (online) {
-                _this.view.updateCount(online);
-            });
-            settings_1.Settings.socket.on('disconnect', function () {
-                _this.view.showLoader();
-                _this.notification.show('Connection to the party has been lost, reconnecting..', true, false);
-            });
-            settings_1.Settings.socket.on('reconnect', function () {
-                if (_this.joinParty) {
-                    _this.events.joinParty({
-                        hasReconnected: true
-                    });
-                    _this.view.hideLoader();
-                    _this.notification.hide();
-                }
-                else {
-                    _this.events.startParty({
-                        hasReconnected: true
-                    });
-                }
-            });
+            settings_1.Settings.socket.on('songChanged', function () { return _this.events.getCurrentSong(); });
+            settings_1.Settings.socket.on('songRequested', function (song) { return _this.songRequest(song); });
+            settings_1.Settings.socket.on('updateCount', function (online) { return _this.updateCount(online); });
+            settings_1.Settings.socket.on('disconnect', function () { return _this.disconnect(); });
+            settings_1.Settings.socket.on('reconnect', function () { return _this.attemptReconnection(); });
         });
-    };
-    App.prototype.setupPlayer = function () {
-        var _this = this;
-        this.player.play(function (songs) {
-            _this.view.songQueue(songs);
-        });
-    };
-    App.prototype.setupClient = function () {
-        var _this = this;
-        if (services_1.Services.partyId) {
-            services_1.Services.getSongs()
-                .then(function (songs) {
-                _this.view.makeList(songs);
-            });
-        }
     };
     App.prototype.setupEventListeners = function () {
-        if (this.viewList) {
-            this.closeList.addEventListener('click', this.events.closeSongRequestList);
-            this.search.addEventListener('input', this.events.search);
-            this.viewList.addEventListener('click', this.events.getSongRequestsList);
-            this.clearSearch.addEventListener('click', this.events.clearSearch);
+        if (this.view.viewList) {
+            this.view.closeList.addEventListener('click', this.events.closeSongRequestList);
+            this.view.search.addEventListener('input', this.events.search);
+            this.view.viewList.addEventListener('click', this.events.getSongRequestsList);
+            this.view.clearSearchField.addEventListener('click', this.events.clearSearch);
         }
-        if (this.createParty) {
-            this.createParty.addEventListener('click', this.events.createParty);
-            this.partyName.addEventListener('input', this.events.setPartyName);
-            this.copyCode.addEventListener('click', this.events.copyCode);
+        if (this.view.createParty) {
+            this.view.createParty.addEventListener('click', this.events.createParty);
+            this.view.partyName.addEventListener('input', this.events.setPartyName);
+            this.view.copyCode.addEventListener('click', this.events.copyCode);
         }
-        if (this.startParty) {
-            this.startParty.addEventListener('click', this.events.startParty);
+        if (this.view.startParty) {
+            this.view.startParty.addEventListener('click', this.events.startParty);
         }
-        if (this.joinParty) {
-            this.joinParty.addEventListener('click', this.events.joinParty);
-            this.userName.addEventListener('input', this.events.getUsername);
+        if (this.view.joinParty) {
+            this.view.joinParty.addEventListener('click', this.events.joinParty);
+            this.view.userName.addEventListener('input', this.events.getUsername);
         }
-        if (!this.createParty) {
-            this.partyId.addEventListener('input', this.events.setPartyId);
+        if (!this.view.createParty) {
+            this.view.partyId.addEventListener('input', this.events.setPartyId);
         }
+    };
+    App.prototype.songRequest = function (song) {
+        if (settings_1.Settings.isPlayer()) {
+            this.view.updateSongQueue(song);
+            if (!this.player.isPlaying) {
+                this.player.isPlaying = true;
+                this.player.play();
+            }
+        }
+        this.events.getCurrentSong();
+        song.username === services_1.Services.username ? song.username = 'You' : undefined;
+        this.notification.show(song);
+    };
+    App.prototype.updateCount = function (online) {
+        if (this.view.onlineCount) {
+            this.view.updateCount(online);
+        }
+        return;
     };
     return App;
 }());
@@ -19489,9 +19464,6 @@ var Events = (function () {
                 _this.view.showSongRequestList(songs);
             });
         };
-        this.closeSongRequestList = function () {
-            _this.view.closeSongRequestList();
-        };
         this.search = function (e) {
             _this.view.showLoader();
             var value = e.srcElement.value;
@@ -19511,12 +19483,6 @@ var Events = (function () {
                 _this.view.clearSearch(false);
                 _this.view.makeList(songs, true);
             });
-        };
-        this.setPartyName = function (e) {
-            _this.partyName = e.srcElement.value;
-        };
-        this.setPartyId = function (e) {
-            _this.partyId = e.srcElement.value;
         };
         this.createParty = function () {
             _this.view.showLoader();
@@ -19596,6 +19562,9 @@ var Events = (function () {
                 }
             });
         };
+        this.getUsername = function (e) {
+            services_1.Services.username = e.srcElement.value;
+        };
         this.copyCode = function () {
             window.getSelection().removeAllRanges();
             var code = document.querySelector('.code');
@@ -19610,6 +19579,15 @@ var Events = (function () {
                 _this.notification.show('There was an error when trying to copy the party ID to your clipboard', true);
             }
         };
+        this.closeSongRequestList = function () {
+            _this.view.closeSongRequestList();
+        };
+        this.setPartyName = function (e) {
+            _this.partyName = e.srcElement.value;
+        };
+        this.setPartyId = function (e) {
+            _this.partyId = e.srcElement.value;
+        };
         this.notification = new notification_1.Notification();
         this.player = new player_1.Player();
         this.view = new view_1.View();
@@ -19622,9 +19600,6 @@ var Events = (function () {
                 _this.view.setCurrentSong(songs);
             });
         }
-    };
-    Events.prototype.getUsername = function (e) {
-        services_1.Services.username = e.srcElement.value;
     };
     return Events;
 }());
@@ -19650,8 +19625,8 @@ var Notification = (function () {
         this.hide = function () {
             _this.notification.style.transform = 'translateY(5em)';
         };
-        this.notification = document.querySelector('.notification');
         this.hideTimeout;
+        this.notification = document.querySelector('.notification');
         this.showTimeout;
     }
     return Notification;
@@ -19670,7 +19645,7 @@ var Player = (function () {
     Player.prototype.play = function (callback) {
         var _this = this;
         if (services_1.Services.partyId) {
-            var cache_1 = undefined;
+            var cache_1;
             var audio_1 = document.querySelector('audio');
             audio_1.setAttribute('autoplay', true);
             services_1.Services.getSongs('/api/music/requests')
@@ -19937,6 +19912,17 @@ var View = (function () {
         this.revealContainer = $('.splash').find('.reveal, .reveal_inner');
         this.reveal = $('.splash .reveal .reveal_inner > h2, p');
         this.revealPartyId = $('.splash .reveal h3');
+        this.closeList = document.querySelector('.close-list');
+        this.clearSearchField = document.querySelector('.close');
+        this.copyCode = document.querySelector('.copy-code');
+        this.createParty = document.querySelector('.create-party');
+        this.joinParty = document.querySelector('.join-party');
+        this.partyId = document.querySelector('.party-id');
+        this.partyName = document.querySelector('.party-name');
+        this.search = document.querySelector('.search');
+        this.startParty = document.querySelector('.start-party');
+        this.userName = document.querySelector('.user-name');
+        this.viewList = document.querySelector('.view-list');
     }
     View.prototype.makeList = function (songs, isFilter) {
         var _this = this;

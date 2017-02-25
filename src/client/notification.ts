@@ -1,11 +1,11 @@
 export class Notification {
-  private notification: any
   private hideTimeout: any
+  private notification: any
   private showTimeout: any
 
   constructor() {
-    this.notification = document.querySelector('.notification')
     this.hideTimeout
+    this.notification = document.querySelector('.notification')
     this.showTimeout
   }
 
