@@ -3,27 +3,38 @@ import { Notification } from './notification'
 import { Services } from './services'
 
 export class View {
-  private body: any
-  private codeButton: any
-  private code: any
-  private currentlyPlaying: any
-  private notification: Notification
-  private header: any
-  private loading: any
-  private outerBody: any
-  private parent: any
-  private songRequestHeader: any
-  private songRequestList: any
-  private clearSearchButton: any
-  private onlineCount: any
-  private splash: any
-  private splashHeader: any
-  private splashInner: any
-  private splashInput: any
-  private splashButton: any
-  private revealContainer: any
-  private reveal: any
-  private revealPartyId: any
+  public body: any
+  public codeButton: any
+  public code: any
+  public currentlyPlaying: any
+  public notification: Notification
+  public header: any
+  public loading: any
+  public outerBody: any
+  public parent: any
+  public songRequestHeader: any
+  public songRequestList: any
+  public clearSearchButton: any
+  public onlineCount: any
+  public splash: any
+  public splashHeader: any
+  public splashInner: any
+  public splashInput: any
+  public splashButton: any
+  public revealContainer: any
+  public reveal: any
+  public revealPartyId: any
+  public closeList: any
+  public clearSearchField: any
+  public createParty: any
+  public copyCode: any
+  public joinParty: any
+  public partyId: any
+  public partyName: any
+  public search: any
+  public startParty: any
+  public userName: any
+  public viewList: any
 
   constructor() {
     this.body = $('body')
@@ -47,6 +58,17 @@ export class View {
     this.revealContainer = $('.splash').find('.reveal, .reveal_inner')
     this.reveal = $('.splash .reveal .reveal_inner > h2, p')
     this.revealPartyId = $('.splash .reveal h3')
+    this.closeList = document.querySelector('.close-list')
+    this.clearSearchField = document.querySelector('.close')
+    this.copyCode = document.querySelector('.copy-code')
+    this.createParty = document.querySelector('.create-party')
+    this.joinParty = document.querySelector('.join-party')
+    this.partyId = document.querySelector('.party-id')
+    this.partyName = document.querySelector('.party-name')
+    this.search = document.querySelector('.search')
+    this.startParty = document.querySelector('.start-party')
+    this.userName = document.querySelector('.user-name')
+    this.viewList = document.querySelector('.view-list')
   }
 
   public makeList(songs: Array<Interfaces.ISongLink>, isFilter?: Boolean) {

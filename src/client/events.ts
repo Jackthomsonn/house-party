@@ -27,10 +27,6 @@ export class Events {
       })
   }
 
-  public closeSongRequestList = () => {
-    this.view.closeSongRequestList()
-  }
-
   public search = (e: any) => {
     this.view.showLoader()
     const value = e.srcElement.value
@@ -51,14 +47,6 @@ export class Events {
         this.view.clearSearch(false)
         this.view.makeList(songs, true)
       })
-  }
-
-  public setPartyName = (e: any) => {
-    this.partyName = e.srcElement.value
-  }
-
-  public setPartyId = (e: any) => {
-    this.partyId = e.srcElement.value
   }
 
   public createParty = () => {
@@ -148,7 +136,7 @@ export class Events {
     }
   }
 
-  public getUsername(e: any) {
+  public getUsername = (e: any) => {
     Services.username = e.srcElement.value
   }
 
@@ -164,5 +152,17 @@ export class Events {
     } catch (err) {
       this.notification.show('There was an error when trying to copy the party ID to your clipboard', true)
     }
+  }
+
+  public closeSongRequestList = () => {
+    this.view.closeSongRequestList()
+  }
+
+  public setPartyName = (e: any) => {
+    this.partyName = e.srcElement.value
+  }
+
+  public setPartyId = (e: any) => {
+    this.partyId = e.srcElement.value
   }
 }
