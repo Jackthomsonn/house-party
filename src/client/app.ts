@@ -86,10 +86,11 @@ export class App {
         this.player.isPlaying = true
         this.player.play()
       }
+      return
     }
 
     this.events.getCurrentSong()
-    this.events.requestingSocket(song)
+    this.requestingSocket(song)
     this.notification.show(song)
   }
 

@@ -19373,6 +19373,17 @@ var App = (function () {
         this.setupEventListeners();
         this.setupSockets();
     }
+    App.prototype.setupSockets = function () {
+        var _this = this;
+        settings_1.Settings.init()
+            .then(function () {
+            settings_1.Settings.socket.on('songChanged', function () { return _this.events.getCurrentSong(); });
+            settings_1.Settings.socket.on('songRequested', function (song) { return _this.songRequest(song); });
+            settings_1.Settings.socket.on('updateCount', function (online) { return _this.updateCount(online); });
+            settings_1.Settings.socket.on('disconnect', function () { return _this.disconnect(); });
+            settings_1.Settings.socket.on('reconnect', function () { return _this.attemptReconnection(); });
+        });
+    };
     App.prototype.attemptReconnection = function () {
         if (this.view.joinParty) {
             this.events.joinParty({
@@ -19390,17 +19401,6 @@ var App = (function () {
     App.prototype.disconnect = function () {
         this.view.showLoader();
         this.notification.show('Connection to the party has been lost, reconnecting..', true, false);
-    };
-    App.prototype.setupSockets = function () {
-        var _this = this;
-        settings_1.Settings.init()
-            .then(function () {
-            settings_1.Settings.socket.on('songChanged', function () { return _this.events.getCurrentSong(); });
-            settings_1.Settings.socket.on('songRequested', function (song) { return _this.songRequest(song); });
-            settings_1.Settings.socket.on('updateCount', function (online) { return _this.updateCount(online); });
-            settings_1.Settings.socket.on('disconnect', function () { return _this.disconnect(); });
-            settings_1.Settings.socket.on('reconnect', function () { return _this.attemptReconnection(); });
-        });
     };
     App.prototype.setupEventListeners = function () {
         if (this.view.viewList) {
@@ -19432,10 +19432,14 @@ var App = (function () {
                 this.player.isPlaying = true;
                 this.player.play();
             }
+            return;
         }
         this.events.getCurrentSong();
-        song.username === services_1.Services.username ? song.username = 'You' : undefined;
+        this.requestingSocket(song);
         this.notification.show(song);
+    };
+    App.prototype.requestingSocket = function (song) {
+        song.username === services_1.Services.username ? song.username = 'You' : undefined;
     };
     App.prototype.updateCount = function (online) {
         if (this.view.onlineCount) {
