@@ -19537,6 +19537,8 @@ var Events = (function () {
             _this.view.showLoader();
             services_1.Services.partyId = _this.partyId;
             settings_1.Settings.socket.emit('joinRoom', _this.partyId);
+            console.log('Called');
+            _this.view.showPartyId(_this.partyId);
             services_1.Services.partyExists(function (exists) {
                 if (exists) {
                     if (!e.hasReconnected) {
@@ -19577,7 +19579,7 @@ var Events = (function () {
             window.getSelection().addRange(range);
             try {
                 document.execCommand('copy');
-                _this.notification.show('Party ID successfully copied to clipboard', true);
+                _this.notification.show("Party ID successfully copied to clipboard <a href='../player'>Start party</a>", true, false);
             }
             catch (err) {
                 _this.notification.show('There was an error when trying to copy the party ID to your clipboard', true);
@@ -19922,6 +19924,7 @@ var View = (function () {
         this.createParty = document.querySelector('.create-party');
         this.joinParty = document.querySelector('.join-party');
         this.partyId = document.querySelector('.party-id');
+        this.partiesId = document.querySelector('.parties-id');
         this.partyName = document.querySelector('.party-name');
         this.search = document.querySelector('.search');
         this.startParty = document.querySelector('.start-party');
@@ -20015,6 +20018,9 @@ var View = (function () {
     };
     View.prototype.updateCount = function (online) {
         this.onlineCount.html("Clients connected: " + online);
+    };
+    View.prototype.showPartyId = function (id) {
+        this.partiesId.innerHTML = "Party ID - " + id;
     };
     return View;
 }());

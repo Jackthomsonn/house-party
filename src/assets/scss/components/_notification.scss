@@ -13,6 +13,12 @@
   font-size: .8em;
   transform: translateY(5em);
   transition: all ease-in-out .5s;
+  a {
+    text-transform: uppercase;
+    font-weight: 700;
+    float: right;
+    color: $action-color;
+  }
   @media (min-width: 0) and (max-width: 800px) {
     & {
       width: 100vw;

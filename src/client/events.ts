@@ -98,6 +98,8 @@ export class Events {
     this.view.showLoader()
     Services.partyId = this.partyId
     Settings.socket.emit('joinRoom', this.partyId)
+    console.log('Called')
+    this.view.showPartyId(this.partyId)
     Services.partyExists((exists: Boolean) => {
       if (exists) {
         if (!e.hasReconnected) {
@@ -148,7 +150,7 @@ export class Events {
     window.getSelection().addRange(range)
     try {
       document.execCommand('copy')
-      this.notification.show('Party ID successfully copied to clipboard', true)
+      this.notification.show(`Party ID successfully copied to clipboard <a href='../player'>Start party</a>`, true, false)
     } catch (err) {
       this.notification.show('There was an error when trying to copy the party ID to your clipboard', true)
     }

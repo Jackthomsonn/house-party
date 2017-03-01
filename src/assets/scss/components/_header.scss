@@ -50,6 +50,9 @@ header {
       margin: 0 0 0 .4em;
     }
   }
+  button.parties-id {
+    @extend button.online-count
+  }
   div {
     display: -webkit-inline-box;
   }

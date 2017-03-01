@@ -30,6 +30,7 @@ export class View {
   public copyCode: any
   public joinParty: any
   public partyId: any
+  public partiesId: any
   public partyName: any
   public search: any
   public startParty: any
@@ -64,6 +65,7 @@ export class View {
     this.createParty = document.querySelector('.create-party')
     this.joinParty = document.querySelector('.join-party')
     this.partyId = document.querySelector('.party-id')
+    this.partiesId = document.querySelector('.parties-id')
     this.partyName = document.querySelector('.party-name')
     this.search = document.querySelector('.search')
     this.startParty = document.querySelector('.start-party')
@@ -194,5 +196,9 @@ export class View {
 
   public updateCount(online: Number) {
     this.onlineCount.html(`Clients connected: ${online}`)
+  }
+
+  public showPartyId(id: String) {
+    this.partiesId.innerHTML = `Party ID - ${id}`
   }
 }
