@@ -98,7 +98,6 @@ export class Events {
     this.view.showLoader()
     Services.partyId = this.partyId
     Settings.socket.emit('joinRoom', this.partyId)
-    console.log('Called')
     this.view.showPartyId(this.partyId)
     Services.partyExists((exists: Boolean) => {
       if (exists) {
