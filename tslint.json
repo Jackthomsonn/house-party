@@ -8,6 +8,7 @@
     "semicolon": [false],
     "quotemark": [false],
     "max-line-length": [true, 140],
+    "cyclomatic-complexity": [true],
     "member-ordering": [true,
       "public-before-private",
       "static-before-instance",
