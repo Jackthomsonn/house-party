@@ -19682,7 +19682,7 @@ var Player = (function () {
                 .then(function () {
                 settings_1.Settings.socket.emit('songChanged', {
                     changed: true,
-                    shortName: services_1.Services.partyId
+                    partyId: services_1.Services.partyId
                 });
                 _this.view.removeSongFromQueue();
                 _this.play();
@@ -19725,7 +19725,7 @@ var Services = (function () {
                         return;
                     }
                     results.map(function (song) {
-                        if (song.shortName === Services.partyId) {
+                        if (song.partyId === Services.partyId) {
                             partySongs.push(song);
                             resolve(partySongs);
                         }
@@ -19746,7 +19746,7 @@ var Services = (function () {
                 url: '/api/house-parties'
             }).done(function (parties) {
                 parties.map(function (party) {
-                    if (party.shortName === partyId) {
+                    if (party.partyId === partyId) {
                         resolve(party.name);
                     }
                 });
@@ -19786,7 +19786,7 @@ var Services = (function () {
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({
                     name: houseParty.name,
-                    shortName: shortId.generate()
+                    partyId: shortId.generate()
                 }),
                 dataType: 'json',
                 method: 'POST',
@@ -19804,7 +19804,7 @@ var Services = (function () {
             method: 'GET',
             url: '/api/house-parties'
         }).done(function (parties) {
-            var exists = parties.some(function (party) { return party.shortName === _this.partyId; });
+            var exists = parties.some(function (party) { return party.partyId === _this.partyId; });
             exists ? callback(true) : callback(false);
         });
     };
@@ -19825,7 +19825,7 @@ var Services = (function () {
             url: '/api/music/requests'
         }).done(function (responses) {
             responses.map(function (response) {
-                if (response.shortName === _this.partyId) {
+                if (response.partyId === _this.partyId) {
                     if (requestedSong.link === response.link) {
                         exists = true;
                     }
@@ -19843,7 +19843,7 @@ var Services = (function () {
                 artist: requestedSong.artist,
                 image: requestedSong.image,
                 link: requestedSong.link,
-                shortName: this.partyId,
+                partyId: this.partyId,
                 songName: requestedSong.songName,
                 username: this.username
             }),
@@ -19854,7 +19854,7 @@ var Services = (function () {
             settings_1.Settings.socket.emit('songRequested', {
                 artist: requestedSong.artist,
                 image: requestedSong.image,
-                shortName: _this.partyId,
+                partyId: _this.partyId,
                 songName: requestedSong.songName,
                 username: _this.username ? _this.username : 'Someone'
             });
@@ -19973,7 +19973,7 @@ var View = (function () {
         var _this = this;
         this.parent.find('.card').remove();
         songs.map(function (song, index) {
-            if (song.shortName === services_1.Services.partyId) {
+            if (song.partyId === services_1.Services.partyId) {
                 _this.parent.append("<div class=\"card\">\n          <img src=\"" + song.image + "\"></img>\n          <div class=\"info\">\n            <p>" + song.artist + "</p>\n            <p>" + song.songName + "</p>\n          </div>\n        </div>");
             }
         });
@@ -20011,7 +20011,7 @@ var View = (function () {
         setTimeout(function () {
             _this.revealContainer.attr('style', 'display: flex');
             _this.splashInner.remove();
-            _this.revealPartyId.html("" + createdParty.shortName);
+            _this.revealPartyId.html("" + createdParty.partyId);
             _this.revealPartyId.addClass('show');
             _this.reveal.addClass('show');
         }, 700);

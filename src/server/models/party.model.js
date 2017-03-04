@@ -3,7 +3,7 @@ const mongoose = restful.mongoose
 const partySchema = new mongoose.Schema({
   name: String,
   partyId: String,
-  shortName: String
+  partyId: String
 })
 
 module.exports = restful.model('Party', partySchema)

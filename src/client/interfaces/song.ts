@@ -7,7 +7,6 @@ namespace Interfaces {
     duration: Number
     currentTime: Number
     partyId: String
-    shortName: String
     username: String
   }
 }

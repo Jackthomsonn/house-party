@@ -126,7 +126,7 @@ export class View {
   public songQueue(songs: Array<Interfaces.ISong>) {
     this.parent.find('.card').remove()
     songs.map((song: Interfaces.ISong, index) => {
-      if (song.shortName === Services.partyId) {
+      if (song.partyId === Services.partyId) {
         this.parent.append(`<div class="card">
           <img src="${song.image}"></img>
           <div class="info">
@@ -180,7 +180,7 @@ export class View {
     setTimeout(() => {
       this.revealContainer.attr('style', 'display: flex')
       this.splashInner.remove()
-      this.revealPartyId.html(`${createdParty.shortName}`)
+      this.revealPartyId.html(`${createdParty.partyId}`)
       this.revealPartyId.addClass('show')
       this.reveal.addClass('show')
     }, 700)

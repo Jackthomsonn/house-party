@@ -1,6 +1,6 @@
 namespace Interfaces {
   export interface IHouseParty {
     name: String
-    shortName?: String
+    partyId?: String
   }
 }

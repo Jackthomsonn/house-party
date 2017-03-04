@@ -25,7 +25,7 @@ export class Services {
             return
           }
           results.map((song) => {
-            if (song.shortName === Services.partyId) {
+            if (song.partyId === Services.partyId) {
               partySongs.push(song)
               resolve(partySongs)
             }
@@ -46,7 +46,7 @@ export class Services {
         url: '/api/house-parties'
       }).done((parties) => {
         parties.map((party: Interfaces.IHouseParty) => {
-          if (party.shortName === partyId) {
+          if (party.partyId === partyId) {
             resolve(party.name)
           }
         })
@@ -88,7 +88,7 @@ export class Services {
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({
           name: houseParty.name,
-          shortName: shortId.generate()
+          partyId: shortId.generate()
         }),
         dataType: 'json',
         method: 'POST',
@@ -106,7 +106,7 @@ export class Services {
       method: 'GET',
       url: '/api/house-parties'
     }).done((parties) => {
-      const exists = parties.some((party: Interfaces.IHouseParty) => party.shortName === this.partyId)
+      const exists = parties.some((party: Interfaces.IHouseParty) => party.partyId === this.partyId)
       exists ? callback(true) : callback(false)
     })
   }
@@ -128,7 +128,7 @@ export class Services {
       url: '/api/music/requests'
     }).done((responses: Array<Interfaces.ISong>) => {
       responses.map((response: Interfaces.ISongLink) => {
-        if (response.shortName === this.partyId) {
+        if (response.partyId === this.partyId) {
           if (requestedSong.link === response.link) {
             exists = true
           }
@@ -146,7 +146,7 @@ export class Services {
         artist: requestedSong.artist,
         image: requestedSong.image,
         link: requestedSong.link,
-        shortName: this.partyId,
+        partyId: this.partyId,
         songName: requestedSong.songName,
         username: this.username
       }),
@@ -157,7 +157,7 @@ export class Services {
       Settings.socket.emit('songRequested', {
         artist: requestedSong.artist,
         image: requestedSong.image,
-        shortName: this.partyId,
+        partyId: this.partyId,
         songName: requestedSong.songName,
         username: this.username ? this.username : 'Someone'
       })

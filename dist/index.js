@@ -48,11 +48,11 @@ io.sockets.on('connection', (socket) => {
   })
 
   socket.on('songRequested', (data) => {
-    io.sockets.in(data.shortName).emit('songRequested', data)
+    io.sockets.in(data.partyId).emit('songRequested', data)
   })
 
   socket.on('songChanged', (data) => {
-    io.sockets.in(data.shortName).emit('songChanged', data)
+    io.sockets.in(data.partyId).emit('songChanged', data)
   })
 
   socket.on('disconnect', () => {
