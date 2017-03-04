@@ -51,7 +51,8 @@ header {
     }
   }
   button.parties-id {
-    @extend button.online-count
+    @extend button.online-count;
+    text-transform: none;
   }
   div {
     display: -webkit-inline-box;

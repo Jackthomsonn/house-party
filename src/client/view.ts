@@ -199,6 +199,6 @@ export class View {
   }
 
   public showPartyId(id: String) {
-    this.partiesId.innerHTML = `Party ID - ${id}`
+    this.partiesId.innerHTML = `PARTY ID - ${id}`
   }
 }

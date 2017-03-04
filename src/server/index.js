@@ -7,45 +7,28 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const routing = require('./routing')
 const port = process.env.PORT || 3000
 const env = process.env.NODE_ENV || 'development'
-const enableLog = false
 const socketList = []
+const enableLog = false
 const room = undefined
 let mongoURI = undefined
 let _id = undefined
 
 server.listen(port)
 
-mongoose.Promise = global.Promise
+setupEnvironment(app)
 
-if (process.env.NODE_ENV === 'production') {
-  mongoURI = process.env.MONGO_URI
-  app.use(express.static(__dirname))
-} else {
-  mongoURI = 'mongodb://localhost/house_party/'
-  app.use(express.static('dist'))
-}
+errorHandler()
 
-mongoose.connect(mongoURI)
+routing.route(app)
 
 app.use(bodyParser.json())
 app.use('/api', require('./routes/music.js'))
 app.use('/api', require('./routes/requests.js'))
 app.use('/api', require('./routes/party.js'))
 app.use('/api', require('./routes/settings.js'))
-
-app.get('/', (req, res) => {
-  res.status(200).sendFile(__dirname + '/views/index.html')
-})
-
-app.get('/player', (req, res) => {
-  res.status(200).sendFile(__dirname + '/views/player/index.html')
-})
-
-app.get('/create', (req, res) => {
-  res.status(200).sendFile(__dirname + '/views/create/index.html')
-})
 
 io.sockets.on('connection', (socket) => {
   _id = socket.id
@@ -79,14 +62,6 @@ io.sockets.on('connection', (socket) => {
   })
 })
 
-process.on('uncaughtException', (exception) => {
-  try {
-    throw new Error('An uncaught exception was initiated - ' + exception)
-  } catch (e) {
-    console.error(e)
-  }
-})
-
 function updateCount(room) {
   if (!room || !io.sockets.adapter.rooms[room]) {
     return
@@ -105,4 +80,26 @@ function showLog() {
   console.log('--------------- User List ---------------')
   console.log(JSON.stringify(socketList, undefined, 2))
   console.log('-----------------------------------------')
+}
+
+function setupEnvironment() {
+  if (process.env.NODE_ENV === 'production') {
+    mongoURI = process.env.MONGO_URI
+    app.use(express.static(__dirname))
+  } else {
+    mongoURI = 'mongodb://localhost/house_party/'
+    app.use(express.static('dist'))
+  }
+  mongoose.Promise = global.Promise
+  mongoose.connect(mongoURI)
+}
+
+function errorHandler() {
+  process.on('uncaughtException', (exception) => {
+    try {
+      throw new Error('An uncaught exception was initiated - ' + exception)
+    } catch (e) {
+      console.error(e)
+    }
+  })
 }

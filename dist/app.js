@@ -19358,6 +19358,7 @@ module.exports = yeast;
 
 },{}],72:[function(require,module,exports){
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var events_1 = require("./events");
 var notification_1 = require("./notification");
 var player_1 = require("./player");
@@ -19454,6 +19455,7 @@ new App();
 
 },{"./events":73,"./notification":74,"./player":75,"./services":76,"./settings":77,"./view":78}],73:[function(require,module,exports){
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var notification_1 = require("./notification");
 var player_1 = require("./player");
 var services_1 = require("./services");
@@ -19537,7 +19539,6 @@ var Events = (function () {
             _this.view.showLoader();
             services_1.Services.partyId = _this.partyId;
             settings_1.Settings.socket.emit('joinRoom', _this.partyId);
-            console.log('Called');
             _this.view.showPartyId(_this.partyId);
             services_1.Services.partyExists(function (exists) {
                 if (exists) {
@@ -19613,6 +19614,7 @@ exports.Events = Events;
 
 },{"./notification":74,"./player":75,"./services":76,"./settings":77,"./view":78}],74:[function(require,module,exports){
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Notification = (function () {
     function Notification() {
         var _this = this;
@@ -19641,6 +19643,7 @@ exports.Notification = Notification;
 
 },{}],75:[function(require,module,exports){
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var services_1 = require("./services");
 var settings_1 = require("./settings");
 var view_1 = require("./view");
@@ -19695,6 +19698,7 @@ exports.Player = Player;
 
 },{"./services":76,"./settings":77,"./view":78}],76:[function(require,module,exports){
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var $ = require("jquery");
 var Promise = require("promise");
 var shortId = require("shortid");
@@ -19864,6 +19868,7 @@ exports.Services = Services;
 
 },{"./settings":77,"jquery":31,"promise":38,"shortid":46}],77:[function(require,module,exports){
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Promise = require("promise");
 var io = require("socket.io-client");
 var services_1 = require("./services");
@@ -19892,6 +19897,7 @@ exports.Settings = Settings;
 
 },{"./services":76,"promise":38,"socket.io-client":55}],78:[function(require,module,exports){
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var $ = require("jquery");
 var notification_1 = require("./notification");
 var services_1 = require("./services");
@@ -20020,7 +20026,7 @@ var View = (function () {
         this.onlineCount.html("Clients connected: " + online);
     };
     View.prototype.showPartyId = function (id) {
-        this.partiesId.innerHTML = "Party ID - " + id;
+        this.partiesId.innerHTML = "PARTY ID - " + id;
     };
     return View;
 }());
