@@ -17,7 +17,7 @@
     text-transform: uppercase;
     font-weight: 700;
     float: right;
-    color: $action-color;
+    color: lighten($theme-color, 60%);
   }
   @media (min-width: 0) and (max-width: 800px) {
     & {
