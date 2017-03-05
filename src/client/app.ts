@@ -66,6 +66,10 @@ export class App {
 
     if (this.view.startParty) {
       this.view.startParty.addEventListener('click', this.events.startParty)
+      if (this.events.getParam()) {
+        this.view.partyId.value = this.events.getParam()
+        this.view.partyId.defaultValue = this.events.getParam()
+      }
     }
 
     if (this.view.joinParty) {

@@ -1,5 +1,5 @@
 {
-  "files": ["src/client/*.ts"],
+  "files": ["src/client/app.ts"],
   "compilerOptions": {
     "module": "commonjs",
     "allowJs": true,

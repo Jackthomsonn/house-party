@@ -95,6 +95,9 @@ export class Events {
   }
 
   public startParty = (e: any) => {
+    if (this.getParam()) {
+      this.partyId = this.getParam()
+    }
     this.view.showLoader()
     Services.partyId = this.partyId
     Settings.socket.emit('joinRoom', this.partyId)
@@ -149,10 +152,15 @@ export class Events {
     window.getSelection().addRange(range)
     try {
       document.execCommand('copy')
-      this.notification.show(`Party ID successfully copied to clipboard <a href='../player'>Start party</a>`, true, false)
+      this.notification.show(`Party ID successfully copied to clipboard <a href='../player?partyid=${code.innerHTML}
+      '>Start party</a>`, true, false)
     } catch (err) {
       this.notification.show('There was an error when trying to copy the party ID to your clipboard', true)
     }
+  }
+
+  public getParam() {
+    return location.search.split('=').pop()
   }
 
   public closeSongRequestList = () => {

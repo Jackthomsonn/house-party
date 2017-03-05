@@ -19417,6 +19417,10 @@ var App = (function () {
         }
         if (this.view.startParty) {
             this.view.startParty.addEventListener('click', this.events.startParty);
+            if (this.events.getParam()) {
+                this.view.partyId.value = this.events.getParam();
+                this.view.partyId.defaultValue = this.events.getParam();
+            }
         }
         if (this.view.joinParty) {
             this.view.joinParty.addEventListener('click', this.events.joinParty);
@@ -19536,6 +19540,9 @@ var Events = (function () {
             });
         };
         this.startParty = function (e) {
+            if (_this.getParam()) {
+                _this.partyId = _this.getParam();
+            }
             _this.view.showLoader();
             services_1.Services.partyId = _this.partyId;
             settings_1.Settings.socket.emit('joinRoom', _this.partyId);
@@ -19580,7 +19587,7 @@ var Events = (function () {
             window.getSelection().addRange(range);
             try {
                 document.execCommand('copy');
-                _this.notification.show("Party ID successfully copied to clipboard <a href='../player'>Start party</a>", true, false);
+                _this.notification.show("Party ID successfully copied to clipboard <a href='../player?partyid=" + code.innerHTML + "\n      '>Start party</a>", true, false);
             }
             catch (err) {
                 _this.notification.show('There was an error when trying to copy the party ID to your clipboard', true);
@@ -19607,6 +19614,9 @@ var Events = (function () {
                 _this.view.setCurrentSong(songs);
             });
         }
+    };
+    Events.prototype.getParam = function () {
+        return location.search.split('=').pop();
     };
     return Events;
 }());
