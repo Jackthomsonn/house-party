@@ -8,6 +8,7 @@ const io = require('socket.io')(server)
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const routing = require('./routing')
+const cors = require('cors')
 const port = process.env.PORT || 3000
 const env = process.env.NODE_ENV || 'development'
 const socketList = []
@@ -15,6 +16,8 @@ const enableLog = false
 const room = undefined
 let mongoURI = undefined
 let _id = undefined
+
+app.use(cors())
 
 server.listen(port)
 
