@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Jackthomsonn/house-party#readme",
   "dependencies": {
+    "@babel/register": "^7.0.0-beta.34",
     "@types/jquery": "^2.0.39",
     "@types/promise": "^7.1.30",
     "@types/shortid": "0.0.28",
