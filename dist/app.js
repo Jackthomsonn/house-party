@@ -19719,6 +19719,7 @@ var Player = /** @class */ (function () {
         var _this = this;
         if (services_1.Services.partyId) {
             var cache_1;
+            var int_1;
             var audio_1 = document.querySelector('audio');
             audio_1.setAttribute('autoplay', true);
             services_1.Services.getSongs('/api/music/requests')
@@ -19729,8 +19730,8 @@ var Player = /** @class */ (function () {
                 if (songs.length > 0) {
                     cache_1 = songs[0];
                     audio_1.src = cache_1.link;
-                    setInterval(function () {
-                        _this.hasEnded(audio_1) ? _this.next(cache_1) && (cache_1 = undefined) : undefined;
+                    int_1 = setInterval(function () {
+                        _this.hasEnded(audio_1) ? _this.next(cache_1) && (cache_1 = undefined) && (clearInterval(int_1)) : undefined;
                     }, 1000);
                 }
             });

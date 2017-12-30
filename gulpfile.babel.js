@@ -61,4 +61,4 @@ gulp.task('watch', () => {
   gulp.watch('./src/assets/scss/**/*.scss', ['sass'])
 })
 
-gulp.task('default', ['nodemon', 'compile', 'move', 'sass', 'watch'])
+gulp.task('default', ['compile', 'move', 'sass', 'watch'])
