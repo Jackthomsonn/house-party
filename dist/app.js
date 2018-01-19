@@ -19610,6 +19610,9 @@ var Events = /** @class */ (function () {
                         .then(function (songs) {
                         _this.view.hideLoader();
                         _this.view.songQueue(songs);
+                        if (songs.length > 0) {
+                            _this.player.play();
+                        }
                         if (!e.hasReconnected) {
                             _this.notification.show("Party successfully started", true);
                         }
@@ -19731,8 +19734,14 @@ var Player = /** @class */ (function () {
                     cache_1 = songs[0];
                     audio_1.src = cache_1.link;
                     int_1 = setInterval(function () {
-                        _this.hasEnded(audio_1) ? _this.next(cache_1) && (cache_1 = undefined) && (clearInterval(int_1)) : undefined;
+                        if (_this.hasEnded(audio_1)) {
+                            _this.next(cache_1);
+                            cache_1 = undefined;
+                        }
                     }, 1000);
+                }
+                else {
+                    _this.isPlaying = false;
                 }
             });
         }

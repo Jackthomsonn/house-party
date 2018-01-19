@@ -111,6 +111,9 @@ export class Events {
           .then((songs: Array<Interfaces.ISongLink>) => {
             this.view.hideLoader()
             this.view.songQueue(songs)
+            if(songs.length > 0) {
+              this.player.play()
+            }
             if (!e.hasReconnected) {
               this.notification.show(`Party successfully started`, true)
             } else {

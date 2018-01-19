@@ -25,8 +25,13 @@ export class Player {
             cache = songs[0]
             audio.src = cache.link
             int = setInterval(() => {
-              this.hasEnded(audio) ? this.next(cache) && (cache = undefined) && (clearInterval(int)) : undefined
+              if(this.hasEnded(audio)) {
+                this.next(cache)
+                cache = undefined
+              }
             }, 1000)
+          } else {
+            this.isPlaying = false
           }
         })
     }
