@@ -19487,8 +19487,8 @@ var App = /** @class */ (function () {
     App.prototype.songRequest = function (song) {
         if (settings_1.Settings.isPlayer()) {
             this.view.updateSongQueue(song);
-            if (!this.player.isPlaying) {
-                this.player.isPlaying = true;
+            if (!player_1.Player.isPlaying) {
+                player_1.Player.isPlaying = true;
                 this.player.play();
             }
             return;
@@ -19612,7 +19612,12 @@ var Events = /** @class */ (function () {
                         _this.view.songQueue(songs);
                         if (songs.length > 0) {
                             _this.player.play();
+                            player_1.Player.isPlaying = true;
                         }
+                        else {
+                            player_1.Player.isPlaying = false;
+                        }
+                        console.log(player_1.Player.isPlaying);
                         if (!e.hasReconnected) {
                             _this.notification.show("Party successfully started", true);
                         }
@@ -19741,7 +19746,7 @@ var Player = /** @class */ (function () {
                     }, 1000);
                 }
                 else {
-                    _this.isPlaying = false;
+                    Player.isPlaying = false;
                 }
             });
         }

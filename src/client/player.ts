@@ -3,7 +3,7 @@ import { Settings } from './settings'
 import { View } from './view'
 
 export class Player {
-  public isPlaying: Boolean
+  public static isPlaying: Boolean
   private view: View
 
   constructor() {
@@ -31,7 +31,7 @@ export class Player {
               }
             }, 1000)
           } else {
-            this.isPlaying = false
+            Player.isPlaying = false
           }
         })
     }

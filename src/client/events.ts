@@ -113,7 +113,11 @@ export class Events {
             this.view.songQueue(songs)
             if(songs.length > 0) {
               this.player.play()
+              Player.isPlaying = true
+            } else {
+              Player.isPlaying = false
             }
+            console.log(Player.isPlaying)
             if (!e.hasReconnected) {
               this.notification.show(`Party successfully started`, true)
             } else {

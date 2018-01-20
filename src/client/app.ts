@@ -86,10 +86,12 @@ export class App {
   private songRequest(song: Interfaces.ISong) {
     if (Settings.isPlayer()) {
       this.view.updateSongQueue(song)
-      if (!this.player.isPlaying) {
-        this.player.isPlaying = true
+
+      if (!Player.isPlaying) {
+        Player.isPlaying = true
         this.player.play()
       }
+
       return
     }
 
