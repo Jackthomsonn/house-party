@@ -68,7 +68,7 @@ io.sockets.on('connection', (socket) => {
     updateCount(socket.room)
     socketList.splice(socketList[_id], 1)
     socket.leave(room)
-    socket.disconnect(true)
+    socket.disconnect(false)
   })
 })
 
