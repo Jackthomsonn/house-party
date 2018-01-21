@@ -63,13 +63,6 @@ io.sockets.on('connection', (socket) => {
     socketList.splice(socketList[_id], 1)
     socket.leave(room)
   })
-
-  socket.on('forceDisconnect', () => {
-    updateCount(socket.room)
-    socketList.splice(socketList[_id], 1)
-    socket.leave(room)
-    socket.disconnect(false)
-  })
 })
 
 function updateCount(room) {
